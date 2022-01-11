@@ -5,17 +5,15 @@ public class Participant {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private String country;
 
     private String username;
     private String password;
 
-    public Participant(String firstName, String lastName, String email, String phoneNumber, String country, String username, String password) {
+    public Participant(String firstName, String lastName, String email, String phoneNumber, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.country = country;
         this.username = username;
         this.password = password;
     }
@@ -50,14 +48,6 @@ public class Participant {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 
     public String getUsername() {
