@@ -3,11 +3,11 @@ CREATE DATABASE conferencedb;
 
 CREATE TABLE `conferencedb`.`organiser` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `firstName` VARCHAR(45) NULL,
-  `lastName` VARCHAR(45) NULL,
+  `first_name` VARCHAR(45) NULL,
+  `last_name` VARCHAR(45) NULL,
   `title` VARCHAR(255) NULL,
   `email` VARCHAR(45) NULL,
-  `phoneNumber` VARCHAR(15) NULL,
+  `phone_number` VARCHAR(15) NULL,
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
@@ -16,14 +16,14 @@ CREATE TABLE `conferencedb`.`organiser` (
 
 CREATE TABLE `conferencedb`.`participant` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `firstName` VARCHAR(45) NOT NULL,
-  `lastName` VARCHAR(45) NOT NULL,
+  `first_name` VARCHAR(45) NOT NULL,
+  `last_name` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
-  `phoneNumber` VARCHAR(15) NOT NULL,
+  `phone_number` VARCHAR(15) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `phoneNumber_UNIQUE` (`phoneNumber` ASC) VISIBLE,
+  UNIQUE INDEX `phone_number_UNIQUE` (`phone_number` ASC) VISIBLE,
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE);
 
@@ -32,9 +32,9 @@ CREATE TABLE `conferencedb`.`speaker` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(45) NOT NULL,
   `company` VARCHAR(45) NOT NULL,
-  `linkedinAcc` VARCHAR(45) NOT NULL,
-  `twitterAcc` VARCHAR(45) NOT NULL,
-  `githubAcc` VARCHAR(45) NOT NULL,
+  `linkedin_acc` VARCHAR(45) NOT NULL,
+  `twitter_acc` VARCHAR(45) NOT NULL,
+  `github_acc` VARCHAR(45) NOT NULL,
   `biography` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `participant_id_fk`
