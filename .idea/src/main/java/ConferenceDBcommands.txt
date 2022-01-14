@@ -11,7 +11,7 @@ CREATE TABLE `conferencedb`.`organiser` (
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE);
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) );
 
 
 CREATE TABLE `conferencedb`.`participant` (
@@ -23,9 +23,9 @@ CREATE TABLE `conferencedb`.`participant` (
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `phone_number_UNIQUE` (`phone_number` ASC) VISIBLE,
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
-  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE);
+  UNIQUE INDEX `phone_number_UNIQUE` (`phone_number` ASC) ,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) ,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) );
 
 
 CREATE TABLE `conferencedb`.`speaker` (
@@ -64,7 +64,7 @@ CREATE TABLE `conferencedb`.`day` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `conference_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `conference_id_idx` (`conference_id` ASC) VISIBLE,
+  INDEX `conference_id_idx` (`conference_id` ASC) ,
   CONSTRAINT `conference_id`
     FOREIGN KEY (`conference_id`)
     REFERENCES `conferencedb`.`conference` (`id`)
@@ -76,7 +76,7 @@ CREATE TABLE `conferencedb`.`track` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `day_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `day_id_idx` (`day_id` ASC) VISIBLE,
+  INDEX `day_id_idx` (`day_id` ASC) ,
   CONSTRAINT `day_id`
     FOREIGN KEY (`day_id`)
     REFERENCES `conferencedb`.`day` (`id`)
@@ -97,7 +97,7 @@ CREATE TABLE `conferencedb`.`session` (
   `review` INT NOT NULL,
   `track_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `track_id_idx` (`track_id` ASC) VISIBLE,
+  INDEX `track_id_idx` (`track_id` ASC) ,
   CONSTRAINT `track_id`
     FOREIGN KEY (`track_id`)
     REFERENCES `conferencedb`.`track` (`id`)
@@ -109,15 +109,15 @@ CREATE TABLE `conferencedb`.`sessions_spekers` (
   `session_id` INT NOT NULL,
   `speaker_id` INT NOT NULL,
   PRIMARY KEY (`session_id`, `speaker_id`),
-  INDEX `sessions_speakers_speakers_fk_idx` (`speakers_id` ASC) VISIBLE,
+  INDEX `sessions_speakers_speakers_fk_idx` (`speaker_id` ASC) ,
   CONSTRAINT `sessions_speakers_sessions_fk`
     FOREIGN KEY (`session_id`)
     REFERENCES `conferencedb`.`session` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `sessions_speakers_speakers_fk`
-    FOREIGN KEY (`speakersid`)
-    REFERENCES `conferencedb`.`speakers` (`id`)
+    FOREIGN KEY (`speaker_id`)
+    REFERENCES `conferencedb`.`speaker` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 
@@ -126,7 +126,7 @@ CREATE TABLE `conferencedb`.`sessions_participants` (
   `session_id` INT NOT NULL,
   `participant_id` INT NOT NULL,
   PRIMARY KEY (`session_id`, `participant_id`),
-  INDEX `sessions_participants_participants_fk_idx` (`participant_id` ASC) VISIBLE,
+  INDEX `sessions_participants_participants_fk_idx` (`participant_id` ASC) ,
   CONSTRAINT `sessions_participants_sessions_fk`
     FOREIGN KEY (`session_id`)
     REFERENCES `conferencedb`.`session` (`id`)
