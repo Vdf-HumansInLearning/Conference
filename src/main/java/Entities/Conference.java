@@ -3,8 +3,7 @@ package Entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,11 +15,11 @@ public class Conference {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "conference_id")
+    private Integer conference_id;
 
-    // DE DEFINIT RELATIA
-//    private ArrayList<Date> dates;
+    @OneToMany(mappedBy = "conference")
+    private List<Day> days;
 
     @Column(name = "location", nullable = false)
     private String location;
