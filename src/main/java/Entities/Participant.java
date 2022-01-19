@@ -3,6 +3,7 @@ package Entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 
 @Getter
 @Setter
@@ -14,8 +15,8 @@ public class Participant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "participant_id")
+    private Integer participant_id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -34,4 +35,11 @@ public class Participant {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @OneToOne(mappedBy = "participant")
+    private Speaker speaker;
+
+    @ManyToOne
+    @JoinColumn(name = "session_id", nullable = false)
+    private Session sessions;
 }
