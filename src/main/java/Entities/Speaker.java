@@ -14,11 +14,12 @@ public class Speaker {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "speaker_id")
+    private Integer speaker_id;
 
-    // DE DEFINIT RELATIA
-//    private Entities.Participant participant;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "participant_id")
+    private Entities.Participant participant;
 
     @Column(name = "title", nullable = false)
     private String title;
