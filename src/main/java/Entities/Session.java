@@ -2,6 +2,7 @@ package Entities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import lombok.*;
 
@@ -17,14 +18,15 @@ public class Session {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "session_id")
+    private Integer session_id;
 
     @Column(name = "title", nullable = false)
     private String title;
 
-    //  DE DEFINIT RELATIA
-//    private ArrayList<Entities.Speaker> speakers;
+    @ManyToOne
+    @JoinColumn(name = "speaker_id", nullable = false)
+    private Speaker speakers;
 
     @Column(name = "description", nullable = false)
     private String description;
@@ -38,21 +40,22 @@ public class Session {
     @Column(name = "tech_lvl", nullable = false)
     private String techlvl;
 
-    //  DE VAZUT CUM DEFINIT ARRAY-UL IN DB
-//    @Column(name = "keywords", nullable = false)
-//    private String[] keywords;
+    @Column(name = "keywords", nullable = false)
+    @ElementCollection
+    private List<String> keywords;
 
-    // length in minutes
     @Column(name = "length", nullable = false)
     private int length;
 
     @Column(name = "date", nullable = false)
     private Date date;
 
-    // review between 1 and 5
     @Column(name = "review", nullable = false)
     private int review;
 
-    // DE DEFINIT RELATIA
-//    private ArrayList<Entities.Participant> participants;
+    @OneToMany(mappedBy="sessions")
+    private ArrayList<Participant> participants;
+
+    @OneToMany(mappedBy="session")
+    private ArrayList<Track> tracks;
 }
