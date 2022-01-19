@@ -3,7 +3,6 @@ package Entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 
 @Getter
 @Setter
@@ -18,6 +17,11 @@ public class Day {
     @Column(name = "id")
     private Integer id;
 
-    // DE DEFINIT RELATIA
-//    public ArrayList<Entities.Track> tracks;
+    @ManyToOne
+    @JoinColumn(name = "conference_id", nullable = false)
+    private Conference conference;
+
+    @ManyToOne
+    @JoinColumn(name = "track_id", nullable = false)
+    private Track track;
 }
