@@ -1,0 +1,139 @@
+CREATE DATABASE conferencedb;
+
+
+CREATE TABLE `conferencedb`.`organiser` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `first_name` VARCHAR(45) NULL,
+  `last_name` VARCHAR(45) NULL,
+  `title` VARCHAR(255) NULL,
+  `email` VARCHAR(45) NULL,
+  `phone_number` VARCHAR(15) NULL,
+  `username` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) );
+
+
+CREATE TABLE `conferencedb`.`participant` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `first_name` VARCHAR(45) NOT NULL,
+  `last_name` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `phone_number` VARCHAR(15) NOT NULL,
+  `username` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `phone_number_UNIQUE` (`phone_number` ASC) ,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) ,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) );
+
+
+CREATE TABLE `conferencedb`.`speaker` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(45) NOT NULL,
+  `company` VARCHAR(45) NOT NULL,
+  `linkedin_acc` VARCHAR(45) NOT NULL,
+  `twitter_acc` VARCHAR(45) NOT NULL,
+  `github_acc` VARCHAR(45) NOT NULL,
+  `biography` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `participant_id_fk`
+    FOREIGN KEY (`id`)
+    REFERENCES `conferencedb`.`participant` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+
+CREATE TABLE `conferencedb`.`conference` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `location` VARCHAR(45) NOT NULL,
+  `theme` VARCHAR(45) NOT NULL,
+  `description` VARCHAR(45) NOT NULL,
+  `schedule` VARCHAR(45) NOT NULL,
+  `ticketType` VARCHAR(45) NOT NULL,
+  `organizator_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `organizator_id`
+    FOREIGN KEY (`organizator_id`)
+    REFERENCES `conferencedb`.`organiser` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+
+CREATE TABLE `conferencedb`.`day` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `conference_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `conference_id_idx` (`conference_id` ASC) ,
+  CONSTRAINT `conference_id`
+    FOREIGN KEY (`conference_id`)
+    REFERENCES `conferencedb`.`conference` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+
+CREATE TABLE `conferencedb`.`track` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `day_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `day_id_idx` (`day_id` ASC) ,
+  CONSTRAINT `day_id`
+    FOREIGN KEY (`day_id`)
+    REFERENCES `conferencedb`.`day` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+
+CREATE TABLE `conferencedb`.`session` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(45) NOT NULL,
+  `description` VARCHAR(255) NOT NULL,
+  `type` VARCHAR(45) NOT NULL,
+  `topic` VARCHAR(45) NOT NULL,
+  `techlvl` VARCHAR(45) NOT NULL,
+  `keywords` VARCHAR(45) NOT NULL,
+  `length` INT NOT NULL,
+  `date` DATE NOT NULL,
+  `review` INT NOT NULL,
+  `track_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `track_id_idx` (`track_id` ASC) ,
+  CONSTRAINT `track_id`
+    FOREIGN KEY (`track_id`)
+    REFERENCES `conferencedb`.`track` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+
+CREATE TABLE `conferencedb`.`sessions_spekers` (
+  `session_id` INT NOT NULL,
+  `speaker_id` INT NOT NULL,
+  PRIMARY KEY (`session_id`, `speaker_id`),
+  INDEX `sessions_speakers_speakers_fk_idx` (`speaker_id` ASC) ,
+  CONSTRAINT `sessions_speakers_sessions_fk`
+    FOREIGN KEY (`session_id`)
+    REFERENCES `conferencedb`.`session` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `sessions_speakers_speakers_fk`
+    FOREIGN KEY (`speaker_id`)
+    REFERENCES `conferencedb`.`speaker` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+
+CREATE TABLE `conferencedb`.`sessions_participants` (
+  `session_id` INT NOT NULL,
+  `participant_id` INT NOT NULL,
+  PRIMARY KEY (`session_id`, `participant_id`),
+  INDEX `sessions_participants_participants_fk_idx` (`participant_id` ASC) ,
+  CONSTRAINT `sessions_participants_sessions_fk`
+    FOREIGN KEY (`session_id`)
+    REFERENCES `conferencedb`.`session` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `sessions_participants_participants_fk`
+    FOREIGN KEY (`participant_id`)
+    REFERENCES `conferencedb`.`participant` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
