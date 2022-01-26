@@ -24,6 +24,9 @@ public class Participant {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Column(name = "title", nullable = false)
+    private String title;
+
     @Column(name = "email", nullable = false)
     private String email;
 

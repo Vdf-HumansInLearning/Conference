@@ -14,8 +14,8 @@ public class Organiser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "organiser_id")
+    private Integer organiser_id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;

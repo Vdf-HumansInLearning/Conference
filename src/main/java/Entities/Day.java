@@ -3,6 +3,7 @@ package Entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -14,8 +15,11 @@ public class Day {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "day_id")
+    private Integer day_id;
+
+    @Column(name = "date")
+    private Date date;
 
     @ManyToOne
     @JoinColumn(name = "conference_id", nullable = false)

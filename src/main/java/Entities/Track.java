@@ -15,8 +15,8 @@ public class Track {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "track_id")
+    private Integer track_id;
 
     @OneToMany(mappedBy = "track")
     private List<Day> days;
