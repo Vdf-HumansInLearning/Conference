@@ -3,7 +3,7 @@ package Entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -45,4 +45,15 @@ public class Participant {
     @ManyToOne
     @JoinColumn(name = "session_id", nullable = false)
     private Session sessions;
+
+    @OneToMany(mappedBy = "participant")
+    private List<Ticket> tickets;
+
+    @Column(name = "is_organiser", columnDefinition = "tinyint(1) default 0")
+    private Boolean is_organiser;
+
+    @ManyToOne
+    @JoinColumn(name = "conference_id")
+    private Conference conference;
+
 }

@@ -8,6 +8,6 @@ CREATE TABLE conference
     description VARCHAR(45) NOT NULL,
     schedule VARCHAR(45) NOT NULL,
     ticket_type VARCHAR(45) NOT NULL,
-    organiser_id INT,
-    FOREIGN KEY(organiser_id) REFERENCES organiser(organiser_id)
+    participant_id INT,
+    FOREIGN KEY(participant_id) REFERENCES participant(participant_id)
 );

@@ -18,6 +18,9 @@ public class Track {
     @Column(name = "track_id")
     private Integer track_id;
 
+    @Column(name = "title", nullable = false)
+    private String title;
+
     @OneToMany(mappedBy = "track")
     private List<Day> days;
 

@@ -33,6 +33,6 @@ public class Conference {
     @Column(name = "schedule", nullable = false)
     private String schedule;
 
-    @Column(name = "ticket_type", nullable = false)
-    private String ticketType;
+    @OneToMany(mappedBy = "conference")
+    private List<Participant> participants;
 }

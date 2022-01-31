@@ -12,5 +12,6 @@ CREATE TABLE participant
     password VARCHAR(45) NOT NULL,
     speaker_id INT,
     session_id INT,
+    is_organiser TINYINT(1) DEFAULT 0,
     FOREIGN KEY(session_id) REFERENCES session(session_id)
 );
