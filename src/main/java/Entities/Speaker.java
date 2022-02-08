@@ -1,20 +1,22 @@
 package Entities;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ManyToAny;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 public class Speaker {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "speaker_id")
+    @Column(name = "speaker_id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private Integer speaker_id;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -38,4 +40,7 @@ public class Speaker {
 
     @Column(name = "biography", nullable = false)
     private String biography;
+
+    @ManyToMany
+    private List<Session> sessions;
 }

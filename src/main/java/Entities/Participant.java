@@ -1,21 +1,21 @@
 package Entities;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 public class Participant {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "participant_id")
+    @Column(name = "participant_id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private Integer participant_id;
 
     @Column(name = "first_name", nullable = false)
@@ -51,6 +51,9 @@ public class Participant {
 
     @Column(name = "is_organiser", columnDefinition = "tinyint(1) default 0")
     private Boolean is_organiser;
+
+    @Column(name = "is_speaker", columnDefinition = "tinyint(1) default 0")
+    private Boolean is_speaker;
 
     @ManyToOne
     @JoinColumn(name = "conference_id")

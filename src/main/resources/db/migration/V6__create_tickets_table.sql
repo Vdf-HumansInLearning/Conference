@@ -2,6 +2,6 @@ USE conference;
 
 CREATE TABLE ticket
 (
-    ticket_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ticket_id BINARY(16) NOT NULL PRIMARY KEY,
     type VARCHAR(15) NOT NULL
 );

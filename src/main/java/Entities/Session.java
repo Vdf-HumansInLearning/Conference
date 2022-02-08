@@ -3,59 +3,60 @@ package Entities;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 public class Session {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "session_id")
-    private Integer session_id;
+    @Column(name = "session_id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID session_id;
 
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "speaker_id", nullable = false)
-    private Speaker speakers;
+    @ManyToMany
+    private List<Speaker> speakers;
 
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "type", nullable = false)
-    private String type;
+    @OneToOne(mappedBy = "session")
+    private SessionType sessionType;
 
     @Column(name = "topic", nullable = false)
     private String topic;
 
     @Column(name = "tech_lvl", nullable = false)
+    @Enumerated(EnumType.STRING)
     private String techlvl;
 
     @Column(name = "keywords", nullable = false)
     @ElementCollection
     private List<String> keywords;
 
-    @Column(name = "length", nullable = false)
-    private int length;
-
     @Column(name = "date", nullable = false)
     private Date date;
+
+    @Column(name = "end_time", nullable = false)
+    private Date end_time;
 
     @Column(name = "review", nullable = false)
     private int review;
 
-    @OneToMany(mappedBy="sessions")
+    @OneToMany(mappedBy = "sessions")
     private ArrayList<Participant> participants;
 
-    @OneToMany(mappedBy="session")
+    @OneToMany(mappedBy = "session")
     private ArrayList<Track> tracks;
 }
