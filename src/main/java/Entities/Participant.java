@@ -1,7 +1,9 @@
 package Entities;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import java.util.List;
@@ -27,9 +29,11 @@ public class Participant {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Email(message = "Email should be valid!")
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Range(min = 10,max= 13, message = "Phone number not valid!" )
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
