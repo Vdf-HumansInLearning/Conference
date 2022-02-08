@@ -33,7 +33,7 @@ public class Participant {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Range(min = 10,max= 13, message = "Phone number not valid!" )
+    @Range(min = 10,max = 13, message = "Phone number not valid!" )
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
