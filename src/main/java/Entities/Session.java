@@ -1,7 +1,7 @@
 package Entities;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,10 +46,10 @@ public class Session {
     private List<String> keywords;
 
     @Column(name = "date", nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @Column(name = "end_time", nullable = false)
-    private Date end_time;
+    private LocalDate end_time;
 
     @Column(name = "review", nullable = false)
     private int review;
