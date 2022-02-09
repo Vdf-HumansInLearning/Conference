@@ -4,7 +4,8 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -16,10 +17,10 @@ public class Day {
     @Column(name = "day_id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private Integer day_id;
+    private UUID day_id;
 
     @Column(name = "date")
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "conference_id", nullable = false)
