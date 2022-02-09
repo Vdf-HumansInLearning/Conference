@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +19,7 @@ public class Participant {
     @Column(name = "participant_id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private Integer participant_id;
+    private UUID participant_id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
