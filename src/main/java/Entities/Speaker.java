@@ -2,10 +2,10 @@ package Entities;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.ManyToAny;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -17,7 +17,7 @@ public class Speaker {
     @Column(name = "speaker_id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private Integer speaker_id;
+    private UUID speaker_id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "participant_id")
