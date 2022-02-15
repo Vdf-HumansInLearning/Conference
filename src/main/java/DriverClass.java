@@ -1,39 +1,47 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class DriverClass {
-    public static void main(String[] args) {
 
-        ArrayList<Participant> participants = new ArrayList<>();
-        ArrayList<Speaker> speakers = new ArrayList<>();
+    private static final String insertTicket =  "INSERT INTO ticket(ticket_id, type) VALUES (UUID_TO_BIN(UUID()), 'Normal');";
+    private static final String insertSpeaker =  "INSERT INTO speaker(speaker_id, title, company, linkedin_acc, twitter_acc, github_acc, biography)\n" +
+            "VALUES (UUID_TO_BIN(UUID()), 'Test', 'Test', 'Test', 'Test', 'Test', 'Test');";
+    private static final String insertSessionType =  "INSERT INTO session_type(session_type_id, type, length) VALUES (UUID_TO_BIN(UUID()), 'presentation', '30');";
+    private static final String insertSession =  "INSERT INTO session(session_id, title, description, session_type_id, topic, techlvl, keywords, length, date, end_time, review)\n" +
+            "VALUES (UUID_TO_BIN(UUID()), 'Test', 'Test', UUID_TO_BIN('bf7dc398-88db-11ec-ac42-0242ac110002'), 'Test', 'beginner', 'Test', 10, NOW(), NOW(), 5);";
+    private static final String insertParticipant =  "INSERT INTO participant(participant_id, first_name, last_name, title, email, phone_number, username, password, session_id, is_organiser, is_speaker)\n" +
+            "VALUES (UUID_TO_BIN(UUID()), 'Test', 'Test', 'Test', 'test@test.com', '0729000000', 'testuser', 'password', UUID_TO_BIN('5b0c7ff4-88da-11ec-ac42-0242ac110002'), 1, 1);";
+    private static final String insertConference =  "INSERT INTO conference(conference_id, location, theme, description, ticket_id, participant_id)\n" +
+            "VALUES (UUID_TO_BIN(UUID()), 'Bucharest', 'Testing', 'Test', UUID_TO_BIN('298c904f-88db-11ec-ac42-0242ac110002'), UUID_TO_BIN('1adde6be-88db-11ec-ac42-0242ac110002'));";
+    private static final String insertTrack =  "INSERT INTO track(track_id, title, session_id) VALUES (UUID_TO_BIN(UUID()), 'Test', UUID_TO_BIN('5b0c7ff4-88da-11ec-ac42-0242ac110002'));";
+    private static final String insertDay =  "INSERT INTO day (day_id, date, conference_id, track_id) VALUES (UUID_TO_BIN(UUID()), NOW(), UUID_TO_BIN('4516dee2-88db-11ec-ac42-0242ac110002'), UUID_TO_BIN('54d90e9f-88db-11ec-ac42-0242ac110002'));";
 
-        Date date1 = new Date(20-1-122);
-        Date date2 = new Date(21-1-122);
-        Date date3 = new Date(22-1-122);
+    private static final String getSql = "SELECT * FROM conference;";
 
-        Participant participant1 = new Participant("Tom", "Morrison", "tom.morrison@gmail.com", "0722446699", "tom.morrison", "password123");
-        Participant participant2 = new Participant("Jane", "Thomson", "jane.thomson@gmail.com", "0788149825", "jane.thomson", "pwd000#");
-        Participant participant3 = new Participant("Jon", "Adams", "jon.adams@gmail.com", "0707079988", "jon.adams", "jon((#))");
+    public static void main(String[] args) throws Exception {
 
-        participants.add(participant1);
-        participants.add(participant2);
-        participants.add(participant3);
-
-        Organiser organiser1 = new Organiser("Emily", "Brown", "Dr.", "emily.brown@gmail.com", "0768683673", "emily.brown", "emily200172");
-
-        Speaker speaker = new Speaker(participant1, "Senior Software Developer", "Vodafone", "Tom.Morrison", "Tom.Morrison", "Tom.Morrison", "Passionate about the fast emerging pace of technology.");
-
-        speakers.add(speaker);
-
-        Session session1 = new Session("Emerging Software Analysis", speakers, "Brief overview of software development opportunities", "Workshop", "Software Development", "Intermediate", new String[]{"software", "technology", "intermediate"}, 60, date1, 4, participants);
-        Session session2 = new Session("Python Daily", speakers, "Python coding tutorial", "Tutorial", "Software Development in Python", "Advanced", new String[]{"software", "technology", "advanced"}, 90, date3, 3, participants);
-
-        Track track1 = new Track(new ArrayList<>(Arrays.asList(session1)));
-        Track track2 = new Track(new ArrayList<>(Arrays.asList(session2)));
-
-        Day day = new Day(new ArrayList<>(Arrays.asList(track1, track2)));
-
-        Conference conference = new Conference(new ArrayList<>(Arrays.asList(date1, date2, date3)), "Romania, Bucharest", "Technological Breakthroughs", "Conference presenting the latest technological breakthroughs", "20-22 January 2022", "Normal Entry");
+        try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/conference", "root" , "root")) {
+            Statement statement = connection.createStatement();
+            System.out.println("Insert row " + statement.executeUpdate(insertTicket));
+            System.out.println("Insert row " + statement.executeUpdate(insertSpeaker));
+            System.out.println("Insert row " + statement.executeUpdate(insertSessionType));
+            System.out.println("Insert row " + statement.executeUpdate(insertSession));
+            System.out.println("Insert row " + statement.executeUpdate(insertParticipant));
+            System.out.println("Insert row " + statement.executeUpdate(insertConference));
+            System.out.println("Insert row " + statement.executeUpdate(insertTrack));
+            System.out.println("Insert row " + statement.executeUpdate(insertDay));
+            ResultSet result  = statement.executeQuery(getSql);
+            System.out.println(result);
+            while(result.next()) {
+                System.out.println(result.getInt(1));
+                System.out.println(result.getString(2));
+                System.out.println(result.getString(3));
+                System.out.println(result.getString(4));
+                System.out.println(result.getInt(5));
+                System.out.println(result.getInt(6));
+            }
+        }
     }
 }
