@@ -16,5 +16,15 @@
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="vdf-digital-repository" />
+      <option name="name" value="vdf-digital-repository" />
+      <option name="url" value="http://devops02.connex.ro:18080/repository/vdf-digital-repository/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven-vdf" />
+      <option name="name" value="maven-vdf" />
+      <option name="url" value="http://devops02.connex.ro:18080/repository/maven-public/" />
+    </remote-repository>
   </component>
 </project>
