@@ -31,14 +31,14 @@ public class Participant {
     private String title;
 
     @Email(message = "Email should be valid!")
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Range(min = 10,max = 13, message = "Phone number not valid!" )
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Column(name = "password", nullable = false)
