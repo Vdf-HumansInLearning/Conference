@@ -1,11 +1,13 @@
-package Entities;
+package com.vodafone.conference.models.entities;
 
-import jakarta.validation.constraints.Email;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,10 +18,10 @@ import java.util.UUID;
 public class Participant {
 
     @Id
-    @Column(name = "participant_id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID participant_id;
+    private UUID id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -55,13 +57,15 @@ public class Participant {
     private List<Ticket> tickets;
 
     @Column(name = "is_organiser", columnDefinition = "tinyint(1) default 0")
-    private Boolean is_organiser;
+    private Boolean isOrganiser;
 
     @Column(name = "is_speaker", columnDefinition = "tinyint(1) default 0")
-    private Boolean is_speaker;
+    private Boolean isSpeaker;
 
     @ManyToOne
-    @JoinColumn(name = "conference_id")
+    @JoinColumn(name = "conference_id", nullable = false)
     private Conference conference;
 
+    @OneToMany(mappedBy = "participant")
+    private List<Track> tracks;
 }

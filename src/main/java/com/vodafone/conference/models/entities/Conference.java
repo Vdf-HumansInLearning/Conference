@@ -1,6 +1,8 @@
-package Entities;
+package com.vodafone.conference.models.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,10 +16,10 @@ import java.util.UUID;
 public class Conference {
 
     @Id
-    @Column(name = "conference_id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID conference_id;
+    private UUID id;
 
     @OneToMany(mappedBy = "conference")
     private List<Day> days;
@@ -31,6 +33,6 @@ public class Conference {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "conference")
+    @OneToMany(mappedBy = "id")
     private List<Participant> participants;
 }

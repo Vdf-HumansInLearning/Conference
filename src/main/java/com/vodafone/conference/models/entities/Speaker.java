@@ -1,6 +1,8 @@
-package Entities;
+package com.vodafone.conference.models.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,14 +16,14 @@ import java.util.UUID;
 public class Speaker {
 
     @Id
-    @Column(name = "speaker_id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID speaker_id;
+    private UUID id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "participant_id")
-    private Entities.Participant participant;
+    private Participant participant;
 
     @Column(name = "title", nullable = false)
     private String title;

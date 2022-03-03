@@ -2,7 +2,7 @@ USE conference;
 
 CREATE TABLE speaker
 (
-    speaker_id BINARY(16) NOT NULL PRIMARY KEY,
+    id BINARY(16) NOT NULL PRIMARY KEY,
     title VARCHAR(45) NOT NULL,
     company VARCHAR(45) NOT NULL,
     linkedin_acc VARCHAR(45) NOT NULL,
@@ -11,6 +11,6 @@ CREATE TABLE speaker
     biography VARCHAR(255) NOT NULL,
     session_id BINARY(16),
     participant_id BINARY(16),
-    FOREIGN KEY (session_id) REFERENCES session(session_id),
-    FOREIGN KEY (participant_id) REFERENCES participant(participant_id)
+    FOREIGN KEY (session_id) REFERENCES session(id),
+    FOREIGN KEY (participant_id) REFERENCES participant(id)
 );
