@@ -11,7 +11,11 @@ public interface SpeakerRepository extends CrudRepository<Speaker, UUID>{
     // JPA Palette generated
     //Optional<Participant> findByIdEquals(UUID id);
     @Override
+    Iterable<Speaker> findAll();
+
+    @Override
     Optional<Speaker> findById(UUID uuid);
+
 
     // TO DO: implement save method to POST/insert speakers
 

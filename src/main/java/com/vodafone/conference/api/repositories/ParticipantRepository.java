@@ -9,9 +9,12 @@ import java.util.UUID;
 public interface ParticipantRepository extends CrudRepository<Participant, UUID> {
 
     // JPA Palette generated
-    //Optional<Participant> findByIdEquals(UUID id);
+    @Override
+    Iterable<Participant> findAll();
+
     @Override
     Optional<Participant> findById(UUID uuid);
+
 
     // TO DO: implement save method to POST/insert participants
 
