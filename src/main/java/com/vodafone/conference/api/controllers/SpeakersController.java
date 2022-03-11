@@ -60,7 +60,7 @@ public class SpeakersController {
     //}
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<Speaker> postSpeaker(@Valid Speaker speaker, Errors errors) {
+    public ResponseEntity<Speaker> postSpeaker(@Valid @RequestBody Speaker speaker, Errors errors) {
 
         if (errors.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -75,7 +75,7 @@ public class SpeakersController {
     //}
 
     @PutMapping("sessions/{session-id}/speakers/{speaker-id}")
-    public ResponseEntity<Speaker> putParticipant(@Valid Speaker speaker, Errors errors)
+    public ResponseEntity<Speaker> putParticipant(@Valid @RequestBody Speaker speaker, Errors errors)
     {
         if (errors.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -87,7 +87,7 @@ public class SpeakersController {
     // TO DO PATCH method
     // implement validation check
     @PatchMapping("sessions/{session-id}/speakers/{speaker-id}")
-    public ResponseEntity<Speaker> patchSpeaker(@PathVariable("speaker-id") UUID id, @RequestBody Speaker patch) {
+    public ResponseEntity<Speaker> patchSpeaker(@PathVariable("speaker-id") UUID id, @Valid @RequestBody Speaker patch) {
         Speaker speaker = speakersRepo.findById(id).get();
 
         //check inner participant fields

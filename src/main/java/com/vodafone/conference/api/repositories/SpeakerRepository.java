@@ -1,23 +1,21 @@
 package com.vodafone.conference.api.repositories;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.vodafone.conference.models.entities.Speaker;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface SpeakerRepository extends CrudRepository<Speaker, UUID>{
+public interface SpeakerRepository extends JpaRepository<Speaker, UUID>{
 
     // JPA Palette generated
     //Optional<Participant> findByIdEquals(UUID id);
     @Override
-    Iterable<Speaker> findAll();
+    List<Speaker> findAll();
 
     @Override
     Optional<Speaker> findById(UUID uuid);
-
-
-    // TO DO: implement save method to POST/insert speakers
 
     @Override
     void deleteById(UUID uuid);

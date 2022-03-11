@@ -83,7 +83,7 @@ public class ParticipantsController {
     //}
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<Participant> postParticipant(@Valid Participant participant, Errors errors) {
+    public ResponseEntity<Participant> postParticipant(@Valid @RequestBody Participant participant, Errors errors) {
         if (errors.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -91,13 +91,8 @@ public class ParticipantsController {
         return new ResponseEntity<>(participantsRepo.save(participant), HttpStatus.CREATED);
     }
 
-    //@PutMapping("conferences/{conference-id}/participants/{participant-id}")
-    //public Participant putParticipant(@RequestBody Participant participant) {
-    //    return participantsRepo.save(participant);
-    //}
-
     @PutMapping("conferences/{conference-id}/participants/{participant-id}")
-    public ResponseEntity<Participant> putParticipant(@Valid Participant participant, Errors errors) {
+    public ResponseEntity<Participant> putParticipant(@Valid @RequestBody Participant participant, Errors errors) {
         if (errors.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -105,10 +100,9 @@ public class ParticipantsController {
         return new ResponseEntity<>(participantsRepo.save(participant), HttpStatus.OK);
     }
 
-    // TO DO PATCH method
     // implement validation check
     @PatchMapping("conferences/{conference-id}/participants/{participant-id}")
-    public ResponseEntity<Participant> patchParticipant(@PathVariable("participant-id") UUID id, @RequestBody Participant patch ) {
+    public ResponseEntity<Participant> patchParticipant(@PathVariable("participant-id") UUID id, @Valid @RequestBody Participant patch ) {
         Participant participant = participantsRepo.findById(id).get();
         if (patch.getFirstName() != null) {
             participant.setFirstName(patch.getFirstName());
