@@ -30,4 +30,8 @@ public class SpeakerService {
         Objects.requireNonNull(speaker);
         speakerRepository.save(speaker);
     }
+
+    public void deleteById(UUID id) {
+        speakerRepository.deleteById(id);
+    }
 }

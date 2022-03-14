@@ -3,8 +3,12 @@ package com.vodafone.conference.api.controllers;
 import java.util.*;
 import java.util.Optional;
 
+import com.vodafone.conference.api.mapper.SpeakerMapper;
 import com.vodafone.conference.api.repositories.SpeakerRepository;
+import com.vodafone.conference.models.entities.DTO.SpeakerCreationDTO;
+import com.vodafone.conference.models.entities.DTO.SpeakerDTO;
 import com.vodafone.conference.models.entities.Speaker;
+import com.vodafone.conference.services.SpeakerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
@@ -27,16 +31,21 @@ import javax.validation.Valid;
 public class SpeakersController {
 
     @Autowired
-    private SpeakerRepository speakersRepo;
+    //private SpeakerRepository speakersRepo;
+    private SpeakerService speakerService;
+    private SpeakerMapper mapper;
 
     //@Autowired
     //EntityLinks entityLinks;
 
-    public  SpeakersController(SpeakerRepository speakerRepository) {this.speakersRepo = speakerRepository; }
+    public  SpeakersController(SpeakerService speakerService, SpeakerMapper speakerMapper) {
+        this.speakerService = speakerService;
+        this.mapper = speakerMapper;
+    }
 
     @GetMapping("sessions/{session-id}/speakers/{speaker-id}")
     public ResponseEntity<Speaker> speakerById(@PathVariable("speaker-id") UUID id) {
-        Optional<Speaker> optSpeaker = speakersRepo.findById(id);
+        Optional<Speaker> optSpeaker = speakerService.findById(id);
         if(optSpeaker.isPresent()) {
             return new ResponseEntity<>(optSpeaker.get(), HttpStatus.OK);
         }
@@ -47,7 +56,7 @@ public class SpeakersController {
     public ResponseEntity<List<Speaker>> sessionSpeakers() {
         List<Speaker> speakers = new ArrayList<>();
 
-        speakersRepo.findAll().forEach(speakers::add);
+        speakerService.findAll().forEach(speakers::add);
 
         return new ResponseEntity<>(speakers, HttpStatus.OK);
     }
@@ -60,13 +69,16 @@ public class SpeakersController {
     //}
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<Speaker> postSpeaker(@Valid @RequestBody Speaker speaker, Errors errors) {
+    public ResponseEntity<SpeakerDTO> postSpeaker(@Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, Errors errors) {
 
+        Speaker speaker = mapper.toSpeaker(speakerCreationDTO);
+        SpeakerDTO speakerDTO = mapper.toDto(speaker);
         if (errors.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(speakersRepo.save(speaker), HttpStatus.CREATED);
+        speakerService.save(speaker);
+        return new ResponseEntity<>(speakerDTO, HttpStatus.CREATED);
     }
 
     //@PutMapping("sessions/{session-id}/speakers/{speaker-id}")
@@ -75,20 +87,24 @@ public class SpeakersController {
     //}
 
     @PutMapping("sessions/{session-id}/speakers/{speaker-id}")
-    public ResponseEntity<Speaker> putParticipant(@Valid @RequestBody Speaker speaker, Errors errors)
+    public ResponseEntity<SpeakerDTO> putParticipant(@Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, Errors errors)
     {
+
+        Speaker speaker = mapper.toSpeaker(speakerCreationDTO);
+        SpeakerDTO speakerDTO = mapper.toDto(speaker);
         if (errors.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(speakersRepo.save(speaker), HttpStatus.OK);
+        speakerService.save(speaker);
+        return new ResponseEntity<>(speakerDTO, HttpStatus.OK);
     }
 
     // TO DO PATCH method
     // implement validation check
     @PatchMapping("sessions/{session-id}/speakers/{speaker-id}")
-    public ResponseEntity<Speaker> patchSpeaker(@PathVariable("speaker-id") UUID id, @Valid @RequestBody Speaker patch) {
-        Speaker speaker = speakersRepo.findById(id).get();
+    public ResponseEntity<SpeakerDTO> patchSpeaker(@PathVariable("speaker-id") UUID id, @Valid @RequestBody Speaker patch) {
+        Speaker speaker = speakerService.findById(id).get();
 
         //check inner participant fields
         if (patch.getParticipant().getFirstName() != null) {
@@ -130,7 +146,8 @@ public class SpeakersController {
             speaker.setBiography(patch.getBiography());
         }
 
-        return new ResponseEntity<>(speakersRepo.save(speaker), HttpStatus.OK);
+        speakerService.save(speaker);
+        return new ResponseEntity<>(mapper.toDto(speaker), HttpStatus.OK);
     }
 
     // DELETE method may be implemented with ResponseEntity
@@ -139,7 +156,7 @@ public class SpeakersController {
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteSpeaker (@PathVariable("speaker-id") UUID id) {
         try {
-            speakersRepo.deleteById(id);
+            speakerService.deleteById(id);
         } catch (EmptyResultDataAccessException e) {}
 
     }

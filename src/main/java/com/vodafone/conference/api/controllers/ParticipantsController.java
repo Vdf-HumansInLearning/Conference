@@ -1,11 +1,13 @@
 package com.vodafone.conference.api.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
+import com.vodafone.conference.api.mapper.ParticipantMapper;
 import com.vodafone.conference.api.repositories.ParticipantRepository;
+import com.vodafone.conference.models.entities.DTO.ParticipantCreationDTO;
+import com.vodafone.conference.models.entities.DTO.ParticipantDTO;
+import com.vodafone.conference.services.ParticipantService;
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
@@ -28,20 +30,25 @@ import javax.validation.Valid;
 public class ParticipantsController {
 
     @Autowired
-    private ParticipantRepository participantsRepo;
+    //private ParticipantRepository participantsRepo;
+    private ParticipantService participantService;
+    private ParticipantMapper mapper;
 
     //@Autowired
     //EntityLinks entityLinks;
 
-    public ParticipantsController(ParticipantRepository participantsRepo) {
-        this.participantsRepo = participantsRepo;
+    public ParticipantsController(ParticipantService participantService, ParticipantMapper mapper) {
+
+        this.participantService = participantService;
+        this.mapper = mapper;
+
     }
 
     // May want to rework endpoint for returning participants belonging to a conference and to a session
 
     @GetMapping("conferences/{conference-id}/participants/{participant-id}")
     public ResponseEntity<Participant> conferenceParticipantById(@PathVariable("participant-id") UUID id) {
-        Optional<Participant> optParticipant = participantsRepo.findById(id);
+        Optional<Participant> optParticipant = participantService.findById(id);
         if(optParticipant.isPresent()) {
             return new ResponseEntity<>(optParticipant.get(), HttpStatus.OK);
         }
@@ -50,7 +57,7 @@ public class ParticipantsController {
 
     @GetMapping("tracks/{track-id}/sessions/{session-id}/participants/{participant-id}")
     public ResponseEntity<Participant> sessionParticipantById(@PathVariable("participant-id") UUID id) {
-        Optional<Participant> optParticipant = participantsRepo.findById(id);
+        Optional<Participant> optParticipant = participantService.findById(id);
         if(optParticipant.isPresent()) {
             return new ResponseEntity<>(optParticipant.get(), HttpStatus.OK);
         }
@@ -61,19 +68,20 @@ public class ParticipantsController {
     public ResponseEntity<List<Participant>> conferenceParticipants() {
         List<Participant> participants = new ArrayList<>();
 
-        participantsRepo.findAll().forEach(participants::add);
+        participantService.findAll().forEach(participants::add);
 
         return new ResponseEntity<>(participants, HttpStatus.OK);
     }
 
-    @GetMapping("tracks/{track-id}/sessions/{session-id}/participants")
+    //might not need it anymore (check again with Carmen)
+    /*@GetMapping("tracks/{track-id}/sessions/{session-id}/participants")
     public ResponseEntity<List<Participant>> sessionParticipants() {
         List<Participant> participants = new ArrayList<>();
 
         participantsRepo.findAll().forEach(participants::add);
 
         return new ResponseEntity<>(participants, HttpStatus.OK);
-    }
+    }*/
 
     // POST method may be implemented with ResponseEntity
     //@PostMapping(consumes = "application/json")
@@ -83,27 +91,35 @@ public class ParticipantsController {
     //}
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<Participant> postParticipant(@Valid @RequestBody Participant participant, Errors errors) {
+    public ResponseEntity<ParticipantDTO> postParticipant(@Valid @RequestBody ParticipantCreationDTO participantCreationDTO, Errors errors) {
+
+        Participant participant = mapper.toParticipant(participantCreationDTO);
+        ParticipantDTO participantDTO = mapper.toDto(participant);
         if (errors.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(participantsRepo.save(participant), HttpStatus.CREATED);
+        participantService.save(participant);
+        return new ResponseEntity<>(participantDTO, HttpStatus.CREATED);
     }
 
     @PutMapping("conferences/{conference-id}/participants/{participant-id}")
-    public ResponseEntity<Participant> putParticipant(@Valid @RequestBody Participant participant, Errors errors) {
+    public ResponseEntity<ParticipantDTO> putParticipant(@Valid @RequestBody ParticipantCreationDTO participantCreationDTO, Errors errors) {
+
+        Participant participant = mapper.toParticipant(participantCreationDTO);
+        ParticipantDTO participantDTO = mapper.toDto(mapper.toParticipant(participantCreationDTO));
         if (errors.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(participantsRepo.save(participant), HttpStatus.OK);
+        participantService.save(participant);
+        return new ResponseEntity<>(participantDTO, HttpStatus.OK);
     }
 
     // implement validation check
     @PatchMapping("conferences/{conference-id}/participants/{participant-id}")
-    public ResponseEntity<Participant> patchParticipant(@PathVariable("participant-id") UUID id, @Valid @RequestBody Participant patch ) {
-        Participant participant = participantsRepo.findById(id).get();
+    public ResponseEntity<ParticipantDTO> patchParticipant(@PathVariable("participant-id") UUID id, @Valid @RequestBody ParticipantCreationDTO patch ) {
+        Participant participant = participantService.findById(id).get();
         if (patch.getFirstName() != null) {
             participant.setFirstName(patch.getFirstName());
         }
@@ -126,7 +142,8 @@ public class ParticipantsController {
             participant.setPassword(patch.getPassword());
         }
 
-        return new ResponseEntity<>(participantsRepo.save(participant), HttpStatus.OK);
+        participantService.save(participant);
+        return new ResponseEntity<>(mapper.toDto(participant), HttpStatus.OK);
     }
 
 
@@ -136,7 +153,7 @@ public class ParticipantsController {
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteParticipant (@PathVariable("participant-id") UUID id) {
         try {
-            participantsRepo.deleteById(id);
+            participantService.deleteById(id);
         } catch (EmptyResultDataAccessException e) {}
 
     }

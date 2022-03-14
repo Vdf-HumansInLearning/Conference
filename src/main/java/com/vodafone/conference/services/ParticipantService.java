@@ -30,4 +30,8 @@ public class ParticipantService {
         Objects.requireNonNull(participant);
         participantRepository.save(participant);
     }
+
+    public void deleteById(UUID id) {
+        participantRepository.deleteById(id);
+    }
 }

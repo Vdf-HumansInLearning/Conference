@@ -25,10 +25,10 @@ public class SpeakerMapper {
     // test against Lombok generated constructor
     // TO DO must add other parameters to AllArgsConstructor call
     public Speaker toSpeaker(SpeakerCreationDTO speakerCreationDTO) {
-        return new Speaker(UUID.randomUUID(), speakerCreationDTO.getParticipant(),
+        /*return new Speaker(UUID.randomUUID(), speakerCreationDTO.getParticipant(),
                 speakerCreationDTO.getTitle(), speakerCreationDTO.getCompany(),
                 speakerCreationDTO.getLinkedinAcc(), speakerCreationDTO.getTwitterAcc(),
                 speakerCreationDTO.getGithubAcc(), speakerCreationDTO.getBiography(),
-                )
+                );*/
     }
 }
