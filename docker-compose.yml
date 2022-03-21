@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  #web:
+  #  build:
+  #  ports:
+  api:
+    build: ./api
+    ports:
+      - "8080:8080"
+    environment:
+      #DB_URL:
+  db:
+    image: mysql
+    ports:
+      - "3306:3306"
+    #volumes:
+      #- conference:
+
+volumes:
+  conference:
+
