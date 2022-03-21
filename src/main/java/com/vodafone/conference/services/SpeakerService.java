@@ -4,12 +4,14 @@ import com.vodafone.conference.api.repositories.ParticipantRepository;
 import com.vodafone.conference.api.repositories.SpeakerRepository;
 import com.vodafone.conference.models.entities.Participant;
 import com.vodafone.conference.models.entities.Speaker;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class SpeakerService {
 
     private SpeakerRepository speakerRepository;

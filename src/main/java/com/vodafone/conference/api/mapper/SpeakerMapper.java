@@ -5,20 +5,25 @@ import com.vodafone.conference.models.entities.DTO.SpeakerCreationDTO;
 import com.vodafone.conference.models.entities.DTO.SpeakerDTO;
 import com.vodafone.conference.models.entities.Participant;
 import com.vodafone.conference.models.entities.Speaker;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
+@Component
 public class SpeakerMapper {
 
+    ModelMapper mapper = new ModelMapper();
+
     public SpeakerDTO toDto(Speaker speaker) {
-        Participant participant = speaker.getParticipant();
+        /*Participant participant = speaker.getParticipant();
         String company = speaker.getCompany();
         String linkedinAcc = speaker.getLinkedinAcc();
         String twitterAcc = speaker.getTwitterAcc();
         String githubAcc = speaker.getGithubAcc();
         String biography = speaker.getBiography();
 
-        return new SpeakerDTO(participant, company, linkedinAcc, twitterAcc, githubAcc, biography);
+        return new SpeakerDTO(participant, company, linkedinAcc, twitterAcc, githubAcc, biography);*/
+        SpeakerDTO speakerDTO = mapper.map(speaker, SpeakerDTO.class);
+        return speakerDTO;
     }
 
     // check with Carmen if UUID should be generated here
@@ -30,5 +35,8 @@ public class SpeakerMapper {
                 speakerCreationDTO.getLinkedinAcc(), speakerCreationDTO.getTwitterAcc(),
                 speakerCreationDTO.getGithubAcc(), speakerCreationDTO.getBiography(),
                 );*/
+
+        Speaker speaker = mapper.map(speakerCreationDTO, Speaker.class);
+        return speaker;
     }
 }

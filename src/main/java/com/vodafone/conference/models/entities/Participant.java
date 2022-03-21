@@ -70,7 +70,7 @@ public class Participant {
     It contains at least one lower case alphabet.
     It contains at least one special character which includes !@#$%&*()-+=^.
     It does not contain any white space.*/
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\\\S+$).{8, 20}$")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\\\S+$).{8,20}$")
     private String password;
 
     @OneToOne(mappedBy = "participant")
