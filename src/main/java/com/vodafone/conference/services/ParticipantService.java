@@ -26,6 +26,14 @@ public class ParticipantService {
         return participantRepository.findById(id);
     }
 
+    public List<Participant> findBySessions_Id(UUID id) {
+        return participantRepository.findBySessions_Id(id);
+    }
+
+    public List<Participant> findByConference_Id(UUID id) {
+        return participantRepository.findByConference_Id(id);
+    }
+
     public void save(Participant participant) {
         Objects.requireNonNull(participant);
         participantRepository.save(participant);

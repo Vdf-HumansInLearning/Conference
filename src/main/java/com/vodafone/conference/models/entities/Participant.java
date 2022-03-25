@@ -38,7 +38,6 @@ public class Participant {
     private String lastName;
 
     @Column(name = "title", nullable = false)
-
     private String title;
 
     @Email()

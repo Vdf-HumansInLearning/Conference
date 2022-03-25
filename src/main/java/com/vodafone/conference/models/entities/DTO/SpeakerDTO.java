@@ -7,6 +7,7 @@ import javax.persistence.Column;
 
 public class SpeakerDTO {
 
+    //private ParticipantDTO participantDTO;
     private Participant participant;
     private String company;
     private String linkedinAcc;
@@ -15,6 +16,7 @@ public class SpeakerDTO {
     private String biography;
 
     public SpeakerDTO(Participant participant, String company, String linkedinAcc, String twitterAcc, String githubAcc, String biography) {
+        //this.participantDTO = participantDTO;
         this.participant = participant;
         this.company = company;
         this.linkedinAcc = linkedinAcc;

@@ -2,9 +2,11 @@ package com.vodafone.conference.api.controllers;
 
 import java.util.*;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.vodafone.conference.api.mapper.SpeakerMapper;
 import com.vodafone.conference.api.repositories.SpeakerRepository;
+import com.vodafone.conference.models.entities.DTO.ParticipantDTO;
 import com.vodafone.conference.models.entities.DTO.SpeakerCreationDTO;
 import com.vodafone.conference.models.entities.DTO.SpeakerDTO;
 import com.vodafone.conference.models.entities.Speaker;
@@ -35,41 +37,48 @@ public class SpeakersController {
     private SpeakerService speakerService;
     private SpeakerMapper mapper;
 
-    //@Autowired
-    //EntityLinks entityLinks;
-
     public  SpeakersController(SpeakerService speakerService, SpeakerMapper speakerMapper) {
         this.speakerService = speakerService;
         this.mapper = speakerMapper;
     }
 
-    @GetMapping("sessions/{session-id}/speakers/{speaker-id}")
-    public ResponseEntity<Speaker> speakerById(@PathVariable("speaker-id") UUID id) {
+    // get speaker by id
+    // implementation fixed
+    @GetMapping("{speaker-id}")
+    public ResponseEntity<SpeakerDTO> getSpeakerById(@PathVariable("speaker-id") UUID id) {
         Optional<Speaker> optSpeaker = speakerService.findById(id);
         if(optSpeaker.isPresent()) {
-            return new ResponseEntity<>(optSpeaker.get(), HttpStatus.OK);
+            //SpeakerDTO speakerDTO = mapper.toDto(optSpeaker.get());
+            return new ResponseEntity<>(mapper.toDto(optSpeaker.get()), HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("sessions/{session-id}/speakers")
-    public ResponseEntity<List<Speaker>> sessionSpeakers() {
-        List<Speaker> speakers = new ArrayList<>();
+    // get all speakers belonging to a session
+    // implementation fixed
+    @GetMapping("sessions/{session-id}")
+    public ResponseEntity<List<SpeakerDTO>> getSessionSpeakersBySessionId(@PathVariable("session-id") UUID id) {
 
-        speakerService.findAll().forEach(speakers::add);
+        List<SpeakerDTO> speakers = speakerService.findBySessions_Id(id).stream()
+                .map(speaker -> mapper.toDto(speaker)).collect(Collectors.toList());
 
         return new ResponseEntity<>(speakers, HttpStatus.OK);
     }
 
-    // POST method may be implemented ResponseEntity
-    //@PostMapping(consumes = "application/json")
-    //@ResponseStatus(HttpStatus.CREATED)
-    //public Speaker postSpeaker(@RequestBody Speaker speaker) {
-    //    return speakersRepo.save(speaker);
-    //}
+    // get all speakers belonging to a conference
+    // implementation done
+    @GetMapping("conferences/{conference-id}")
+    public ResponseEntity<List<SpeakerDTO>> getConferenceSpeakersByConferenceId(@PathVariable("conference-id") UUID id) {
 
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity<SpeakerDTO> postSpeaker(@Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, Errors errors) {
+        List<SpeakerDTO> speakers = speakerService.findByConference_Id(id).stream()
+                .map(speaker -> mapper.toDto(speaker)).collect(Collectors.toList());
+
+        return new ResponseEntity<>(speakers, HttpStatus.OK);
+    }
+
+    //create a speaker (must include conference and session id)
+    @PostMapping(path= "{conference-id}/{session-id}", consumes = "application/json")
+    public ResponseEntity<SpeakerDTO> createSpeaker(@Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, Errors errors) {
 
         Speaker speaker = mapper.toSpeaker(speakerCreationDTO);
         SpeakerDTO speakerDTO = mapper.toDto(speaker);
@@ -81,13 +90,9 @@ public class SpeakersController {
         return new ResponseEntity<>(speakerDTO, HttpStatus.CREATED);
     }
 
-    //@PutMapping("sessions/{session-id}/speakers/{speaker-id}")
-    //public Speaker putParticipant(@RequestBody Speaker speaker) {
-    //    return speakersRepo.save(speaker);
-    //}
-
-    @PutMapping("sessions/{session-id}/speakers/{speaker-id}")
-    public ResponseEntity<SpeakerDTO> putParticipant(@Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, Errors errors)
+    // rewrite a speaker by id
+    @PutMapping("{speaker-id}")
+    public ResponseEntity<SpeakerDTO> putSpeaker(@Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, Errors errors, @PathVariable("speaker-id") String parameter)
     {
 
         Speaker speaker = mapper.toSpeaker(speakerCreationDTO);
@@ -100,9 +105,10 @@ public class SpeakersController {
         return new ResponseEntity<>(speakerDTO, HttpStatus.OK);
     }
 
+    // update a speaker by id
     // TO DO PATCH method
     // implement validation check
-    @PatchMapping("sessions/{session-id}/speakers/{speaker-id}")
+    @PatchMapping("{speaker-id}")
     public ResponseEntity<SpeakerDTO> patchSpeaker(@PathVariable("speaker-id") UUID id, @Valid @RequestBody Speaker patch) {
         Speaker speaker = speakerService.findById(id).get();
 
@@ -150,9 +156,11 @@ public class SpeakersController {
         return new ResponseEntity<>(mapper.toDto(speaker), HttpStatus.OK);
     }
 
+    // delete a speaker by id
     // DELETE method may be implemented with ResponseEntity
     // handle exception
-    @DeleteMapping("sessions/{session-id}/speakers/{speaker-id}")
+    // implementation done
+    @DeleteMapping("{speaker-id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteSpeaker (@PathVariable("speaker-id") UUID id) {
         try {

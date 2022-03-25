@@ -46,4 +46,8 @@ public class Speaker {
 
     @ManyToMany
     private List<Session> sessions;
+
+    @ManyToOne
+    @JoinColumn(name = "conference_id", nullable = false)
+    private Conference conference;
 }

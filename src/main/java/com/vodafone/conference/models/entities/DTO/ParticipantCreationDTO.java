@@ -21,6 +21,9 @@ public class ParticipantCreationDTO {
     private String username;
     private String password;
 
+    private Boolean isOrganiser;
+    private Boolean isSpeaker;
+
     public String getFirstName() {
         return firstName;
     }
@@ -79,15 +82,31 @@ public class ParticipantCreationDTO {
 
     // Unsure whether these fields pertain to user creation
     // Check with Carmen
-    private Speaker speaker;
-    private Session sessions;
-    private List<Ticket> tickets;
-    private Boolean isOrganiser;
-    private Boolean isSpeaker;
-    private Conference conference;
-    private List<Track> tracks;
+    //private Speaker speaker;
+    //private Session sessions;
+    //private List<Ticket> tickets;
 
-    public Speaker getSpeaker() {
+
+    public Boolean getOrganiser() {
+        return isOrganiser;
+    }
+
+    public void setOrganiser(Boolean organiser) {
+        isOrganiser = organiser;
+    }
+
+    public Boolean getSpeaker() {
+        return isSpeaker;
+    }
+
+    public void setSpeaker(Boolean speaker) {
+        isSpeaker = speaker;
+    }
+
+    //private Conference conference;
+    //private List<Track> tracks;
+
+    /*public Speaker getSpeaker() {
         return speaker;
     }
 
@@ -129,13 +148,7 @@ public class ParticipantCreationDTO {
 
     public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
-    }
+    }*/
 
-    public Boolean getOrganiser() {
-        return isOrganiser;
-    }
 
-    public void setOrganiser(Boolean organiser) {
-        isOrganiser = organiser;
-    }
 }

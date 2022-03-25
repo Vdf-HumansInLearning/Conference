@@ -1,6 +1,7 @@
 package com.vodafone.conference.api.controllers;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.vodafone.conference.api.mapper.ParticipantMapper;
 import com.vodafone.conference.api.repositories.ParticipantRepository;
@@ -34,9 +35,6 @@ public class ParticipantsController {
     private ParticipantService participantService;
     private ParticipantMapper mapper;
 
-    //@Autowired
-    //EntityLinks entityLinks;
-
     public ParticipantsController(ParticipantService participantService, ParticipantMapper mapper) {
 
         this.participantService = participantService;
@@ -46,65 +44,59 @@ public class ParticipantsController {
 
     // May want to rework endpoint for returning participants belonging to a conference and to a session
 
-    @GetMapping("conferences/{conference-id}/participants/{participant-id}")
-    public ResponseEntity<Participant> conferenceParticipantById(@PathVariable("participant-id") UUID id) {
-        Optional<Participant> optParticipant = participantService.findById(id);
+    // get a participant by id
+    // implementation fixed
+    @GetMapping("{participant-id}")
+    public ResponseEntity<ParticipantDTO> getParticipantById(@PathVariable("participant-id") String id) {
+        Optional<Participant> optParticipant = participantService.findById(UUID.fromString(id));
         if(optParticipant.isPresent()) {
-            return new ResponseEntity<>(optParticipant.get(), HttpStatus.OK);
+            //ParticipantDTO participantDTO = mapper.toDto(optParticipant.get());
+            return new ResponseEntity<>(mapper.toDto(optParticipant.get()), HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("tracks/{track-id}/sessions/{session-id}/participants/{participant-id}")
-    public ResponseEntity<Participant> sessionParticipantById(@PathVariable("participant-id") UUID id) {
-        Optional<Participant> optParticipant = participantService.findById(id);
-        if(optParticipant.isPresent()) {
-            return new ResponseEntity<>(optParticipant.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    // get all the participants belonging to a certain session
+    // implementation fixed
+    @GetMapping("sessions/{session-id}")
+    public ResponseEntity<List<ParticipantDTO>> getSessionParticipantsBySessionId(@PathVariable("session-id") UUID id) {
+
+        List<ParticipantDTO> participants = participantService.findBySessions_Id(id).stream()
+                .map(participant -> mapper.toDto(participant)).collect(Collectors.toList());
+
+        return new ResponseEntity<>(participants, HttpStatus.OK);
+        //return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("conferences/{conference-id}/participants")
-    public ResponseEntity<List<Participant>> conferenceParticipants() {
-        List<Participant> participants = new ArrayList<>();
+    // get all the participants belonging to a certain conference
+    //implementation fixed
+    @GetMapping("conferences/{conference-id}")
+    public ResponseEntity<List<ParticipantDTO>> getConferenceParticipantsByConferenceId(@PathVariable("conference-id") UUID id) {
 
-        participantService.findAll().forEach(participants::add);
+        List<ParticipantDTO> participants = participantService.findByConference_Id(id).stream()
+                .map(participant -> mapper.toDto(participant)).collect(Collectors.toList());
 
         return new ResponseEntity<>(participants, HttpStatus.OK);
     }
 
-    //might not need it anymore (check again with Carmen)
-    /*@GetMapping("tracks/{track-id}/sessions/{session-id}/participants")
-    public ResponseEntity<List<Participant>> sessionParticipants() {
-        List<Participant> participants = new ArrayList<>();
-
-        participantsRepo.findAll().forEach(participants::add);
-
-        return new ResponseEntity<>(participants, HttpStatus.OK);
-    }*/
-
-    // POST method may be implemented with ResponseEntity
+    //create a participant (must include conference and session id)
     //@PostMapping(consumes = "application/json")
-    //@ResponseStatus(HttpStatus.CREATED)
-    //public Participant postParticipant(@RequestBody Participant participant) {
-    //   return participantsRepo.save(participant);
-    //}
-
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity<ParticipantDTO> postParticipant(@Valid @RequestBody ParticipantCreationDTO participantCreationDTO, Errors errors) {
+    @PostMapping(path= "{conference-id}/{session-id}", consumes = "application/json")
+    public ResponseEntity<ParticipantDTO> createParticipant(@Valid @RequestBody ParticipantCreationDTO participantCreationDTO, Errors errors) {
 
         Participant participant = mapper.toParticipant(participantCreationDTO);
         ParticipantDTO participantDTO = mapper.toDto(participant);
         if (errors.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         participantService.save(participant);
         return new ResponseEntity<>(participantDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping("conferences/{conference-id}/participants/{participant-id}")
-    public ResponseEntity<ParticipantDTO> putParticipant(@Valid @RequestBody ParticipantCreationDTO participantCreationDTO, Errors errors) {
+    //rewrite a participant by id
+    @PutMapping("{participant-id}")
+    public ResponseEntity<ParticipantDTO> putParticipant(@Valid @RequestBody ParticipantCreationDTO participantCreationDTO, Errors errors, @PathVariable("participant-id") String parameter) {
 
         Participant participant = mapper.toParticipant(participantCreationDTO);
         ParticipantDTO participantDTO = mapper.toDto(mapper.toParticipant(participantCreationDTO));
@@ -116,8 +108,9 @@ public class ParticipantsController {
         return new ResponseEntity<>(participantDTO, HttpStatus.OK);
     }
 
+    // update a participant by id
     // implement validation check
-    @PatchMapping("conferences/{conference-id}/participants/{participant-id}")
+    @PatchMapping("{participant-id}")
     public ResponseEntity<ParticipantDTO> patchParticipant(@PathVariable("participant-id") UUID id, @Valid @RequestBody ParticipantCreationDTO patch ) {
         Participant participant = participantService.findById(id).get();
         if (patch.getFirstName() != null) {
@@ -146,14 +139,15 @@ public class ParticipantsController {
         return new ResponseEntity<>(mapper.toDto(participant), HttpStatus.OK);
     }
 
-
+    // delete a participant by id
     // DELETE method may be implemented with ResponseEntity
     // handle exception
-    @DeleteMapping("conferences/{conference-id}/participants/{participant-id}")
+    // implementation done
+    @DeleteMapping("{participant-id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteParticipant (@PathVariable("participant-id") UUID id) {
+    public void deleteParticipant (@PathVariable("participant-id") String id) {
         try {
-            participantService.deleteById(id);
+            participantService.deleteById(UUID.fromString(id));
         } catch (EmptyResultDataAccessException e) {}
 
     }

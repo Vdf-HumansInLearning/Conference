@@ -76,7 +76,7 @@ public class SpeakerCreationDTO {
 
     // Unsure whether these fields pertain to user creation
     // Check with Carmen
-    private List<Session> sessions;
+    /*private List<Session> sessions;
 
     public List<Session> getSessions() {
         return sessions;
@@ -84,5 +84,5 @@ public class SpeakerCreationDTO {
 
     public void setSessions(List<Session> sessions) {
         this.sessions = sessions;
-    }
+    }*/
 }

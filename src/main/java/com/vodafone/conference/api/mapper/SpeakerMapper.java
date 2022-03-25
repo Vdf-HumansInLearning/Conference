@@ -23,6 +23,7 @@ public class SpeakerMapper {
 
         return new SpeakerDTO(participant, company, linkedinAcc, twitterAcc, githubAcc, biography);*/
         SpeakerDTO speakerDTO = mapper.map(speaker, SpeakerDTO.class);
+
         return speakerDTO;
     }
 

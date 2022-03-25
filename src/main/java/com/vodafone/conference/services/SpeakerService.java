@@ -28,6 +28,14 @@ public class SpeakerService {
         return speakerRepository.findById(id);
     }
 
+    public List<Speaker> findBySessions_Id(UUID id) {
+        return speakerRepository.findBySessions_Id(id);
+    }
+
+    public List<Speaker> findByConference_Id(UUID id) {
+        return speakerRepository.findByConference_Id(id);
+    }
+
     public void save(Speaker speaker) {
         Objects.requireNonNull(speaker);
         speakerRepository.save(speaker);
