@@ -23,9 +23,10 @@ public class Participant {
 
     @Id
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
+    //@GeneratedValue(generator = "UUID")
+    //@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    //private UUID id;
+    private String id;
 
     @Column(name = "first_name", nullable = false)
     @NotBlank(message = "First name is required")

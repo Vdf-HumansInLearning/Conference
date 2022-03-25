@@ -47,8 +47,8 @@ public class ParticipantsController {
     // get a participant by id
     // implementation fixed
     @GetMapping("{participant-id}")
-    public ResponseEntity<ParticipantDTO> getParticipantById(@PathVariable("participant-id") String id) {
-        Optional<Participant> optParticipant = participantService.findById(UUID.fromString(id));
+    public ResponseEntity<ParticipantDTO> getParticipantById(@PathVariable("participant-id") UUID id) {
+        Optional<Participant> optParticipant = participantService.findById(id);
         if(optParticipant.isPresent()) {
             //ParticipantDTO participantDTO = mapper.toDto(optParticipant.get());
             return new ResponseEntity<>(mapper.toDto(optParticipant.get()), HttpStatus.OK);
