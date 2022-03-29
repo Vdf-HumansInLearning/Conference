@@ -35,20 +35,40 @@ public class ConferenceDTO implements Serializable {
         return days;
     }
 
+    public void setDays(List<Day> days) {
+        this.days = days;
+    }
+
     public String getLocation() {
         return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getTheme() {
         return theme;
     }
 
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
+
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public List<Participant> getParticipants() {
         return participants;
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        this.participants = participants;
     }
 
     @Override

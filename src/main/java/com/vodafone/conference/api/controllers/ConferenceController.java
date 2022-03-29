@@ -37,6 +37,7 @@ public class ConferenceController {
     }
 
     //get a conference by id
+    // check
     @GetMapping("{conference-id}")
     public ResponseEntity<ConferenceDTO> getConferenceById(@PathVariable("conference-id") String id) {
         Optional<Conference> optConference = conferenceService.findById(UUID.fromString(id));
@@ -53,9 +54,9 @@ public class ConferenceController {
     public ResponseEntity<ConferenceDTO> createConference(@Valid @RequestBody ConferenceCreationDTO conferenceCreationDTO, Errors errors) {
 
         Conference conference = mapper.toConference(conferenceCreationDTO);
-        System.out.println(conference.toString());
+        //System.out.println(conference.toString());
         ConferenceDTO conferenceDTO = mapper.toDto(conference);
-        System.out.println(conferenceDTO.toString());
+        //System.out.println(conferenceDTO.toString());
         if (errors.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -65,6 +66,7 @@ public class ConferenceController {
     }
 
     //rewrite a conference by id
+    // check
     @PutMapping("{conference-id}")
     public ResponseEntity<ConferenceDTO> putConference(@Valid @RequestBody ConferenceCreationDTO conferenceCreationDTO, Errors errors, @PathVariable("conference-id") String id) {
 
@@ -73,13 +75,14 @@ public class ConferenceController {
         if (errors.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        conferenceService.save(conference);
+        //System.out.println(UUID.fromString(id));
+        conferenceService.update(conference, UUID.fromString(id));
         return new ResponseEntity<>(conferenceDTO, HttpStatus.OK);
     }
 
     // update a conference by id
     // implement validation check
+    // check
     @PatchMapping("{conference-id}")
     public ResponseEntity<ConferenceDTO> patchConference(@PathVariable("conference-id") String id, @Valid @RequestBody ConferenceCreationDTO conferenceCreationDTO ) {
         Conference conference = conferenceService.findById(UUID.fromString(id)).get();
@@ -87,9 +90,9 @@ public class ConferenceController {
         //    participant.setFirstName(patch.getFirstName());
         //}
 
-        /*if (conferenceCreationDTO.getDays() != null) {
+        if (conferenceCreationDTO.getDays() != null) {
             conference.setDays(conferenceCreationDTO.getDays());
-        }*/
+        }
         if (conferenceCreationDTO.getLocation() != null) {
             conference.setLocation(conferenceCreationDTO.getLocation());
         }
@@ -99,19 +102,19 @@ public class ConferenceController {
         if (conferenceCreationDTO.getDescription() != null) {
             conference.setDescription(conferenceCreationDTO.getDescription());
         }
-        /*if (conferenceCreationDTO.getParticipants() != null) {
+        if (conferenceCreationDTO.getParticipants() != null) {
             conference.setParticipants(conferenceCreationDTO.getParticipants());
-        }*/
+        }
 
 
-        conferenceService.save(conference);
+        conferenceService.update(conference, UUID.fromString(id));
         return new ResponseEntity<>(mapper.toDto(conference), HttpStatus.OK);
     }
 
     // delete a participant by id
     // DELETE method may be implemented with ResponseEntity
     // handle exception
-    // check
+    // DOES NOT WORK FOR CERTAIN UUIDs
     @DeleteMapping("{conference-id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteConference (@PathVariable("conference-id") String id) {

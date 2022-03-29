@@ -25,6 +25,8 @@ public class SpeakerDTO {
         this.biography = biography;
     }
 
+    public SpeakerDTO() {
+    }
 
     // unsure whether we should return participant fields instead
     public Participant getParticipant() {
@@ -50,5 +52,29 @@ public class SpeakerDTO {
 
     public String getBiography() {
         return biography;
+    }
+
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public void setLinkedinAcc(String linkedinAcc) {
+        this.linkedinAcc = linkedinAcc;
+    }
+
+    public void setTwitterAcc(String twitterAcc) {
+        this.twitterAcc = twitterAcc;
+    }
+
+    public void setGithubAcc(String githubAcc) {
+        this.githubAcc = githubAcc;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
     }
 }

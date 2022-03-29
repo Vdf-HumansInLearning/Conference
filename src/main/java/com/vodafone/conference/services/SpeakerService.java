@@ -44,4 +44,10 @@ public class SpeakerService {
     public void deleteById(UUID id) {
         speakerRepository.deleteById(id);
     }
+
+    public void update(Speaker speaker, UUID id) {
+        Objects.requireNonNull(speaker);
+        speakerRepository.update(speaker.getParticipant(), speaker.getTitle(), speaker.getCompany(), speaker.getLinkedinAcc(),
+                speaker.getTwitterAcc(), speaker.getGithubAcc(), speaker.getBiography(), id);
+    }
 }

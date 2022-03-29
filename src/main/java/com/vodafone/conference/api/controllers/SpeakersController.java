@@ -28,7 +28,7 @@ import javax.validation.Valid;
 
 @RestController
 // base path URL will break requests
-@RequestMapping(path="/speakers", produces = "application/json")
+@RequestMapping(produces = "application/json")
 @CrossOrigin(origins = "*")
 public class SpeakersController {
 
@@ -44,9 +44,9 @@ public class SpeakersController {
 
     // get speaker by id
     // implementation fixed
-    @GetMapping("{speaker-id}")
-    public ResponseEntity<SpeakerDTO> getSpeakerById(@PathVariable("speaker-id") UUID id) {
-        Optional<Speaker> optSpeaker = speakerService.findById(id);
+    @GetMapping("speakers/{speaker-id}")
+    public ResponseEntity<SpeakerDTO> getSpeakerById(@PathVariable("speaker-id") String id) {
+        Optional<Speaker> optSpeaker = speakerService.findById(UUID.fromString(id));
         if(optSpeaker.isPresent()) {
             //SpeakerDTO speakerDTO = mapper.toDto(optSpeaker.get());
             return new ResponseEntity<>(mapper.toDto(optSpeaker.get()), HttpStatus.OK);
@@ -56,10 +56,10 @@ public class SpeakersController {
 
     // get all speakers belonging to a session
     // implementation fixed
-    @GetMapping("sessions/{session-id}")
-    public ResponseEntity<List<SpeakerDTO>> getSessionSpeakersBySessionId(@PathVariable("session-id") UUID id) {
+    @GetMapping("sessions/{session-id}/speakers")
+    public ResponseEntity<List<SpeakerDTO>> getSessionSpeakersBySessionId(@PathVariable("session-id") String id) {
 
-        List<SpeakerDTO> speakers = speakerService.findBySessions_Id(id).stream()
+        List<SpeakerDTO> speakers = speakerService.findBySessions_Id(UUID.fromString(id)).stream()
                 .map(speaker -> mapper.toDto(speaker)).collect(Collectors.toList());
 
         return new ResponseEntity<>(speakers, HttpStatus.OK);
@@ -67,17 +67,17 @@ public class SpeakersController {
 
     // get all speakers belonging to a conference
     // implementation done
-    @GetMapping("conferences/{conference-id}")
-    public ResponseEntity<List<SpeakerDTO>> getConferenceSpeakersByConferenceId(@PathVariable("conference-id") UUID id) {
+    @GetMapping("conferences/{conference-id}/speakers")
+    public ResponseEntity<List<SpeakerDTO>> getConferenceSpeakersByConferenceId(@PathVariable("conference-id") String id) {
 
-        List<SpeakerDTO> speakers = speakerService.findByConference_Id(id).stream()
+        List<SpeakerDTO> speakers = speakerService.findByConference_Id(UUID.fromString(id)).stream()
                 .map(speaker -> mapper.toDto(speaker)).collect(Collectors.toList());
 
         return new ResponseEntity<>(speakers, HttpStatus.OK);
     }
 
     //create a speaker (must include conference and session id)
-    @PostMapping(path= "{conference-id}/{session-id}", consumes = "application/json")
+    @PostMapping(path= "conferences/{conference-id}/sessions/{session-id}", consumes = "application/json")
     public ResponseEntity<SpeakerDTO> createSpeaker(@Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, Errors errors) {
 
         Speaker speaker = mapper.toSpeaker(speakerCreationDTO);
@@ -91,8 +91,8 @@ public class SpeakersController {
     }
 
     // rewrite a speaker by id
-    @PutMapping("{speaker-id}")
-    public ResponseEntity<SpeakerDTO> putSpeaker(@Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, Errors errors, @PathVariable("speaker-id") String parameter)
+    @PutMapping("speakers/{speaker-id}")
+    public ResponseEntity<SpeakerDTO> putSpeaker(@Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, Errors errors, @PathVariable("speaker-id") String id)
     {
 
         Speaker speaker = mapper.toSpeaker(speakerCreationDTO);
@@ -101,58 +101,58 @@ public class SpeakersController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        speakerService.save(speaker);
+        speakerService.update(speaker, UUID.fromString(id));
         return new ResponseEntity<>(speakerDTO, HttpStatus.OK);
     }
 
     // update a speaker by id
     // TO DO PATCH method
     // implement validation check
-    @PatchMapping("{speaker-id}")
-    public ResponseEntity<SpeakerDTO> patchSpeaker(@PathVariable("speaker-id") UUID id, @Valid @RequestBody Speaker patch) {
-        Speaker speaker = speakerService.findById(id).get();
+    @PatchMapping("speakers/{speaker-id}")
+    public ResponseEntity<SpeakerDTO> patchSpeaker(@PathVariable("speaker-id") String id, @Valid @RequestBody SpeakerCreationDTO speakerCreationDTO) {
+        Speaker speaker = speakerService.findById(UUID.fromString(id)).get();
 
         //check inner participant fields
-        if (patch.getParticipant().getFirstName() != null) {
-            speaker.getParticipant().setFirstName(patch.getParticipant().getFirstName());
+        if (speakerCreationDTO.getParticipant().getFirstName() != null) {
+            speaker.getParticipant().setFirstName(speakerCreationDTO.getParticipant().getFirstName());
         }
-        if (patch.getParticipant().getLastName() != null) {
-            speaker.getParticipant().setLastName(patch.getParticipant().getLastName());
+        if (speakerCreationDTO.getParticipant().getLastName() != null) {
+            speaker.getParticipant().setLastName(speakerCreationDTO.getParticipant().getLastName());
         }
-        if (patch.getTitle() != null) {
-            speaker.getParticipant().setTitle(patch.getTitle());
+        if (speakerCreationDTO.getTitle() != null) {
+            speaker.getParticipant().setTitle(speakerCreationDTO.getTitle());
         }
-        if (patch.getParticipant().getEmail() != null) {
-            speaker.getParticipant().setEmail(patch.getParticipant().getEmail());
+        if (speakerCreationDTO.getParticipant().getEmail() != null) {
+            speaker.getParticipant().setEmail(speakerCreationDTO.getParticipant().getEmail());
         }
-        if (patch.getParticipant().getPhoneNumber() != null) {
-            speaker.getParticipant().setPhoneNumber(patch.getParticipant().getPhoneNumber());
+        if (speakerCreationDTO.getParticipant().getPhoneNumber() != null) {
+            speaker.getParticipant().setPhoneNumber(speakerCreationDTO.getParticipant().getPhoneNumber());
         }
-        if (patch.getParticipant().getUsername() != null) {
-            speaker.getParticipant().setUsername(patch.getParticipant().getUsername());
+        if (speakerCreationDTO.getParticipant().getUsername() != null) {
+            speaker.getParticipant().setUsername(speakerCreationDTO.getParticipant().getUsername());
         }
-        if (patch.getParticipant().getPassword() != null) {
-            speaker.getParticipant().setPassword(patch.getParticipant().getPassword());
+        if (speakerCreationDTO.getParticipant().getPassword() != null) {
+            speaker.getParticipant().setPassword(speakerCreationDTO.getParticipant().getPassword());
         }
 
         // check speaker specific fields
-        if (patch.getCompany() != null) {
-            speaker.setCompany(patch.getCompany());
+        if (speakerCreationDTO.getCompany() != null) {
+            speaker.setCompany(speakerCreationDTO.getCompany());
         }
-        if (patch.getLinkedinAcc() != null) {
-            speaker.setLinkedinAcc(patch.getLinkedinAcc());
+        if (speakerCreationDTO.getLinkedinAcc() != null) {
+            speaker.setLinkedinAcc(speakerCreationDTO.getLinkedinAcc());
         }
-        if (patch.getTwitterAcc() != null) {
-            speaker.setTwitterAcc(patch.getTwitterAcc());
+        if (speakerCreationDTO.getTwitterAcc() != null) {
+            speaker.setTwitterAcc(speakerCreationDTO.getTwitterAcc());
         }
-        if (patch.getGithubAcc() != null) {
-            speaker.setGithubAcc(patch.getGithubAcc());
+        if (speakerCreationDTO.getGithubAcc() != null) {
+            speaker.setGithubAcc(speakerCreationDTO.getGithubAcc());
         }
-        if (patch.getBiography() != null) {
-            speaker.setBiography(patch.getBiography());
+        if (speakerCreationDTO.getBiography() != null) {
+            speaker.setBiography(speakerCreationDTO.getBiography());
         }
 
-        speakerService.save(speaker);
+        speakerService.update(speaker, UUID.fromString(id));
         return new ResponseEntity<>(mapper.toDto(speaker), HttpStatus.OK);
     }
 
@@ -160,11 +160,11 @@ public class SpeakersController {
     // DELETE method may be implemented with ResponseEntity
     // handle exception
     // implementation done
-    @DeleteMapping("{speaker-id}")
+    @DeleteMapping("speakers/{speaker-id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteSpeaker (@PathVariable("speaker-id") UUID id) {
+    public void deleteSpeaker (@PathVariable("speaker-id") String id) {
         try {
-            speakerService.deleteById(id);
+            speakerService.deleteById(UUID.fromString(id));
         } catch (EmptyResultDataAccessException e) {}
 
     }

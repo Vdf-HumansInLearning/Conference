@@ -34,6 +34,12 @@ public class ParticipantService {
         return participantRepository.findByConference_Id(id);
     }
 
+    //public void save(Participant participant, UUID conferenceId, UUID sessionId) {
+    //    Objects.requireNonNull(participant);
+        //participant.setConference();
+    //    participantRepository.save(participant);
+    //}
+
     public void save(Participant participant) {
         Objects.requireNonNull(participant);
         participantRepository.save(participant);
@@ -41,5 +47,12 @@ public class ParticipantService {
 
     public void deleteById(UUID id) {
         participantRepository.deleteById(id);
+    }
+
+    public void update(Participant participant, UUID id) {
+        Objects.requireNonNull(participant);
+
+        participantRepository.update(participant.getFirstName(), participant.getLastName(), participant.getTitle(),
+                participant.getEmail(), participant.getPhoneNumber(), participant.getUsername(), participant.getPassword(), id);
     }
 }

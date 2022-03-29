@@ -30,6 +30,12 @@ public class ConferenceService implements Serializable {
         conferenceRepository.save(conference);
     }
 
+    public void update(Conference conference, UUID id) {
+        Objects.requireNonNull(conference);
+        //conferenceRepository.update(conference.getDays(), conference.getLocation(), conference.getTheme(), conference.getDescription(), conference.getParticipants(), id);
+        conferenceRepository.update(conference.getLocation(), conference.getTheme(), conference.getDescription(), id);
+    }
+
     public void deleteById(UUID id) {
         conferenceRepository.deleteById(id);
     }
