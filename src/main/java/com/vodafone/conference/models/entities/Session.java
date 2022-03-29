@@ -16,8 +16,9 @@ import java.util.UUID;
 @Entity
 public class Session {
 
+    // columnDefinition = "uuid DEFAULT uuid_generate_v4()"
     @Id
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
@@ -25,7 +26,11 @@ public class Session {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(name="speaker_session", joinColumns = @JoinColumn(name="session_id"),
+            inverseJoinColumns = @JoinColumn(name="speaker_id"))
     private List<Speaker> speakers;
 
     @Column(name = "description", nullable = false)

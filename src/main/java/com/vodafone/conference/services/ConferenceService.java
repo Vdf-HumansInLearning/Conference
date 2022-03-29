@@ -1,0 +1,36 @@
+package com.vodafone.conference.services;
+
+import com.vodafone.conference.api.repositories.ConferenceRepository;
+import com.vodafone.conference.models.entities.Conference;
+import com.vodafone.conference.models.entities.Day;
+import com.vodafone.conference.models.entities.Participant;
+import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+public class ConferenceService implements Serializable {
+
+    private ConferenceRepository conferenceRepository;
+
+    public ConferenceService(ConferenceRepository conferenceRepository) {
+        this.conferenceRepository = conferenceRepository;
+    }
+
+    public Optional<Conference> findById(UUID id) {
+        return conferenceRepository.findById(id);
+    }
+
+    public void save(Conference conference) {
+        Objects.requireNonNull(conference);
+        conferenceRepository.save(conference);
+    }
+
+    public void deleteById(UUID id) {
+        conferenceRepository.deleteById(id);
+    }
+}

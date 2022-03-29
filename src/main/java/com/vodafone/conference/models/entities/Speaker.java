@@ -15,8 +15,9 @@ import java.util.UUID;
 @Entity
 public class Speaker {
 
+    // columnDefinition = "uuid DEFAULT uuid_generate_v4()"
     @Id
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
@@ -44,7 +45,13 @@ public class Speaker {
     @Column(name = "biography", nullable = false)
     private String biography;
 
-    @ManyToMany
+    // check Spring many-to-many relationship in course
+    //checked
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(name="speaker_session", joinColumns = @JoinColumn(name="speaker_id"),
+                inverseJoinColumns = @JoinColumn(name="session_id"))
     private List<Session> sessions;
 
     @ManyToOne

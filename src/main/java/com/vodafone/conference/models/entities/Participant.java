@@ -21,8 +21,9 @@ import java.util.UUID;
 @Entity
 public class Participant {
 
+    // columnDefinition = "uuid DEFAULT uuid_generate_v4()"
     @Id
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+    @Column(name = "id", updatable = false, nullable = false)
     //@GeneratedValue(generator = "UUID")
     //@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     //private UUID id;
@@ -80,7 +81,7 @@ public class Participant {
     @JoinColumn(name = "session_id", nullable = false)
     private Session sessions;
 
-    @OneToMany(mappedBy = "participant")
+    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
     private List<Ticket> tickets;
 
     @Column(name = "is_organiser", columnDefinition = "tinyint(1) default 0")
@@ -93,6 +94,6 @@ public class Participant {
     @JoinColumn(name = "conference_id", nullable = false)
     private Conference conference;
 
-    @OneToMany(mappedBy = "participant")
+    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
     private List<Track> tracks;
 }

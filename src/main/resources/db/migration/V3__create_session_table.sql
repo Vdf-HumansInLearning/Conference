@@ -2,10 +2,10 @@ USE conference;
 
 CREATE TABLE session
 (
-    id BINARY(16) NOT NULL PRIMARY KEY,
+    id UUID NOT NULL PRIMARY KEY,
     title VARCHAR(45) NOT NULL,
     description VARCHAR(255) NOT NULL,
-    session_type_id BINARY(16),
+    session_type_id UUID,
     topic VARCHAR(45) NOT NULL,
     tech_level ENUM('BEGINNER', 'MID_LEVEL', 'ADVANCED'),
     keywords VARCHAR(45) NOT NULL,

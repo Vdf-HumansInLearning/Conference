@@ -14,8 +14,9 @@ import java.util.UUID;
 @Entity
 public class Ticket {
 
+    // columnDefinition = "uuid DEFAULT uuid_generate_v4()"
     @Id
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;

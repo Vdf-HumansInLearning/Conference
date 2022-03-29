@@ -15,8 +15,9 @@ import java.util.UUID;
 @Entity
 public class Conference {
 
+    //columnDefinition = "uuid DEFAULT uuid_generate_v4()"
     @Id
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
+    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
@@ -35,4 +36,16 @@ public class Conference {
 
     @OneToMany(mappedBy = "id")
     private List<Participant> participants;
+
+    @Override
+    public String toString() {
+        return "Conference{" +
+                "id=" + id +
+                ", days=" + days +
+                ", location='" + location + '\'' +
+                ", theme='" + theme + '\'' +
+                ", description='" + description + '\'' +
+                ", participants=" + participants +
+                '}';
+    }
 }
