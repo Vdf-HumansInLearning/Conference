@@ -1,27 +1,21 @@
 package com.vodafone.conference.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.UUID;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-public class Conference {
-
-    @Id
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
-
-    @OneToMany(mappedBy = "conference")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "conference")
+public class Conference extends EntityWithUUID {
+    @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL) @JsonIgnore
     private List<Day> days;
 
     @Column(name = "location", nullable = false)
@@ -33,6 +27,9 @@ public class Conference {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "id") @JsonIgnore
     private List<Participant> participants;
+
+    @OneToMany(mappedBy = "conference") @JsonIgnore
+    private List<Ticket> tickets;
 }

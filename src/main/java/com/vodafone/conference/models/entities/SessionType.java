@@ -1,47 +1,49 @@
 package com.vodafone.conference.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class SessionType {
-
-    @Id
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
-
+@Table(name = "session_type")
+public class SessionType extends EntityWithUUID {
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private TypeAndDuration type;
+    private Type type;
 
     @Column(name = "length", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TypeAndDuration length;
+    @Enumerated(EnumType.ORDINAL)
+    private Duration length;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "sessionType") @JsonIgnore
     @JoinColumn(name = "session_id", referencedColumnName = "id")
     private Session session;
 
-    enum TypeAndDuration {
-        WORKSHOP (45),
-        DEMO (90),
-        PRESENTATION (30),
-        BREAK (15),
-        LUNCH_BREAK (90);
+    public enum Type {
+        WORKSHOP,
+        DEMO,
+        PRESENTATION,
+        BREAK,
+        LUNCH_BREAK;
+    }
+
+    public enum Duration {
+        LENGTH_1 (15),
+        LENGTH_2 (30),
+        LENGTH_3 (45),
+        LENGTH_4 (90);
 
         private int length;
-        TypeAndDuration(int length) {
+        Duration(int length) {
             this.length = length;
         }
+
+        public int getLength() { return length; }
     }
 }

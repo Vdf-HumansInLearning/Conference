@@ -1,0 +1,9 @@
+CREATE TYPE ticket_type AS ENUM ('COMPLETE_ONLINE_EXPERIENCE', 'COMPLETE_ON_SITE_EXPERIENCE', 'ONLINE_EXPERIENCE', 'ON_SITE_EXPERIENCE');
+CREATE TYPE ticket_price AS ENUM ('200', '250', '300', '350');
+
+CREATE TABLE ticket
+(
+    id UUID NOT NULL PRIMARY KEY,
+    type ticket_type,
+    price ticket_price
+);
