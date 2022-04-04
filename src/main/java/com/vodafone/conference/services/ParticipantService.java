@@ -41,9 +41,9 @@ public class ParticipantService {
         Objects.requireNonNull(participant);
           //set speaker
           participant.setSpeaker(null);
-          //set tickets
+          //set conference
           participant.setConference(conferenceRepository.findById(conferenceId).get());
-          //set tracks
+
         participantRepository.save(participant);
     }
 

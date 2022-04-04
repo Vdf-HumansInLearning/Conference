@@ -45,8 +45,6 @@ public class SpeakerService {
     public void save(Speaker speaker, UUID conferenceId, UUID participantId) {
         Objects.requireNonNull(speaker);
 
-        // participant may come served from Front-End
-
         speaker.setConference(conferenceRepository.findById(conferenceId).get());
         speakerRepository.save(speaker);
     }

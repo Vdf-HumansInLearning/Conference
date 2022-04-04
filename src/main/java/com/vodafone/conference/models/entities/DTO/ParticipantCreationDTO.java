@@ -82,8 +82,6 @@ public class ParticipantCreationDTO {
 
     // Unsure whether these fields pertain to user creation
     // Check with Carmen
-    //private Speaker speaker;
-    //private Session sessions;
     //private List<Ticket> tickets;
 
 
@@ -102,53 +100,5 @@ public class ParticipantCreationDTO {
     public void setSpeaker(Boolean speaker) {
         isSpeaker = speaker;
     }
-
-    //private Conference conference;
-    //private List<Track> tracks;
-
-    /*public Speaker getSpeaker() {
-        return speaker;
-    }
-
-    public void setSpeaker(Boolean speaker) {
-        isSpeaker = speaker;
-    }
-
-    public Conference getConference() {
-        return conference;
-    }
-
-    public void setConference(Conference conference) {
-        this.conference = conference;
-    }
-
-    public List<Track> getTracks() {
-        return tracks;
-    }
-
-    public void setTracks(List<Track> tracks) {
-        this.tracks = tracks;
-    }
-
-    public void setSpeaker(Speaker speaker) {
-        this.speaker = speaker;
-    }
-
-    public Session getSessions() {
-        return sessions;
-    }
-
-    public void setSessions(Session sessions) {
-        this.sessions = sessions;
-    }
-
-    public List<Ticket> getTickets() {
-        return tickets;
-    }
-
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
-    }*/
-
 
 }

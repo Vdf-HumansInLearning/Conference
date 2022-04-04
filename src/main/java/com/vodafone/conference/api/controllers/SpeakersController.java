@@ -29,7 +29,6 @@ import com.vodafone.conference.models.entities.Participant;
 import javax.validation.Valid;
 
 @RestController
-// base path URL will break requests
 @RequestMapping(produces = "application/json")
 @CrossOrigin(origins = "*")
 public class SpeakersController {

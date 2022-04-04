@@ -22,7 +22,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-// base path URL will break requests
 @RequestMapping(path="/conferences", produces = "application/json")
 @CrossOrigin(origins = "*")
 public class ConferenceController {
