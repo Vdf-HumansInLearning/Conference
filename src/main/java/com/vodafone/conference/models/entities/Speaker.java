@@ -22,6 +22,7 @@ public class Speaker {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
+    //@Transient creates error
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "participant_id")
     private Participant participant;
@@ -45,14 +46,20 @@ public class Speaker {
     @Column(name = "biography", nullable = false)
     private String biography;
 
-    // check Spring many-to-many relationship in course
-    //checked
-    @ManyToMany(fetch = FetchType.LAZY,
+    // this is Spring many-to-many relationship in course
+    /*@ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(name="speaker_session", joinColumns = @JoinColumn(name="speaker_id"),
                 inverseJoinColumns = @JoinColumn(name="session_id"))
-    private List<Session> sessions;
+    private List<Session> sessions;*/
+
+
+    // speaker should not have session ID
+    // as sessions added/created by speakers are unique to them (i.e. two speakers cannot add/create the same session)
+    //@ManyToOne
+    //@JoinColumn(name = "session_id", nullable = false)
+    //private Session sessions;
 
     @ManyToOne
     @JoinColumn(name = "conference_id", nullable = false)

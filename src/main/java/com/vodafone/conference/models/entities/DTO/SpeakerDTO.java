@@ -7,17 +7,17 @@ import javax.persistence.Column;
 
 public class SpeakerDTO {
 
-    //private ParticipantDTO participantDTO;
-    private Participant participant;
+    private ParticipantDTO participantDTO;
+    //private Participant participant;
     private String company;
     private String linkedinAcc;
     private String twitterAcc;
     private String githubAcc;
     private String biography;
 
-    public SpeakerDTO(Participant participant, String company, String linkedinAcc, String twitterAcc, String githubAcc, String biography) {
-        //this.participantDTO = participantDTO;
-        this.participant = participant;
+    public SpeakerDTO(ParticipantDTO participantDTO, String company, String linkedinAcc, String twitterAcc, String githubAcc, String biography) {
+        this.participantDTO = participantDTO;
+        //this.participant = participant;
         this.company = company;
         this.linkedinAcc = linkedinAcc;
         this.twitterAcc = twitterAcc;
@@ -29,8 +29,8 @@ public class SpeakerDTO {
     }
 
     // unsure whether we should return participant fields instead
-    public Participant getParticipant() {
-        return participant;
+    public ParticipantDTO getParticipantDTO() {
+        return participantDTO;
     }
 
 
@@ -54,8 +54,8 @@ public class SpeakerDTO {
         return biography;
     }
 
-    public void setParticipant(Participant participant) {
-        this.participant = participant;
+    public void setParticipantDTO(ParticipantDTO participantDTO) {
+        this.participantDTO = participantDTO;
     }
 
     public void setCompany(String company) {

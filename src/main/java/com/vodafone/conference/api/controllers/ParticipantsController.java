@@ -31,7 +31,6 @@ import javax.validation.Valid;
 public class ParticipantsController {
 
     @Autowired
-    //private ParticipantRepository participantsRepo;
     private ParticipantService participantService;
     private ParticipantMapper mapper;
 
@@ -42,23 +41,21 @@ public class ParticipantsController {
 
     }
 
-    // May want to rework endpoint for returning participants belonging to a conference and to a session
-
     // get a participant by id
-    //
+    // DOES NOT WORK FOR CERTAIN UUIDs (UUID string too large)
     @GetMapping("participants/{participant-id}")
     public ResponseEntity<ParticipantDTO> getParticipantById(@PathVariable("participant-id") String id) {
         Optional<Participant> optParticipant = participantService.findById(UUID.fromString(id));
         if(optParticipant.isPresent()) {
-            //ParticipantDTO participantDTO = mapper.toDto(optParticipant.get());
             return new ResponseEntity<>(mapper.toDto(optParticipant.get()), HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     // get all the participants belonging to a certain session
-    //
-    @GetMapping("sessions/{session-id}/participants")
+    // participant should not have session ID
+    // as sessions added/created by participants are unique to them (i.e. two participants cannot add/create the same session)
+    /*@GetMapping("sessions/{session-id}/participants")
     public ResponseEntity<List<ParticipantDTO>> getSessionParticipantsBySessionId(@PathVariable("session-id") String id) {
 
         List<ParticipantDTO> participants = participantService.findBySessions_Id(UUID.fromString(id)).stream()
@@ -66,10 +63,10 @@ public class ParticipantsController {
 
         return new ResponseEntity<>(participants, HttpStatus.OK);
         //return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
+    }*/
 
     // get all the participants belonging to a certain conference
-    //
+    // check
     @GetMapping("conferences/{conference-id}/participants")
     public ResponseEntity<List<ParticipantDTO>> getConferenceParticipantsByConferenceId(@PathVariable("conference-id") String id) {
 
@@ -79,11 +76,9 @@ public class ParticipantsController {
         return new ResponseEntity<>(participants, HttpStatus.OK);
     }
 
-    //create a participant (must include conference and session id)
-    //@PostMapping(consumes = "application/json")
-    //
-    @PostMapping(path= "conferences/{conference-id}/sessions/{session-id}/participants", consumes = "application/json")
-    public ResponseEntity<ParticipantDTO> createParticipant(@Valid @RequestBody ParticipantCreationDTO participantCreationDTO, @PathVariable("conference-id") String conferenceId, @PathVariable("session-id") String sessionId, Errors errors) {
+    // check
+    @PostMapping(path= "conferences/{conference-id}/participants", consumes = "application/json")
+    public ResponseEntity<ParticipantDTO> createParticipant(@Valid @RequestBody ParticipantCreationDTO participantCreationDTO, @PathVariable("conference-id") String conferenceId, Errors errors) {
 
         Participant participant = mapper.toParticipant(participantCreationDTO);
         ParticipantDTO participantDTO = mapper.toDto(participant);
@@ -91,12 +86,13 @@ public class ParticipantsController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        participantService.save(participant);
+
+        participantService.save(participant, UUID.fromString(conferenceId));
         return new ResponseEntity<>(participantDTO, HttpStatus.CREATED);
     }
 
     //rewrite a participant by id
-    //
+    // check
     @PutMapping("/participants/{participant-id}")
     public ResponseEntity<ParticipantDTO> putParticipant(@Valid @RequestBody ParticipantCreationDTO participantCreationDTO, Errors errors, @PathVariable("participant-id") String id) {
 
@@ -112,7 +108,7 @@ public class ParticipantsController {
 
     // update a participant by id
     // implement validation check
-    //
+    // check
     @PatchMapping("participants/{participant-id}")
     public ResponseEntity<ParticipantDTO> patchParticipant(@PathVariable("participant-id") String id, @Valid @RequestBody ParticipantCreationDTO participantCreationDTO ) {
         Participant participant = participantService.findById(UUID.fromString(id)).get();
@@ -145,7 +141,7 @@ public class ParticipantsController {
     // delete a participant by id
     // DELETE method may be implemented with ResponseEntity
     // handle exception
-    //
+    // check
     @DeleteMapping("participants/{participant-id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteParticipant (@PathVariable("participant-id") String id) {

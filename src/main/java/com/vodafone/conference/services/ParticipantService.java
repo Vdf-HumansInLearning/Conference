@@ -1,5 +1,6 @@
 package com.vodafone.conference.services;
 
+import com.vodafone.conference.api.repositories.ConferenceRepository;
 import com.vodafone.conference.api.repositories.ParticipantRepository;
 import com.vodafone.conference.models.entities.Participant;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,11 @@ import java.util.UUID;
 public class ParticipantService {
 
     private ParticipantRepository participantRepository;
+    private ConferenceRepository conferenceRepository;
 
-    public ParticipantService(ParticipantRepository participantRepository) {
+    public ParticipantService(ParticipantRepository participantRepository, ConferenceRepository conferenceRepository) {
         this.participantRepository = participantRepository;
+        this.conferenceRepository = conferenceRepository;
     }
 
     public List<Participant> findAll() {
@@ -26,22 +29,21 @@ public class ParticipantService {
         return participantRepository.findById(id);
     }
 
-    public List<Participant> findBySessions_Id(UUID id) {
-        return participantRepository.findBySessions_Id(id);
-    }
+    //public List<Participant> findBySessions_Id(UUID id) {
+    //    return participantRepository.findBySessions_Id(id);
+    //}
 
     public List<Participant> findByConference_Id(UUID id) {
         return participantRepository.findByConference_Id(id);
     }
 
-    //public void save(Participant participant, UUID conferenceId, UUID sessionId) {
-    //    Objects.requireNonNull(participant);
-        //participant.setConference();
-    //    participantRepository.save(participant);
-    //}
-
-    public void save(Participant participant) {
+    public void save(Participant participant, UUID conferenceId) {
         Objects.requireNonNull(participant);
+          //set speaker
+          participant.setSpeaker(null);
+          //set tickets
+          participant.setConference(conferenceRepository.findById(conferenceId).get());
+          //set tracks
         participantRepository.save(participant);
     }
 

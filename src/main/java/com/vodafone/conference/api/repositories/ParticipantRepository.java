@@ -20,7 +20,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, UUID> 
     @Override
     Optional<Participant> findById(UUID uuid);
 
-    List<Participant> findBySessions_Id(UUID id);
+    //List<Participant> findBySessions_Id(UUID id);
 
     List<Participant> findByConference_Id(UUID id);
 

@@ -10,7 +10,7 @@ public class SpeakerCreationDTO {
 
     SpeakerCreationDTO() {}
 
-    private Participant participant;
+    private ParticipantCreationDTO participantCreationDTO;
     private String title;
     private String company;
     private String linkedinAcc;
@@ -18,12 +18,12 @@ public class SpeakerCreationDTO {
     private String githubAcc;
     private String biography;
 
-    public Participant getParticipant() {
-        return participant;
+    public ParticipantCreationDTO getParticipantCreationDTO() {
+        return participantCreationDTO;
     }
 
-    public void setParticipant(Participant participant) {
-        this.participant = participant;
+    public void setParticipantCreationDTO(ParticipantCreationDTO participantCreationDTO) {
+        this.participantCreationDTO = participantCreationDTO;
     }
 
     public String getTitle() {

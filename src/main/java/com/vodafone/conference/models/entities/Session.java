@@ -59,8 +59,13 @@ public class Session {
     @Column(name = "review", nullable = false)
     private int review;
 
-    @OneToMany(mappedBy = "sessions")
-    private List<Participant> participants;
+    // participant should not have session ID
+    // as sessions added/created by participants are unique to them (i.e. two participants cannot add/create the same session)
+    //@OneToMany(mappedBy = "sessions")
+    //private List<Participant> participants;
+
+
+    // Session may not have track id
 
     @ManyToOne
     @JoinColumn(name = "track_id", nullable = false)

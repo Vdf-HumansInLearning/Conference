@@ -21,7 +21,7 @@ public interface SpeakerRepository extends JpaRepository<Speaker, UUID>{
     @Override
     Optional<Speaker> findById(UUID uuid);
 
-    List<Speaker> findBySessions_Id(UUID id);
+    //List<Speaker> findBySessions_Id(UUID id);
 
     List<Speaker> findByConference_Id(UUID id);
 

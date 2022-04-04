@@ -24,10 +24,10 @@ public class Participant {
     // columnDefinition = "uuid DEFAULT uuid_generate_v4()"
     @Id
     @Column(name = "id", updatable = false, nullable = false)
-    //@GeneratedValue(generator = "UUID")
-    //@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    //private UUID id;
-    private String id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID id;
+    //private String id;
 
     @Column(name = "first_name", nullable = false)
     @NotBlank(message = "First name is required")
@@ -74,12 +74,22 @@ public class Participant {
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\\\S+$).{8,20}$")
     private String password;
 
-    @OneToOne(mappedBy = "participant")
+    @OneToOne(mappedBy = "participant", cascade = CascadeType.ALL)
     private Speaker speaker;
 
-    @ManyToOne
-    @JoinColumn(name = "session_id", nullable = false)
-    private Session sessions;
+    public Speaker getSpeaker() {
+        return speaker;
+    }
+
+    public void setSpeaker(Speaker speaker) {
+        this.speaker = speaker;
+    }
+
+    // participant should not have session ID
+    // as sessions added/created by participants are unique to them (i.e. two participants cannot add/create the same session)
+    //@ManyToOne
+    //@JoinColumn(name = "session_id", nullable = false)
+    //private Session sessions;
 
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
     private List<Ticket> tickets;

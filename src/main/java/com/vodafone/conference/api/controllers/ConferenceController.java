@@ -114,7 +114,7 @@ public class ConferenceController {
     // delete a participant by id
     // DELETE method may be implemented with ResponseEntity
     // handle exception
-    // DOES NOT WORK FOR CERTAIN UUIDs
+    // DOES NOT WORK FOR CERTAIN UUIDs (UUID string too large)
     @DeleteMapping("{conference-id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteConference (@PathVariable("conference-id") String id) {
