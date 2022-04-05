@@ -1,12 +1,14 @@
 package com.vodafone.conference.services;
 
 import com.vodafone.conference.api.repositories.DayRepository;
-import com.vodafone.conference.models.dto.BaseDayDTO;
+import com.vodafone.conference.exceptions.ApiRequestException;
+import com.vodafone.conference.models.dto.DayDTO;
 import com.vodafone.conference.models.entities.Day;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,22 +31,33 @@ public class DayService {
         if (byId.isPresent()) {
             return byId.get();
         } else {
-            throw new RuntimeException(String.format("Could not find a day with the id: ", id));
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         }
     }
 
     @Transactional
-    public List<BaseDayDTO> getAllDays() {
+    public List<DayDTO> getAllDays() {
         List<Day> days = dayRepository.findAll();
-        List<BaseDayDTO> baseDayDTOList = new ArrayList<>();
+        List<DayDTO> dayDTOList = new ArrayList<>();
 
         for (Day day : days) {
-            BaseDayDTO temp = new BaseDayDTO();
+            DayDTO temp = new DayDTO();
+            temp.id = day.getId();
             temp.date = day.getDate();
             temp.conference = day.getConference();
-            baseDayDTOList.add(temp);
+            dayDTOList.add(temp);
         }
-        return baseDayDTOList;
+        return dayDTOList;
+    }
+
+    @Transactional
+    public Day findByDay(LocalDate date) {
+        Optional<Day> byDate = dayRepository.findByDate(date);
+        if (byDate.isPresent()) {
+            return byDate.get();
+        } else {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.DATE_NOT_FOUND, date.toString()));
+        }
     }
 
     @Transactional
@@ -53,7 +66,7 @@ public class DayService {
         if (byId.isPresent()) {
             dayRepository.deleteById(id);
         } else {
-            throw new RuntimeException(String.format("Could not find a day with the id: ", id));
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         }
     }
 }

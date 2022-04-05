@@ -1,21 +1,20 @@
 package com.vodafone.conference.models.utils;
 
-import com.vodafone.conference.models.dto.BaseDayDTO;
 import com.vodafone.conference.models.dto.DayDTO;
 import com.vodafone.conference.models.entities.Day;
 
-public class DayConverter implements EntityConverter<Day, BaseDayDTO> {
+public class DayConverter implements EntityConverter<Day, DayDTO> {
 
     @Override
-    public BaseDayDTO convertToDTO(Day day) {
-        BaseDayDTO baseDayDTO = new BaseDayDTO();
-        baseDayDTO.date = day.getDate();
-        baseDayDTO.conference = day.getConference();
-        return baseDayDTO;
+    public DayDTO convertToDTO(Day day) {
+        DayDTO dayDTO = new DayDTO();
+        dayDTO.date = day.getDate();
+        dayDTO.conference = day.getConference();
+        return dayDTO;
     }
 
     @Override
-    public Day convertToEntity(BaseDayDTO dto) {
+    public Day convertToEntity(DayDTO dto) {
         Day dayEntity = new Day();
         dayEntity.setDate(dto.date);
         dayEntity.setConference(dto.conference);

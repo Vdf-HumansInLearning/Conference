@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "track")
+@IdClass(value = EntityWithUUID.class)
 public class Track extends EntityWithUUID implements Serializable {
     @Column(name = "title", nullable = false)
     private String title;

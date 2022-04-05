@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "day")
+@IdClass(value = EntityWithUUID.class)
 public class Day extends EntityWithUUID implements Serializable {
     @Column(name = "date")
     private LocalDate date;
@@ -27,4 +28,8 @@ public class Day extends EntityWithUUID implements Serializable {
     @OneToMany(mappedBy = "day", fetch = FetchType.EAGER, cascade = CascadeType.ALL) @JsonIgnore
     @JsonManagedReference
     private List<Track> track;
+
+    public Day(LocalDate date) {
+        this.date = date;
+    }
 }

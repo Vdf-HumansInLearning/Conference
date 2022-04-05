@@ -1,7 +1,8 @@
 package com.vodafone.conference.services;
 
 import com.vodafone.conference.api.repositories.TrackRepository;
-import com.vodafone.conference.models.dto.BaseTrackDTO;
+import com.vodafone.conference.exceptions.ApiRequestException;
+import com.vodafone.conference.models.dto.TrackDTO;
 import com.vodafone.conference.models.entities.Track;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,23 +30,24 @@ public class TrackService {
         if (byId.isPresent()) {
             return byId.get();
         } else {
-            throw new RuntimeException(String.format("Could not find a track with the id: ", id));
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         }
     }
 
     @Transactional
-    public List<BaseTrackDTO> getAllTracks() {
+    public List<TrackDTO> getAllTracks() {
         List<Track> tracks = trackRepository.findAll();
-        List<BaseTrackDTO> baseTrackDTOList = new ArrayList<>();
+        List<TrackDTO> trackDTOList = new ArrayList<>();
 
         for (Track track : tracks) {
-            BaseTrackDTO temp = new BaseTrackDTO();
+            TrackDTO temp = new TrackDTO();
+            temp.id = track.getId();
             temp.title = track.getTitle();
-            temp.day = track.getDay();
+            temp.day = track.getDay().getDate();
             temp.sessions = track.getSessions();
-            baseTrackDTOList.add(temp);
+            trackDTOList.add(temp);
         }
-        return baseTrackDTOList;
+        return trackDTOList;
     }
 
 //    @Transactional
@@ -61,7 +63,7 @@ public class TrackService {
         if (byId.isPresent()) {
             trackRepository.deleteById(id);
         } else {
-            throw new RuntimeException(String.format("Could not find a track with the id: ", id));
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         }
     }
 }
