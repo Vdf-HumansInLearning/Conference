@@ -9,7 +9,6 @@ import java.util.UUID;
 
 @Repository
 public interface TrackRepository extends JpaRepository<Track, UUID> {
-
     Optional<Track> findById(UUID id);
 
     //TO DO find by title ignore case

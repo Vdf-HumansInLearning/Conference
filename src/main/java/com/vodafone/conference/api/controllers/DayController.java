@@ -48,6 +48,17 @@ public class DayController {
         }
     }
 
+    @PutMapping(value = "days/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Day> updateDayById(@PathVariable(name = "id") UUID id, @RequestBody DayDTO dayDTO) {
+        Day dayById = dayService.findById(id);
+        if (dayById != null) {
+            Day day = dayService.updateDayById(id, dayDTO);
+            return new ResponseEntity<Day>(day, HttpStatus.OK);
+        } else {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        }
+    }
+
     @DeleteMapping(value = "/days/{id}")
     public void deleteDayById(@PathVariable UUID id) {
         if (dayService.isIdPresent(id)) {

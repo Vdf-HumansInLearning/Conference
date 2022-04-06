@@ -21,10 +21,14 @@ public class Track extends EntityWithUUID implements Serializable {
     private String title;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "day_id", nullable = false)
+    @JoinColumn(name = "day_id")
     @JsonBackReference
     private Day day;
 
     @OneToMany(mappedBy = "track") @JsonIgnore
     private List<Session> sessions;
+
+    @ManyToOne @JsonIgnore
+    @JoinColumn(name = "conference_id", nullable = false)
+    private Conference conference;
 }

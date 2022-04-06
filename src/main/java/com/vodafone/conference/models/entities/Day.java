@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "day")
 @IdClass(value = EntityWithUUID.class)
 public class Day extends EntityWithUUID implements Serializable {
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
     @ManyToOne @JsonIgnore

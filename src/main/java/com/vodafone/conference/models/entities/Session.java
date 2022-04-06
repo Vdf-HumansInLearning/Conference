@@ -35,7 +35,6 @@ public class Session extends EntityWithUUID {
     private TechLevel techLevel;
 
     @Column(name = "keywords", nullable = false)
-//    @ElementCollection
     private String keywords;
 
     @Column(name = "date", nullable = false)

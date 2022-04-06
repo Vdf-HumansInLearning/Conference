@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "conference")
 public class Conference extends EntityWithUUID {
-    @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL) @JsonIgnore
+    @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.LAZY) @JsonIgnore
     private List<Day> days;
 
     @Column(name = "location", nullable = false)
@@ -31,4 +31,8 @@ public class Conference extends EntityWithUUID {
 
     @OneToMany(mappedBy = "conference") @JsonIgnore
     private List<Ticket> tickets;
+
+    //@OneToMany(mappedBy = "conference", fetch = FetchType.EAGER, cascade = CascadeType.ALL) @JsonIgnore
+    @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.LAZY) @JsonIgnore
+    private List<Track> tracks;
 }

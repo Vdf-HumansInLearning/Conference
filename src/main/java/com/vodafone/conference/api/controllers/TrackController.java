@@ -35,12 +35,16 @@ public class TrackController {
         return new ResponseEntity<List<TrackDTO>>(trackService.getAllTracks(), HttpStatus.OK);
     }
 
-//    @PostMapping(value = "/tracks",consumes = "application/json",   produces="application/json")
-//    // TODO DE VERIFICAT CALEA?!
-//    public ResponseEntity<Track> createTrack(@RequestBody BaseTrackDTO dto) {
-//        Track track = trackService.saveTrack(dto);
-//        return new ResponseEntity<Track>(track, HttpStatus.CREATED);
-//    }
+    @PutMapping(value = "tracks/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Track> updateTrackById(@PathVariable(name = "id") UUID id, @RequestBody TrackDTO trackDTO) {
+        Track trackById = trackService.findById(id);
+        if (trackById != null) {
+            Track track = trackService.updateTrackById(id, trackDTO);
+            return new ResponseEntity<Track>(track, HttpStatus.OK);
+        } else {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        }
+    }
 
     @DeleteMapping(value = "/tracks/{id}")
     public void deleteTrackById(@PathVariable UUID id) {
@@ -50,6 +54,4 @@ public class TrackController {
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         }
     }
-
-    //TODO @PutMapping
 }

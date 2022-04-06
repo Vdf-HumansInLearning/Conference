@@ -2,7 +2,9 @@ package com.vodafone.conference.models.utils;
 
 import com.vodafone.conference.models.dto.DayDTO;
 import com.vodafone.conference.models.entities.Day;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DayConverter implements EntityConverter<Day, DayDTO> {
 
     @Override

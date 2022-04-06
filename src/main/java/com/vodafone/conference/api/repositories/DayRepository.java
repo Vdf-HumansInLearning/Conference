@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Repository
 public interface DayRepository extends JpaRepository<Day, UUID> {
-
     Optional<Day> findById(UUID id);
 
     @Query(value = "SELECT * FROM day  WHERE to_char(date, 'yyyy-MM-dd') LIKE %:date%", nativeQuery = true)
