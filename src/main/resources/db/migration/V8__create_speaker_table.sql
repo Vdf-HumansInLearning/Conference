@@ -1,5 +1,3 @@
-USE conference;
-
 CREATE TABLE speaker
 (
     id UUID NOT NULL PRIMARY KEY,
@@ -10,9 +8,7 @@ CREATE TABLE speaker
     github_acc VARCHAR(45) NOT NULL,
     biography VARCHAR(255) NOT NULL,
     session_id UUID,
-    participant_id UUID
-
-    /*FOREIGN KEY (session_id) REFERENCES session(id),
-    FOREIGN KEY (participant_id) REFERENCES participant(id),
-    FOREIGN KEY (conference_id) REFERENCES conference(id)*/
+    participant_id UUID,
+    FOREIGN KEY (session_id) REFERENCES session(id),
+    FOREIGN KEY (participant_id) REFERENCES participant(id)
 );

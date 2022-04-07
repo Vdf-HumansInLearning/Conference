@@ -1,5 +1,3 @@
-USE conference;
-
 CREATE TABLE participant
 (
     id UUID NOT NULL PRIMARY KEY,
@@ -12,9 +10,8 @@ CREATE TABLE participant
     password VARCHAR(45) NOT NULL,
     session_id UUID,
     conference_id UUID,
-    is_organiser TINYINT(1) DEFAULT 0,
-    is_speaker TINYINT(1) DEFAULT 0
-
-    /*FOREIGN KEY(session_id) REFERENCES session(id),
-    FOREIGN KEY(conference_id)  REFERENCES conference(id)*/
+    is_organiser boolean,
+    is_speaker boolean,
+    FOREIGN KEY(session_id) REFERENCES session(id),
+    FOREIGN KEY(conference_id) REFERENCES conference(id)
 );
