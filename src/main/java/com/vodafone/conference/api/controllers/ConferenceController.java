@@ -2,6 +2,7 @@ package com.vodafone.conference.api.controllers;
 
 import com.vodafone.conference.api.mapper.ConferenceMapper;
 import com.vodafone.conference.api.mapper.ParticipantMapper;
+import com.vodafone.conference.exceptions.ApiRequestException;
 import com.vodafone.conference.models.entities.Conference;
 import com.vodafone.conference.models.entities.DTO.ConferenceCreationDTO;
 import com.vodafone.conference.models.entities.DTO.ConferenceDTO;
@@ -44,7 +45,9 @@ public class ConferenceController {
             //ParticipantDTO participantDTO = mapper.toDto(optParticipant.get());
             return new ResponseEntity<>(mapper.toDto(optConference.get()), HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        else {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        }
     }
 
     // create a conference
@@ -53,11 +56,10 @@ public class ConferenceController {
     public ResponseEntity<ConferenceDTO> createConference(@Valid @RequestBody ConferenceCreationDTO conferenceCreationDTO, Errors errors) {
 
         Conference conference = mapper.toConference(conferenceCreationDTO);
-        //System.out.println(conference.toString());
         ConferenceDTO conferenceDTO = mapper.toDto(conference);
-        //System.out.println(conferenceDTO.toString());
-        if (errors.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (errors.hasFieldErrors()) {
+            //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
         }
 
         conferenceService.save(conference);
@@ -71,10 +73,10 @@ public class ConferenceController {
 
         Conference conference = mapper.toConference(conferenceCreationDTO);
         ConferenceDTO conferenceDTO = mapper.toDto(mapper.toConference(conferenceCreationDTO));
-        if (errors.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (errors.hasFieldErrors()) {
+            //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
         }
-        //System.out.println(UUID.fromString(id));
         conferenceService.update(conference, UUID.fromString(id));
         return new ResponseEntity<>(conferenceDTO, HttpStatus.OK);
     }
@@ -83,11 +85,17 @@ public class ConferenceController {
     // implement validation check
     // check
     @PatchMapping("{conference-id}")
-    public ResponseEntity<ConferenceDTO> patchConference(@PathVariable("conference-id") String id, @Valid @RequestBody ConferenceCreationDTO conferenceCreationDTO ) {
+    public ResponseEntity<ConferenceDTO> patchConference(@PathVariable("conference-id") String id, @Valid @RequestBody ConferenceCreationDTO conferenceCreationDTO, Errors errors) {
         Conference conference = conferenceService.findById(UUID.fromString(id)).get();
-        //if (patch.getFirstName() != null) {
-        //    participant.setFirstName(patch.getFirstName());
-        //}
+
+        //error checks
+        if (conference == null) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        }
+        if (errors.hasFieldErrors()) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
+        }
+
 
         if (conferenceCreationDTO.getDays() != null) {
             conference.setDays(conferenceCreationDTO.getDays());
@@ -119,7 +127,9 @@ public class ConferenceController {
     public void deleteConference (@PathVariable("conference-id") String id) {
         try {
             conferenceService.deleteById(UUID.fromString(id));
-        } catch (EmptyResultDataAccessException e) {}
+        } catch (EmptyResultDataAccessException e) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        }
 
     }
 }

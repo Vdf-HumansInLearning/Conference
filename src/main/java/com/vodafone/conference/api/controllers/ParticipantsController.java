@@ -5,8 +5,11 @@ import java.util.stream.Collectors;
 
 import com.vodafone.conference.api.mapper.ParticipantMapper;
 import com.vodafone.conference.api.repositories.ParticipantRepository;
+import com.vodafone.conference.exceptions.ApiRequestException;
+import com.vodafone.conference.models.entities.Conference;
 import com.vodafone.conference.models.entities.DTO.ParticipantCreationDTO;
 import com.vodafone.conference.models.entities.DTO.ParticipantDTO;
+import com.vodafone.conference.services.ConferenceService;
 import com.vodafone.conference.services.ParticipantService;
 import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +34,13 @@ public class ParticipantsController {
 
     @Autowired
     private ParticipantService participantService;
+    private ConferenceService conferenceService;
     private ParticipantMapper mapper;
 
-    public ParticipantsController(ParticipantService participantService, ParticipantMapper mapper) {
+    public ParticipantsController(ParticipantService participantService, ConferenceService conferenceService, ParticipantMapper mapper) {
 
         this.participantService = participantService;
+        this.conferenceService = conferenceService;
         this.mapper = mapper;
 
     }
@@ -48,7 +53,10 @@ public class ParticipantsController {
         if(optParticipant.isPresent()) {
             return new ResponseEntity<>(mapper.toDto(optParticipant.get()), HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        else {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        }
+        //return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     // get all the participants belonging to a certain session
@@ -69,25 +77,36 @@ public class ParticipantsController {
     @GetMapping("conferences/{conference-id}/participants")
     public ResponseEntity<List<ParticipantDTO>> getConferenceParticipantsByConferenceId(@PathVariable("conference-id") String id) {
 
-        List<ParticipantDTO> participants = participantService.findByConference_Id(UUID.fromString(id)).stream()
-                .map(participant -> mapper.toDto(participant)).collect(Collectors.toList());
+        Conference conference = conferenceService.findById(UUID.fromString(id)).get();
+        if (conference == null) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        } else {
+            List<ParticipantDTO> participants = participantService.findByConference_Id(UUID.fromString(id)).stream()
+                    .map(participant -> mapper.toDto(participant)).collect(Collectors.toList());
 
-        return new ResponseEntity<>(participants, HttpStatus.OK);
+            return new ResponseEntity<>(participants, HttpStatus.OK);
+        }
+
     }
 
     // check
     @PostMapping(path= "conferences/{conference-id}/participants", consumes = "application/json")
     public ResponseEntity<ParticipantDTO> createParticipant(@Valid @RequestBody ParticipantCreationDTO participantCreationDTO, @PathVariable("conference-id") String conferenceId, Errors errors) {
 
-        Participant participant = mapper.toParticipant(participantCreationDTO);
-        ParticipantDTO participantDTO = mapper.toDto(participant);
-        if (errors.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Conference conference = conferenceService.findById(UUID.fromString(conferenceId)).get();
+        if (conference == null) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, conferenceId.toString()));
         }
+        if (errors.hasFieldErrors()) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
+        }
+        else {
+            Participant participant = mapper.toParticipant(participantCreationDTO);
+            ParticipantDTO participantDTO = mapper.toDto(participant);
 
-
-        participantService.save(participant, UUID.fromString(conferenceId));
-        return new ResponseEntity<>(participantDTO, HttpStatus.CREATED);
+            participantService.save(participant, UUID.fromString(conferenceId));
+            return new ResponseEntity<>(participantDTO, HttpStatus.CREATED);
+        }
     }
 
     //rewrite a participant by id
@@ -97,8 +116,9 @@ public class ParticipantsController {
 
         Participant participant = mapper.toParticipant(participantCreationDTO);
         ParticipantDTO participantDTO = mapper.toDto(mapper.toParticipant(participantCreationDTO));
-        if (errors.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (errors.hasFieldErrors()) {
+            //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
         }
 
         participantService.update(participant, UUID.fromString(id));
@@ -109,8 +129,17 @@ public class ParticipantsController {
     // implement validation check
     // check
     @PatchMapping("participants/{participant-id}")
-    public ResponseEntity<ParticipantDTO> patchParticipant(@PathVariable("participant-id") String id, @Valid @RequestBody ParticipantCreationDTO participantCreationDTO ) {
+    public ResponseEntity<ParticipantDTO> patchParticipant(@PathVariable("participant-id") String id, @Valid @RequestBody ParticipantCreationDTO participantCreationDTO,Errors errors) {
         Participant participant = participantService.findById(UUID.fromString(id)).get();
+
+        //error checks
+        if (participant == null) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        }
+        if (errors.hasFieldErrors()) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
+        }
+
         if (participantCreationDTO.getFirstName() != null) {
             participant.setFirstName(participantCreationDTO.getFirstName());
         }
@@ -146,7 +175,9 @@ public class ParticipantsController {
     public void deleteParticipant (@PathVariable("participant-id") String id) {
         try {
             participantService.deleteById(UUID.fromString(id));
-        } catch (EmptyResultDataAccessException e) {}
+        } catch (EmptyResultDataAccessException e) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        }
 
     }
 

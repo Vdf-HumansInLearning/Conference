@@ -7,10 +7,13 @@ import java.util.stream.Collectors;
 import com.vodafone.conference.api.mapper.ParticipantMapper;
 import com.vodafone.conference.api.mapper.SpeakerMapper;
 import com.vodafone.conference.api.repositories.SpeakerRepository;
+import com.vodafone.conference.exceptions.ApiRequestException;
+import com.vodafone.conference.models.entities.Conference;
 import com.vodafone.conference.models.entities.DTO.ParticipantDTO;
 import com.vodafone.conference.models.entities.DTO.SpeakerCreationDTO;
 import com.vodafone.conference.models.entities.DTO.SpeakerDTO;
 import com.vodafone.conference.models.entities.Speaker;
+import com.vodafone.conference.services.ConferenceService;
 import com.vodafone.conference.services.ParticipantService;
 import com.vodafone.conference.services.SpeakerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +40,14 @@ public class SpeakersController {
     //private SpeakerRepository speakersRepo;
     private SpeakerService speakerService;
     private ParticipantService participantService;
+    private ConferenceService conferenceService;
     private SpeakerMapper speakerMapper;
     private ParticipantMapper participantMapper;
 
-    public SpeakersController(SpeakerService speakerService, ParticipantService participantService, SpeakerMapper speakerMapper, ParticipantMapper participantMapper) {
+    public SpeakersController(SpeakerService speakerService, ParticipantService participantService, ConferenceService conferenceService, SpeakerMapper speakerMapper, ParticipantMapper participantMapper) {
         this.speakerService = speakerService;
         this.participantService = participantService;
+        this.conferenceService = conferenceService;
         this.speakerMapper = speakerMapper;
         this.participantMapper = participantMapper;
     }
@@ -61,8 +66,10 @@ public class SpeakersController {
 
         if(optSpeaker.isPresent()) {
             return new ResponseEntity<>(speakerDTO, HttpStatus.OK);
+        } else {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        //return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     // get all speakers belonging to a session
@@ -81,22 +88,27 @@ public class SpeakersController {
     @GetMapping("conferences/{conference-id}/speakers")
     public ResponseEntity<List<SpeakerDTO>> getConferenceSpeakersByConferenceId(@PathVariable("conference-id") String id) {
 
-        List<Speaker> speakers = speakerService.findByConference_Id(UUID.fromString(id));
-        List<ParticipantDTO> participantDTOS = speakers.stream().map(speaker -> participantMapper.toDto(speaker.getParticipant())).collect(Collectors.toList());
-        List<SpeakerDTO> speakerDTOS = speakerService.findByConference_Id(UUID.fromString(id)).stream()
-                .map(speaker -> speakerMapper.toDto(speaker)).collect(Collectors.toList());
+        Conference conference = conferenceService.findById(UUID.fromString(id)).get();
+        if (conference == null) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        } else {
+            List<Speaker> speakers = speakerService.findByConference_Id(UUID.fromString(id));
+            List<ParticipantDTO> participantDTOS = speakers.stream().map(speaker -> participantMapper.toDto(speaker.getParticipant())).collect(Collectors.toList());
+            List<SpeakerDTO> speakerDTOS = speakerService.findByConference_Id(UUID.fromString(id)).stream()
+                    .map(speaker -> speakerMapper.toDto(speaker)).collect(Collectors.toList());
 
-        // writing participantDTOs could be done declaratively
-        SpeakerDTO[] speakerDTOarray = speakerDTOS.toArray(new SpeakerDTO[speakerDTOS.size()]);
-        ParticipantDTO[] participantDTOarray = participantDTOS.toArray(new ParticipantDTO[participantDTOS.size()]);
+            // writing participantDTOs could be done declaratively
+            SpeakerDTO[] speakerDTOarray = speakerDTOS.toArray(new SpeakerDTO[speakerDTOS.size()]);
+            ParticipantDTO[] participantDTOarray = participantDTOS.toArray(new ParticipantDTO[participantDTOS.size()]);
 
-        for (int i = 0; i < speakerDTOS.size(); i++) {
-            speakerDTOarray[i].setParticipantDTO(participantDTOarray[i]);
+            for (int i = 0; i < speakerDTOS.size(); i++) {
+                speakerDTOarray[i].setParticipantDTO(participantDTOarray[i]);
+            }
+
+            speakerDTOS = Arrays.asList(speakerDTOarray);
+
+            return new ResponseEntity<>(speakerDTOS, HttpStatus.OK);
         }
-
-        speakerDTOS = Arrays.asList(speakerDTOarray);
-
-        return new ResponseEntity<>(speakerDTOS, HttpStatus.OK);
     }
 
     //create a speaker (must include conference and session id)
@@ -104,29 +116,28 @@ public class SpeakersController {
     @PostMapping(path= "conferences/{conference-id}/speakers", consumes = "application/json")
     public ResponseEntity<SpeakerDTO> createSpeaker(@Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, @PathVariable("conference-id") String conferenceId, Errors errors) {
 
-        // create speaker entity and save fields coming from creation DTO
-        Speaker speaker = speakerMapper.toSpeaker(speakerCreationDTO);
-
-        // create participant entity from participantCreationDTO coming from Front-End
-        Participant participant = participantMapper.toParticipant(speakerCreationDTO.getParticipantCreationDTO());
-        if (errors.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Conference conference = conferenceService.findById(UUID.fromString(conferenceId)).get();
+        if (conference == null) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, conferenceId.toString()));
         }
-
-        // save participant first
-        participantService.save(participant, UUID.fromString(conferenceId));
-
-        // set participantId for speaker entity
-        speaker.setParticipant(participant);
-
-        // set speaker DTO and response
-        SpeakerDTO speakerDTO = speakerMapper.toDto(speaker);
-        if (errors.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (errors.hasFieldErrors()) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
         }
+        else {
+            // create speaker entity and save fields coming from creation DTO
+            Speaker speaker = speakerMapper.toSpeaker(speakerCreationDTO);
+            // create participant entity from participantCreationDTO coming from Front-End
+            Participant participant = participantMapper.toParticipant(speakerCreationDTO.getParticipantCreationDTO());
+            // save participant first
+            participantService.save(participant, UUID.fromString(conferenceId));
+            // set participantId for speaker entity
+            speaker.setParticipant(participant);
+            // set speaker DTO and response
+            SpeakerDTO speakerDTO = speakerMapper.toDto(speaker);
 
-        speakerService.save(speaker, UUID.fromString(conferenceId), speaker.getParticipant().getId());
-        return new ResponseEntity<>(speakerDTO, HttpStatus.CREATED);
+            speakerService.save(speaker, UUID.fromString(conferenceId), speaker.getParticipant().getId());
+            return new ResponseEntity<>(speakerDTO, HttpStatus.CREATED);
+        }
     }
 
     // rewrite a speaker by id
@@ -140,8 +151,8 @@ public class SpeakersController {
 
         Speaker speaker = speakerMapper.toSpeaker(speakerCreationDTO);
         SpeakerDTO speakerDTO = speakerMapper.toDto(speaker);
-        if (errors.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (errors.hasFieldErrors()) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
         }
 
         speakerService.update(speaker, UUID.fromString(id));
@@ -151,10 +162,7 @@ public class SpeakersController {
     // update a speaker by id
     // check
     @PatchMapping("speakers/{speaker-id}")
-    public ResponseEntity<SpeakerDTO> patchSpeaker(@PathVariable("speaker-id") String id, @Valid @RequestBody SpeakerCreationDTO speakerCreationDTO) {
-        Speaker speaker = speakerService.findById(UUID.fromString(id)).get();
-
-
+    public ResponseEntity<SpeakerDTO> patchSpeaker(@PathVariable("speaker-id") String id, @Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, Errors errors) {
         // PATCH request body may not include updates to the fields of the associated Participant entity
         // the associated participant entity may be updated by PUT request to Participant entity from Front-End
 
@@ -180,6 +188,16 @@ public class SpeakersController {
         if (speakerCreationDTO.getParticipant().getPassword() != null) {
             speaker.getParticipant().setPassword(speakerCreationDTO.getParticipant().getPassword());
         }*/
+
+        Speaker speaker = speakerService.findById(UUID.fromString(id)).get();
+
+        //error checks
+        if (speaker == null) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        }
+        if (errors.hasFieldErrors()) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
+        }
 
         // check speaker specific fields
         if (speakerCreationDTO.getCompany() != null) {
@@ -211,7 +229,8 @@ public class SpeakersController {
     public void deleteSpeaker (@PathVariable("speaker-id") String id) {
         try {
             speakerService.deleteById(UUID.fromString(id));
-        } catch (EmptyResultDataAccessException e) {}
-
+        } catch (EmptyResultDataAccessException e) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        }
     }
 }
