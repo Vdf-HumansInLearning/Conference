@@ -84,6 +84,21 @@ public class DayService {
     }
 
     @Transactional
+    public Day saveNewDay(DayDTO dayDTO) {
+        Optional<Conference> conferenceOptional = conferenceRepository.findById(dayDTO.conference.getId());
+        Conference conference = null;
+        if (!conferenceOptional.isPresent()) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, dayDTO.conference.getId().toString()));
+        } else {
+            conference = conferenceOptional.get();
+        }
+
+        Day dayToBeSaved = new Day(dayDTO.date, conference);
+        Day daySaved = dayRepository.save(dayToBeSaved);
+        return daySaved;
+    }
+
+    @Transactional
     public void deleteById(UUID id) {
         Optional<Day> byId = dayRepository.findById(id);
         if (byId.isPresent()) {
