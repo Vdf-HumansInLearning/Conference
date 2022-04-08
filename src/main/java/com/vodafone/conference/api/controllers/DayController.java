@@ -37,7 +37,7 @@ public class DayController {
         return new ResponseEntity<List<DayDTO>>(dayService.getAllDays(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/days/byDate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/days/by-date", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DayDTO> getByDay(@RequestParam("date") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date) {
         Day byDay = dayService.findByDay(date);
         if (byDay != null) {
@@ -57,6 +57,12 @@ public class DayController {
         } else {
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         }
+    }
+    
+    @PostMapping(value = "days/add-day", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Day> createDay(@RequestBody DayDTO dayDTO) {
+        Day day = dayService.saveNewDay(dayDTO);
+        return new ResponseEntity<Day>(day, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/days/{id}")
