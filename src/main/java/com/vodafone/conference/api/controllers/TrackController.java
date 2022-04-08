@@ -46,6 +46,12 @@ public class TrackController {
         }
     }
 
+    @PostMapping(value = "tracks/add-track", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Track> createTrack(@RequestBody TrackDTO trackDTO) {
+        Track track = trackService.saveNewTrack(trackDTO);
+        return new ResponseEntity<Track>(track, HttpStatus.CREATED);
+    }
+
     @DeleteMapping(value = "/tracks/{id}")
     public void deleteTrackById(@PathVariable UUID id) {
         if (trackService.isIdPresent(id)) {
