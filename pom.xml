@@ -145,13 +145,13 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>8.4.2</version>
                 <configuration>
-                    <defaultSchema>conference</defaultSchema>
+                    <defaultSchema>public</defaultSchema>
                     <schemas>
-                        <schema>conference</schema>
+                        <schema>public</schema>
                     </schemas>
-                    <url>jdbc:h2:mem:DATABASE</url>
-                    <user>admin</user>
-                    <password>admin</password>
+                    <url>jdbc:postgresql://localhost:5433/</url>
+                    <user>postgres</user>
+                    <password>root</password>
                 </configuration>
             </plugin>
             <plugin>

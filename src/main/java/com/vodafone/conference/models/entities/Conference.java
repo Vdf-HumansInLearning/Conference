@@ -1,5 +1,6 @@
 package com.vodafone.conference.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class Conference {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @OneToMany(mappedBy = "conference")
+    @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL)
     private List<Day> days;
 
     @Column(name = "location", nullable = false)
@@ -34,8 +35,17 @@ public class Conference {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
     private List<Participant> participants;
+
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    private List<Speaker> speakers;
+
+    //@OneToMany(mappedBy = "conference") @JsonIgnore
+    //private List<Ticket> tickets;
+
+    //@OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.LAZY) @JsonIgnore
+    //private List<Track> tracks;
 
     @Override
     public String toString() {

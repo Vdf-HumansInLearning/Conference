@@ -34,13 +34,13 @@ public class Speaker {
     @Column(name = "company", nullable = false)
     private String company;
 
-    @Column(name = "linkedin_account", nullable = false)
+    @Column(name = "linkedin_acc", nullable = false)
     private String linkedinAcc;
 
-    @Column(name = "twitter_account", nullable = false)
+    @Column(name = "twitter_acc", nullable = false)
     private String twitterAcc;
 
-    @Column(name = "github_account", nullable = false)
+    @Column(name = "github_acc", nullable = false)
     private String githubAcc;
 
     @Column(name = "biography", nullable = false)

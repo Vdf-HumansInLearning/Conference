@@ -1,5 +1,6 @@
 package com.vodafone.conference.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,7 +33,11 @@ public class Track {
     @OneToMany(mappedBy = "track")
     private List<Session> sessions;
 
-    @ManyToOne
-    @JoinColumn(name = "participant_id")
-    private Participant participant;
+    //@ManyToOne
+    //@JoinColumn(name = "participant_id")
+    //private Participant participant;
+
+    @ManyToOne @JsonIgnore
+    @JoinColumn(name = "conference_id", nullable = false)
+    private Conference conference;
 }

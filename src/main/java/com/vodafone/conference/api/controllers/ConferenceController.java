@@ -37,7 +37,7 @@ public class ConferenceController {
     }
 
     //get a conference by id
-    // check
+    // H2/postgres check
     @GetMapping("{conference-id}")
     public ResponseEntity<ConferenceDTO> getConferenceById(@PathVariable("conference-id") String id) {
         Optional<Conference> optConference = conferenceService.findById(UUID.fromString(id));
@@ -51,7 +51,7 @@ public class ConferenceController {
     }
 
     // create a conference
-    // check
+    // H2/postgres check
     @PostMapping(consumes = "application/json")
     public ResponseEntity<ConferenceDTO> createConference(@Valid @RequestBody ConferenceCreationDTO conferenceCreationDTO, Errors errors) {
 
@@ -67,7 +67,7 @@ public class ConferenceController {
     }
 
     //rewrite a conference by id
-    // check
+    // H2/postgres check
     @PutMapping("{conference-id}")
     public ResponseEntity<ConferenceDTO> putConference(@Valid @RequestBody ConferenceCreationDTO conferenceCreationDTO, Errors errors, @PathVariable("conference-id") String id) {
 
@@ -83,7 +83,7 @@ public class ConferenceController {
 
     // update a conference by id
     // implement validation check
-    // check
+    // H2/postgres check
     @PatchMapping("{conference-id}")
     public ResponseEntity<ConferenceDTO> patchConference(@PathVariable("conference-id") String id, @Valid @RequestBody ConferenceCreationDTO conferenceCreationDTO, Errors errors) {
         Conference conference = conferenceService.findById(UUID.fromString(id)).get();
@@ -120,8 +120,8 @@ public class ConferenceController {
 
     // delete a participant by id
     // DELETE method may be implemented with ResponseEntity
-    // handle exception
     // DOES NOT WORK FOR CERTAIN UUIDs (UUID string too large)
+    // H2/postgres check
     @DeleteMapping("{conference-id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteConference (@PathVariable("conference-id") String id) {

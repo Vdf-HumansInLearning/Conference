@@ -54,7 +54,7 @@ public class SpeakersController {
 
     // get speaker by id
     // implementation fixed
-    // check
+    // H2/postgres check
     @GetMapping("speakers/{speaker-id}")
     public ResponseEntity<SpeakerDTO> getSpeakerById(@PathVariable("speaker-id") String id) {
         Optional<Speaker> optSpeaker = speakerService.findById(UUID.fromString(id));
@@ -84,7 +84,7 @@ public class SpeakersController {
     }*/
 
     // get all speakers belonging to a conference
-    // check
+    // H2/postgres check
     @GetMapping("conferences/{conference-id}/speakers")
     public ResponseEntity<List<SpeakerDTO>> getConferenceSpeakersByConferenceId(@PathVariable("conference-id") String id) {
 
@@ -112,7 +112,7 @@ public class SpeakersController {
     }
 
     //create a speaker (must include conference and session id)
-    // check
+    // H2/postgres check
     @PostMapping(path= "conferences/{conference-id}/speakers", consumes = "application/json")
     public ResponseEntity<SpeakerDTO> createSpeaker(@Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, @PathVariable("conference-id") String conferenceId, Errors errors) {
 
@@ -141,7 +141,7 @@ public class SpeakersController {
     }
 
     // rewrite a speaker by id
-    // check
+    // H2/postgres check
     @PutMapping("speakers/{speaker-id}")
     public ResponseEntity<SpeakerDTO> putSpeaker(@Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, Errors errors, @PathVariable("speaker-id") String id)
     {
@@ -160,7 +160,7 @@ public class SpeakersController {
     }
 
     // update a speaker by id
-    // check
+    // H2/postgres check
     @PatchMapping("speakers/{speaker-id}")
     public ResponseEntity<SpeakerDTO> patchSpeaker(@PathVariable("speaker-id") String id, @Valid @RequestBody SpeakerCreationDTO speakerCreationDTO, Errors errors) {
         // PATCH request body may not include updates to the fields of the associated Participant entity
@@ -223,7 +223,7 @@ public class SpeakersController {
     // delete a speaker by id
     // DELETE method may be implemented with ResponseEntity
     // handle exception
-    // check
+    // H2/postgres check
     @DeleteMapping("speakers/{speaker-id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteSpeaker (@PathVariable("speaker-id") String id) {

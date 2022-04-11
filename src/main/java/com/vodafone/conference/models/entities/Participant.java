@@ -1,5 +1,6 @@
 package com.vodafone.conference.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -91,8 +92,8 @@ public class Participant {
     //@JoinColumn(name = "session_id", nullable = false)
     //private Session sessions;
 
-    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
-    private List<Ticket> tickets;
+    //@OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
+    //private List<Ticket> tickets;
 
     @Column(name = "is_organiser", columnDefinition = "tinyint(1) default 0")
     private Boolean isOrganiser;
@@ -104,6 +105,6 @@ public class Participant {
     @JoinColumn(name = "conference_id", nullable = false)
     private Conference conference;
 
-    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
-    private List<Track> tracks;
+    //@OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
+    //private List<Track> tracks;
 }

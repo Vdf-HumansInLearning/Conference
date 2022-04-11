@@ -46,7 +46,7 @@ public class ParticipantsController {
     }
 
     // get a participant by id
-    // DOES NOT WORK FOR CERTAIN UUIDs (UUID string too large)
+    // H2/postgres check
     @GetMapping("participants/{participant-id}")
     public ResponseEntity<ParticipantDTO> getParticipantById(@PathVariable("participant-id") String id) {
         Optional<Participant> optParticipant = participantService.findById(UUID.fromString(id));
@@ -73,7 +73,7 @@ public class ParticipantsController {
     }*/
 
     // get all the participants belonging to a certain conference
-    // check
+    // H2/postgres check
     @GetMapping("conferences/{conference-id}/participants")
     public ResponseEntity<List<ParticipantDTO>> getConferenceParticipantsByConferenceId(@PathVariable("conference-id") String id) {
 
@@ -89,7 +89,7 @@ public class ParticipantsController {
 
     }
 
-    // check
+    // H2/postgres check
     @PostMapping(path= "conferences/{conference-id}/participants", consumes = "application/json")
     public ResponseEntity<ParticipantDTO> createParticipant(@Valid @RequestBody ParticipantCreationDTO participantCreationDTO, @PathVariable("conference-id") String conferenceId, Errors errors) {
 
@@ -110,7 +110,7 @@ public class ParticipantsController {
     }
 
     //rewrite a participant by id
-    // check
+    // H2/postgres check
     @PutMapping("/participants/{participant-id}")
     public ResponseEntity<ParticipantDTO> putParticipant(@Valid @RequestBody ParticipantCreationDTO participantCreationDTO, Errors errors, @PathVariable("participant-id") String id) {
 
@@ -127,7 +127,7 @@ public class ParticipantsController {
 
     // update a participant by id
     // implement validation check
-    // check
+    // H2/postgres check
     @PatchMapping("participants/{participant-id}")
     public ResponseEntity<ParticipantDTO> patchParticipant(@PathVariable("participant-id") String id, @Valid @RequestBody ParticipantCreationDTO participantCreationDTO,Errors errors) {
         Participant participant = participantService.findById(UUID.fromString(id)).get();
@@ -169,7 +169,7 @@ public class ParticipantsController {
     // delete a participant by id
     // DELETE method may be implemented with ResponseEntity
     // handle exception
-    // check
+    // H2/postgres check
     @DeleteMapping("participants/{participant-id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteParticipant (@PathVariable("participant-id") String id) {

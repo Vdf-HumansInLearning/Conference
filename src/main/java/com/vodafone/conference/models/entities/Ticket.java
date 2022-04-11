@@ -1,5 +1,6 @@
 package com.vodafone.conference.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,9 +26,17 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TicketType type;
 
-    @ManyToOne
+    @Column(name = "price", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TicketType price;
+
+    /*@ManyToOne @JsonIgnore
     @JoinColumn(name="participant_id", nullable=false)
     private Participant participant;
+
+    @ManyToOne @JsonIgnore
+    @JoinColumn(name="conference_id", nullable=false)
+    private Conference conference;*/
 
     enum TicketType {
         COMPLETE_ONLINE_EXPERIENCE (300),
