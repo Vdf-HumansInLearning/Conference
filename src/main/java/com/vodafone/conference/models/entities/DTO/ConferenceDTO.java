@@ -2,6 +2,7 @@ package com.vodafone.conference.models.entities.DTO;
 
 import com.vodafone.conference.models.entities.Day;
 import com.vodafone.conference.models.entities.Participant;
+import com.vodafone.conference.models.entities.Speaker;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
@@ -19,13 +20,15 @@ public class ConferenceDTO implements Serializable {
     private String theme;
     private String description;
     private List<Participant> participants;
+    private List<Speaker> speakers;
 
-    public ConferenceDTO(List<Day> days, String location, String theme, String description, List<Participant> participants) {
+    public ConferenceDTO(List<Day> days, String location, String theme, String description, List<Participant> participants, List<Speaker> speakers) {
         this.days = days;
         this.location = location;
         this.theme = theme;
         this.description = description;
         this.participants = participants;
+        this.speakers = speakers;
     }
 
     public ConferenceDTO() {
@@ -71,14 +74,8 @@ public class ConferenceDTO implements Serializable {
         this.participants = participants;
     }
 
-    @Override
-    public String toString() {
-        return "ConferenceDTO{" +
-                "days=" + days +
-                ", location='" + location + '\'' +
-                ", theme='" + theme + '\'' +
-                ", description='" + description + '\'' +
-                ", participants=" + participants +
-                '}';
-    }
+    public List<Speaker> getSpeakers() { return speakers; }
+
+    public void setSpeakers(List<Speaker> speakers) { this.speakers = speakers; }
+
 }

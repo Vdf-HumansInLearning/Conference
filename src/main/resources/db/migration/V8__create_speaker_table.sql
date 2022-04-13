@@ -1,7 +1,6 @@
 CREATE TABLE speaker
 (
     id UUID NOT NULL PRIMARY KEY,
-    title VARCHAR(45) NOT NULL,
     company VARCHAR(45) NOT NULL,
     linkedin_acc VARCHAR(45) NOT NULL,
     twitter_acc VARCHAR(45) NOT NULL,

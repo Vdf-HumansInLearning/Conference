@@ -27,9 +27,9 @@ public interface SpeakerRepository extends JpaRepository<Speaker, UUID>{
 
     @Transactional
     @Modifying
-    @Query("update Speaker s set s.participant = ?1, s.title = ?2, s.company = ?3, s.linkedinAcc = ?4, s.twitterAcc = ?5, s.githubAcc = ?6, s.biography = ?7 " +
-            "where s.id = ?8")
-    void update(Participant participant, String title, String company, String linkedinAcc, String twitterAcc, String githubAcc, String biography, UUID id);
+    @Query("update Speaker s set s.participant = ?1, s.company = ?2, s.linkedinAcc = ?3, s.twitterAcc = ?4, s.githubAcc = ?5, s.biography = ?6 " +
+            "where s.id = ?7")
+    void update(Participant participant, String company, String linkedinAcc, String twitterAcc, String githubAcc, String biography, UUID id);
 
 
 

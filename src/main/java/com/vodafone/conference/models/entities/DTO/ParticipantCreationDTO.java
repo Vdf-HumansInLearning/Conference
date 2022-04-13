@@ -10,7 +10,8 @@ import java.util.List;
 
 public class ParticipantCreationDTO {
 
-    ParticipantCreationDTO() {}
+    // NOTE: making constructor public is incorrect but necessary for testing purposes
+    public ParticipantCreationDTO() {}
 
 
     private String firstName;
@@ -101,4 +102,18 @@ public class ParticipantCreationDTO {
         isSpeaker = speaker;
     }
 
+    @Override
+    public String toString() {
+        return "ParticipantCreationDTO{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", title='" + title + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", isOrganiser=" + isOrganiser +
+                ", isSpeaker=" + isSpeaker +
+                '}';
+    }
 }

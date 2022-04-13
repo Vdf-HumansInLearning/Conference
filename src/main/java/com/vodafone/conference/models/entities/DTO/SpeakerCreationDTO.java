@@ -8,10 +8,11 @@ import java.util.List;
 
 public class SpeakerCreationDTO {
 
-    SpeakerCreationDTO() {}
+    // NOTE: making constructor public is incorrect but necessary for testing purposes
+    public SpeakerCreationDTO() {}
 
     private ParticipantCreationDTO participantCreationDTO;
-    private String title;
+    //private String title;
     private String company;
     private String linkedinAcc;
     private String twitterAcc;
@@ -26,13 +27,13 @@ public class SpeakerCreationDTO {
         this.participantCreationDTO = participantCreationDTO;
     }
 
-    public String getTitle() {
+    /*public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
-    }
+    }*/
 
     public String getCompany() {
         return company;

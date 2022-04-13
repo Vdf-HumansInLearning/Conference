@@ -28,8 +28,8 @@ public class Speaker {
     private Participant participant;
 
     // title also exists in participant (might want to delete this column)
-    @Column(name = "title", nullable = false)
-    private String title;
+    //@Column(name = "title", nullable = false)
+    //private String title;
 
     @Column(name = "company", nullable = false)
     private String company;

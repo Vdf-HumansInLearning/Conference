@@ -1,17 +1,27 @@
 package com.vodafone.conference;
 
 import com.vodafone.conference.models.entities.Conference;
+import com.vodafone.conference.models.entities.DTO.ConferenceCreationDTO;
+import com.vodafone.conference.models.entities.DTO.ConferenceDTO;
 import com.vodafone.conference.models.entities.Day;
 import com.vodafone.conference.services.ConferenceService;
 import io.restassured.RestAssured.*;
 import io.restassured.matcher.RestAssuredMatchers.*;
+import io.restassured.response.Response;
 import org.hamcrest.Matchers.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
+
+
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -23,9 +33,10 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ConferenceControllerTest {
+// public access modifier causes error
+class ConferenceControllerTest {
 
-    /*@LocalServerPort
+    @LocalServerPort
     private int port;
 
     private String uri;
@@ -45,10 +56,138 @@ public class ConferenceControllerTest {
         UUID id = UUID.randomUUID();
         //List<Day> days = new ArrayList<>();
         Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>());
+                "theme", "description", new ArrayList<>(), new ArrayList<>());
 
+        //mock conference service
         when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
 
+        get(uri + "/conferences/" + testConference.getId()).then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                //.body("id", equalTo(testConference.getId()))
+                .body("days", equalTo(testConference.getDays()))
+                .body("location", equalTo(testConference.getLocation()))
+                .body("theme", equalTo(testConference.getTheme()))
+                .body("description", equalTo(testConference.getDescription()))
+                .body("participants", equalTo(testConference.getParticipants()))
+                .body("speakers", equalTo(testConference.getSpeakers()));
 
+    }
+
+    @Test
+    public void whenMakingPostRequestToConferenceEndpoint_thenReturnResponse() {
+
+        ConferenceCreationDTO conferenceCreationDTO = new ConferenceCreationDTO();
+        conferenceCreationDTO.setLocation("location");
+        conferenceCreationDTO.setDescription("description");
+        conferenceCreationDTO.setTheme("theme");
+        conferenceCreationDTO.setDays(new ArrayList<>());
+        conferenceCreationDTO.setParticipants(new ArrayList<>());
+        conferenceCreationDTO.setSpeakers(new ArrayList<>());
+
+        Response response = given().contentType("application/json")
+                .body(conferenceCreationDTO)
+                .post(uri + "/conferences")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.CREATED.value())
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
+        Assertions.assertEquals(List.of(), response.jsonPath().getList("days"));
+        Assertions.assertEquals(List.of(), response.jsonPath().getList("participants"));
+        Assertions.assertEquals(List.of(), response.jsonPath().getList("speakers"));
+        Assertions.assertEquals("location", response.jsonPath().getString("location"));
+        Assertions.assertEquals("theme", response.jsonPath().getString("theme"));
+        Assertions.assertEquals("description", response.jsonPath().getString("description"));
+    }
+
+    @Test
+    public void whenMakingPutRequestToConferenceEndpoint_thenReturnResponse() {
+
+        //TO DO: adjust test to check for table entry replacement
+
+        UUID id = UUID.randomUUID();
+
+        ConferenceCreationDTO conferenceCreationDTO = new ConferenceCreationDTO();
+        conferenceCreationDTO.setLocation("location replace");
+        conferenceCreationDTO.setDescription("description replace");
+        conferenceCreationDTO.setTheme("theme replace");
+        conferenceCreationDTO.setDays(new ArrayList<>());
+        conferenceCreationDTO.setParticipants(new ArrayList<>());
+        conferenceCreationDTO.setSpeakers(new ArrayList<>());
+
+        Response response = given().contentType("application/json")
+                .body(conferenceCreationDTO)
+                .put(uri + "/conferences/" + id)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+        Assertions.assertEquals(List.of(), response.jsonPath().getList("days"));
+        Assertions.assertEquals(List.of(), response.jsonPath().getList("participants"));
+        Assertions.assertEquals(List.of(), response.jsonPath().getList("speakers"));
+        Assertions.assertEquals("location replace", response.jsonPath().getString("location"));
+        Assertions.assertEquals("theme replace", response.jsonPath().getString("theme"));
+        Assertions.assertEquals("description replace", response.jsonPath().getString("description"));
+    }
+
+    // TO DO: fix test
+    /*@Test
+    public void whenMakingPatchRequestToConferenceEndpoint_thenReturnResponse() {
+
+        //TO DO: adjust test to check for table entry field adjustment
+
+        UUID id = UUID.randomUUID();
+
+        ConferenceCreationDTO conferenceCreationDTO = new ConferenceCreationDTO();
+        conferenceCreationDTO.setLocation("location replace");
+        conferenceCreationDTO.setDescription("description replace");
+        conferenceCreationDTO.setTheme("theme replace");
+        conferenceCreationDTO.setDays(new ArrayList<>());
+        conferenceCreationDTO.setParticipants(new ArrayList<>());
+        conferenceCreationDTO.setSpeakers(new ArrayList<>());
+
+        Response response = given().contentType("application/json")
+                .body(conferenceCreationDTO)
+                .patch(uri + "/conferences/" + id)
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+        Assertions.assertEquals(List.of(), response.jsonPath().getList("days"));
+        Assertions.assertEquals(List.of(), response.jsonPath().getList("participants"));
+        Assertions.assertEquals(List.of(), response.jsonPath().getList("speakers"));
+        Assertions.assertEquals("location replace", response.jsonPath().getString("location"));
+        Assertions.assertEquals("theme replace", response.jsonPath().getString("theme"));
+        Assertions.assertEquals("description replace", response.jsonPath().getString("description"));
     }*/
+
+    @Test
+    public void whenMakingDeleteRequestToConferenceEndpoint_thenReturnResponse() {
+
+        //TO DO: adjust test to prepopulate table entry to be deleted (mock)
+
+        UUID id = UUID.randomUUID();
+
+        Conference testConference = new Conference(id, new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>());
+
+
+        Response response = given().contentType("application/json")
+                //.body(conferenceCreationDTO)
+                .delete(uri + "/conferences/" + id)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.NO_CONTENT.value())
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+    }
 }

@@ -55,7 +55,7 @@ public class SpeakerService {
 
     public void update(Speaker speaker, UUID id) {
         Objects.requireNonNull(speaker);
-        speakerRepository.update(speaker.getParticipant(), speaker.getTitle(), speaker.getCompany(), speaker.getLinkedinAcc(),
+        speakerRepository.update(speaker.getParticipant(), speaker.getCompany(), speaker.getLinkedinAcc(),
                 speaker.getTwitterAcc(), speaker.getGithubAcc(), speaker.getBiography(), id);
     }
 }

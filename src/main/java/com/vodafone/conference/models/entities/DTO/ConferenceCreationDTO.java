@@ -2,6 +2,7 @@ package com.vodafone.conference.models.entities.DTO;
 
 import com.vodafone.conference.models.entities.Day;
 import com.vodafone.conference.models.entities.Participant;
+import com.vodafone.conference.models.entities.Speaker;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 public class ConferenceCreationDTO implements Serializable {
 
+    // NOTE: making constructor public is incorrect but necessary for testing purposes
     public ConferenceCreationDTO() {}
 
 
@@ -22,6 +24,8 @@ public class ConferenceCreationDTO implements Serializable {
     private String description;
 
     private List<Day> days;
+    private List<Participant> participants;
+    private List<Speaker> speakers;
 
     public List<Day> getDays() {
         return days;
@@ -55,8 +59,6 @@ public class ConferenceCreationDTO implements Serializable {
         this.description = description;
     }
 
-    private List<Participant> participants;
-
     public List<Participant> getParticipants() {
         return participants;
     }
@@ -64,4 +66,8 @@ public class ConferenceCreationDTO implements Serializable {
     public void setParticipants(List<Participant> participants) {
         this.participants = participants;
     }
+
+    public List<Speaker> getSpeakers() { return speakers; }
+
+    public void setSpeakers(List<Speaker> speakers) { this.speakers = speakers; }
 }

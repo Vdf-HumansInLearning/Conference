@@ -134,6 +134,7 @@ public class SpeakersController {
             speaker.setParticipant(participant);
             // set speaker DTO and response
             SpeakerDTO speakerDTO = speakerMapper.toDto(speaker);
+            speakerDTO.setParticipantDTO(participantMapper.toDto(participant));
 
             speakerService.save(speaker, UUID.fromString(conferenceId), speaker.getParticipant().getId());
             return new ResponseEntity<>(speakerDTO, HttpStatus.CREATED);
