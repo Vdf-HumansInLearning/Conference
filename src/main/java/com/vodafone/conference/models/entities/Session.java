@@ -3,12 +3,14 @@ package com.vodafone.conference.models.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,13 +20,15 @@ public class Session extends EntityWithUUID {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToMany @JsonIgnore
+    @ManyToMany
+    @JsonIgnore
     private List<Speaker> speakers;
 
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL) @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private SessionType sessionType;
 
     @Column(name = "topic", nullable = false)
@@ -46,16 +50,18 @@ public class Session extends EntityWithUUID {
     @Column(name = "review", nullable = false)
     private int review;
 
-    @OneToMany(mappedBy = "sessions") @JsonIgnore
+    @OneToMany(mappedBy = "sessions")
+    @JsonIgnore
     private List<Participant> participants;
 
-    @ManyToOne @JsonIgnore
+    @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "track_id", nullable = false)
     private Track track;
 
-    enum TechLevel {
+    public enum TechLevel {
         BEGINNER,
         MID_LEVEL,
-        ADVANCED;
+        ADVANCED
     }
 }
