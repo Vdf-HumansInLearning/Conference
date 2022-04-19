@@ -86,16 +86,18 @@ public class ConferenceController {
     // H2/postgres check
     @PatchMapping("{conference-id}")
     public ResponseEntity<ConferenceDTO> patchConference(@PathVariable("conference-id") String id, @Valid @RequestBody ConferenceCreationDTO conferenceCreationDTO, Errors errors) {
-        Conference conference = conferenceService.findById(UUID.fromString(id)).get();
 
-        //error checks
-        if (conference == null) {
+        Optional<Conference> optConference = conferenceService.findById(UUID.fromString(id));
+        // revert to Opt.isPresent()
+        // error checks
+        if (!optConference.isPresent()) {
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         }
         if (errors.hasFieldErrors()) {
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
         }
 
+        Conference conference = optConference.get();
 
         if (conferenceCreationDTO.getDays() != null) {
             conference.setDays(conferenceCreationDTO.getDays());

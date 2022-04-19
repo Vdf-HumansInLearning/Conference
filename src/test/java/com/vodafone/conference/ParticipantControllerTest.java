@@ -1,5 +1,6 @@
 package com.vodafone.conference;
 
+import com.vodafone.conference.api.mapper.ParticipantMapper;
 import com.vodafone.conference.models.entities.Conference;
 import com.vodafone.conference.models.entities.DTO.ParticipantCreationDTO;
 import com.vodafone.conference.models.entities.DTO.ParticipantDTO;
@@ -21,10 +22,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.mockito.Mockito.when;
 
@@ -53,7 +51,6 @@ class ParticipantControllerTest {
     public void givenParticipantId_whenMakingGetRequestToParticipantEndpoint_thenReturnParticipant() {
 
         UUID id = UUID.randomUUID();
-
         Participant testParticipant = new Participant(id, "firstName", "lastName", "title", "email",
                 "phoneNumber", "username", "password", null, false, false, null);
 
@@ -80,13 +77,14 @@ class ParticipantControllerTest {
                 .body("speaker", equalTo(testParticipant.getIsSpeaker()));
     }
 
-    // TO DO: fix test
-    /*@Test
+    //TO DO: find out how to iterate through JSON answer to check participants
+    @Test
     public void givenConferenceId_whenMakingGetRequestToParticipantsEndpoint_thenReturnParticipant() {
 
         UUID id = UUID.randomUUID();
         UUID id1 = UUID.randomUUID();
         UUID id2 = UUID.randomUUID();
+
 
         Conference testConference = new Conference(id, new ArrayList<>(), "location",
                 "theme", "description", new ArrayList<>(), new ArrayList<>());
@@ -97,23 +95,35 @@ class ParticipantControllerTest {
         Participant testParticipant2 = new Participant(id2, "firstName2", "lastName2", "title2", "email2",
                 "phoneNumber2", "username2", "password2", null, false, false, testConference);
 
+        List<Participant> participants = new ArrayList<>();
+        participants.add(testParticipant1);
+        participants.add(testParticipant2);
+
+        //ParticipantMapper participantMapper = new ParticipantMapper();
+        //List<ParticipantDTO> participantDTOS = new ArrayList<>();
+        //participantDTOS.add(participantMapper.toDto(testParticipant1));
+        //participantDTOS.add(participantMapper.toDto(testParticipant2));
+
+        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        when(participantService.findByConference_Id(id)).thenReturn(participants);
+
         Response response =  get(uri + "/conferences/" + testConference.getId() + "/participants").then()
                 .extract().response();
 
-        System.out.println(response.asString());
+        List responseList = response.as(List.class);
+        System.out.println(responseList);
+        //System.out.println(participantDTOS);
         Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
+        //Assertions.assertEquals(response, response);
 
-        //TO DO: find out how to iterate through JSON answer to check participants
-    }*/
+    }
 
     @Test
     public void whenMakingPostRequestToParticipantsEndpoint_thenReturnResponse() {
 
         UUID id = UUID.randomUUID();
-
         Conference testConference = new Conference(id, new ArrayList<>(), "location",
                 "theme", "description", new ArrayList<>(), new ArrayList<>());
-
         when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
@@ -153,13 +163,13 @@ class ParticipantControllerTest {
     public void whenMakingPutRequestToParticipantsEndpoint_thenReturnResponse() {
 
         UUID id = UUID.randomUUID();
-        //UUID id1 = UUID.randomUUID();
+        UUID id1 = UUID.randomUUID();
 
-        //Conference testConference = new Conference(id, new ArrayList<>(), "location",
-        //        "theme", "description", new ArrayList<>(), new ArrayList<>());
-
-        //Participant testParticipant1 = new Participant(id1, "firstName1", "lastName1", "title1", "email1",
-        //        "phoneNumber1", "username1", "password1", null, true, true, testConference);
+        Conference testConference = new Conference(id, new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>());
+        Participant testParticipant1 = new Participant(id1, "firstName1", "lastName1", "title1", "email1",
+                "phoneNumber1", "username1", "password1", null, true, true, testConference);
+        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
         participantCreationDTO.setFirstName("firstName");
@@ -172,11 +182,9 @@ class ParticipantControllerTest {
         participantCreationDTO.setOrganiser(true);
         participantCreationDTO.setSpeaker(true);
 
-        //System.out.println(participantCreationDTO.toString());
-
         Response response = given().contentType("application/json")
                 .body(participantCreationDTO)
-                .put(uri + "/participants/" + id)
+                .put(uri + "/participants/" + id1)
                 .then()
                 .extract()
                 .response();
@@ -193,8 +201,7 @@ class ParticipantControllerTest {
         //Assertions.assertEquals(true, response.jsonPath().getBoolean("isSpeaker"));
     }
 
-    // TO DO: fix test
-    /*@Test
+    @Test
     public void whenMakingPatchRequestToConferenceEndpoint_thenReturnResponse() {
 
         UUID id = UUID.randomUUID();
@@ -205,6 +212,9 @@ class ParticipantControllerTest {
 
         Participant testParticipant1 = new Participant(id1, "firstName1", "lastName1", "title1", "email1",
                 "phoneNumber1", "username1", "password1", null, true, true, testConference);
+
+        when(participantService.findById(id1)).thenReturn(Optional.of(testParticipant1));
+
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
         participantCreationDTO.setFirstName("firstName");
@@ -230,12 +240,13 @@ class ParticipantControllerTest {
         Assertions.assertEquals("title", response.jsonPath().getString("title"));
         Assertions.assertEquals("email", response.jsonPath().getString("email"));
         Assertions.assertEquals("phoneNumber", response.jsonPath().getString("phoneNumber"));
-    }*/
+    }
 
     @Test
     public void whenMakingDeleteRequestToParticipantsEndpoint_thenReturnResponse() {
 
         //TO DO: adjust test to prepopulate table entry to be deleted (mock)
+        // mockito verify
 
         UUID id = UUID.randomUUID();
         UUID id1 = UUID.randomUUID();

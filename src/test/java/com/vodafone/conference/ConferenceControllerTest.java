@@ -36,6 +36,8 @@ import static org.mockito.Mockito.when;
 // public access modifier causes error
 class ConferenceControllerTest {
 
+    // create util class for instantiating DTOs
+
     @LocalServerPort
     private int port;
 
@@ -59,6 +61,7 @@ class ConferenceControllerTest {
                 "theme", "description", new ArrayList<>(), new ArrayList<>());
 
         //mock conference service
+        // check for exception with Opt.isPresent()
         when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
 
         get(uri + "/conferences/" + testConference.getId()).then()
@@ -107,8 +110,11 @@ class ConferenceControllerTest {
     public void whenMakingPutRequestToConferenceEndpoint_thenReturnResponse() {
 
         //TO DO: adjust test to check for table entry replacement
-
+        // NOTE: 1) mock findById 2) check put operation
         UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(id, new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>());
+        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
 
         ConferenceCreationDTO conferenceCreationDTO = new ConferenceCreationDTO();
         conferenceCreationDTO.setLocation("location replace");
@@ -136,13 +142,16 @@ class ConferenceControllerTest {
         Assertions.assertEquals("description replace", response.jsonPath().getString("description"));
     }
 
-    // TO DO: fix test
-    /*@Test
+    @Test
     public void whenMakingPatchRequestToConferenceEndpoint_thenReturnResponse() {
 
         //TO DO: adjust test to check for table entry field adjustment
 
+        // NOTE: 1) mock findById 2) check put operation
         UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(id, new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>());
+        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
 
         ConferenceCreationDTO conferenceCreationDTO = new ConferenceCreationDTO();
         conferenceCreationDTO.setLocation("location replace");
@@ -166,18 +175,18 @@ class ConferenceControllerTest {
         Assertions.assertEquals("location replace", response.jsonPath().getString("location"));
         Assertions.assertEquals("theme replace", response.jsonPath().getString("theme"));
         Assertions.assertEquals("description replace", response.jsonPath().getString("description"));
-    }*/
+    }
 
     @Test
     public void whenMakingDeleteRequestToConferenceEndpoint_thenReturnResponse() {
 
-        //TO DO: adjust test to prepopulate table entry to be deleted (mock)
+        //TO DO: adjust test to prepopulate table entry to be deleted (mock repository)
+        // mockito verify
 
         UUID id = UUID.randomUUID();
-
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-
+        //Conference testConference = new Conference(id, new ArrayList<>(), "location",
+        //        "theme", "description", new ArrayList<>(), new ArrayList<>());
+        //when(conferenceService.deleteById(id)).thenReturn(Optional.of(testConference));
 
         Response response = given().contentType("application/json")
                 //.body(conferenceCreationDTO)
@@ -189,5 +198,6 @@ class ConferenceControllerTest {
                 .response();
 
         Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+
     }
 }

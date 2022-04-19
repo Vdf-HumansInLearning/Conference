@@ -88,8 +88,9 @@ public class SpeakersController {
     @GetMapping("conferences/{conference-id}/speakers")
     public ResponseEntity<List<SpeakerDTO>> getConferenceSpeakersByConferenceId(@PathVariable("conference-id") String id) {
 
-        Conference conference = conferenceService.findById(UUID.fromString(id)).get();
-        if (conference == null) {
+        //Conference conference = conferenceService.findById(UUID.fromString(id)).get();
+        Optional<Conference> optConference = conferenceService.findById(UUID.fromString(id));
+        if (!optConference.isPresent()) {
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         } else {
             List<Speaker> speakers = speakerService.findByConference_Id(UUID.fromString(id));
@@ -190,16 +191,17 @@ public class SpeakersController {
             speaker.getParticipant().setPassword(speakerCreationDTO.getParticipant().getPassword());
         }*/
 
-        Speaker speaker = speakerService.findById(UUID.fromString(id)).get();
+        Optional<Speaker> optSpeaker = speakerService.findById(UUID.fromString(id));
 
         //error checks
-        if (speaker == null) {
+        if (!optSpeaker.isPresent()) {
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         }
         if (errors.hasFieldErrors()) {
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
         }
 
+        Speaker speaker = optSpeaker.get();
         // check speaker specific fields
         if (speakerCreationDTO.getCompany() != null) {
             speaker.setCompany(speakerCreationDTO.getCompany());

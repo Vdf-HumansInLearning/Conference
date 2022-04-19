@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -65,10 +66,6 @@ class SpeakerControllerTest {
         Participant testParticipant = new Participant(id2, "firstName", "lastName", "title", "email",
                 "phoneNumber", "username", "password", null, false, false, null);
 
-        //Speaker testSpeaker = new Speaker(id3, testParticipant, "title", "company",
-        //        "linkedinAcc", "twitterAcc", "githubAcc",
-        //        "biography", testConference);
-
         Speaker testSpeaker = new Speaker(id3, testParticipant, "company",
                 "linkedinAcc", "twitterAcc", "githubAcc",
                 "biography", testConference);
@@ -88,7 +85,7 @@ class SpeakerControllerTest {
     }
 
     // TO DO: fix test
-    /*@Test
+    @Test
     public void givenConferenceId_whenMakingGetRequestToSpeakersEndpoint_thenReturnSpeaker() {
 
         UUID id1 = UUID.randomUUID();
@@ -106,31 +103,38 @@ class SpeakerControllerTest {
         Participant testParticipant2 = new Participant(id3, "firstName2", "lastName2", "title2", "email2",
                 "phoneNumber2", "username2", "password2", null, false, false, testConference);
 
-        Speaker testSpeaker = new Speaker(id4, testParticipant1, "title", "company",
-                "linkedinAcc", "twitterAcc", "githubAcc",
-                "biography", testConference);
+        Speaker testSpeaker1 = new Speaker(id4, testParticipant1, "company1",
+                "linkedinAcc1", "twitterAcc1", "githubAcc1",
+                "biography1", testConference);
 
-        Speaker testSpeaker2 = new Speaker(id5, testParticipant2, "title", "company",
-                "linkedinAcc", "twitterAcc", "githubAcc",
-                "biography", testConference);
+        Speaker testSpeaker2 = new Speaker(id5, testParticipant2, "company2",
+                "linkedinAcc2", "twitterAcc2", "githubAcc2",
+                "biography2", testConference);
+
+
+        List<Speaker> speakers = new ArrayList<>();
+        speakers.add(testSpeaker1);
+        speakers.add(testSpeaker2);
+
+        when(conferenceService.findById(id1)).thenReturn(Optional.of(testConference));
+        when(speakerService.findByConference_Id(id1)).thenReturn(speakers);
 
         Response response =  get(uri + "/conferences/" + testConference.getId() + "/speakers").then()
                 .extract().response();
 
-        //System.out.println(response.asString());
+        List responseList = response.as(List.class);
+        System.out.println(responseList);
         Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
 
         //TO DO: find out how to iterate through JSON answer to check participants
-    }*/
+    }
 
     @Test
     public void whenMakingPostRequestToSpeakersEndpoint_thenReturnResponse() {
 
         UUID id = UUID.randomUUID();
-
         Conference testConference = new Conference(id, new ArrayList<>(), "location",
                 "theme", "description", new ArrayList<>(), new ArrayList<>());
-
         when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
@@ -143,6 +147,7 @@ class SpeakerControllerTest {
         participantCreationDTO.setPassword("password");
         participantCreationDTO.setOrganiser(true);
         participantCreationDTO.setSpeaker(true);
+
 
         SpeakerCreationDTO speakerCreationDTO = new SpeakerCreationDTO();
         speakerCreationDTO.setParticipantCreationDTO(participantCreationDTO);
@@ -159,6 +164,8 @@ class SpeakerControllerTest {
                 .extract()
                 .response();
 
+        //List responseList = response.as(List.class);
+        //System.out.println(responseList);
         Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
 
         // Might have to test participantDTO fields as well
@@ -173,12 +180,18 @@ class SpeakerControllerTest {
     @Test
     public void whenMakingPutRequestToSpeakersEndpoint_thenReturnResponse() {
 
-        UUID id = UUID.randomUUID();
+        UUID id1 = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
+        UUID id3 = UUID.randomUUID();
 
-        //Conference testConference = new Conference(id, new ArrayList<>(), "location",
-        //        "theme", "description", new ArrayList<>(), new ArrayList<>());
-
-        //when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        Conference testConference = new Conference(id1, new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>());
+        Participant testParticipant1 = new Participant(id2, "firstName1", "lastName1", "title1", "email1",
+                "phoneNumber1", "username1", "password1", null, true, true, testConference);
+        Speaker testSpeaker1 = new Speaker(id3, testParticipant1, "company1",
+                "linkedinAcc1", "twitterAcc1", "githubAcc1",
+                "biography1", testConference);
+        when(conferenceService.findById(id1)).thenReturn(Optional.of(testConference));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
         participantCreationDTO.setFirstName("firstName");
@@ -201,7 +214,7 @@ class SpeakerControllerTest {
 
         Response response = given().contentType("application/json")
                 .body(speakerCreationDTO)
-                .put(uri + "/speakers/" + id)
+                .put(uri + "/speakers/" + id3)
                 .then()
                 .extract()
                 .response();
@@ -219,19 +232,26 @@ class SpeakerControllerTest {
     }
 
     // TO DO: fix test
-    /*@Test
+    @Test
     public void whenMakingPatchRequestToConferenceEndpoint_thenReturnResponse() {
 
-        UUID id = UUID.randomUUID();
         UUID id1 = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
+        UUID id3 = UUID.randomUUID();
 
         //when(speakerService.findById(id)).thenReturn(Optional.of(testSpeaker));
 
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
+        Conference testConference = new Conference(id1, new ArrayList<>(), "location",
                 "theme", "description", new ArrayList<>(), new ArrayList<>());
 
-        Participant testParticipant1 = new Participant(id1, "firstName1", "lastName1", "title1", "email1",
+        Participant testParticipant1 = new Participant(id2, "firstName1", "lastName1", "title1", "email1",
                 "phoneNumber1", "username1", "password1", null, true, true, testConference);
+
+        Speaker testSpeaker1 = new Speaker(id3, testParticipant1, "company1",
+                "linkedinAcc1", "twitterAcc1", "githubAcc1",
+                "biography1", testConference);
+
+        when(speakerService.findById(id3)).thenReturn(Optional.of(testSpeaker1));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
         participantCreationDTO.setFirstName("firstName");
@@ -254,18 +274,18 @@ class SpeakerControllerTest {
 
         Response response = given().contentType("application/json")
                 .body(speakerCreationDTO)
-                .patch(uri + "/speakers/" + id1)
+                .patch(uri + "/speakers/" + id3)
                 .then()
                 .extract()
                 .response();
 
         Assertions.assertEquals(HttpStatus.OK.value(), response.statusCode());
-        Assertions.assertEquals("firstName", response.jsonPath().getString("firstName"));
-        Assertions.assertEquals("lastName", response.jsonPath().getString("lastName"));
-        Assertions.assertEquals("title", response.jsonPath().getString("title"));
-        Assertions.assertEquals("email", response.jsonPath().getString("email"));
-        Assertions.assertEquals("phoneNumber", response.jsonPath().getString("phoneNumber"));
-    }*/
+        Assertions.assertEquals("company", response.jsonPath().getString("company"));
+        Assertions.assertEquals("linkedinAcc", response.jsonPath().getString("linkedinAcc"));
+        Assertions.assertEquals("githubAcc", response.jsonPath().getString("githubAcc"));
+        Assertions.assertEquals("twitterAcc", response.jsonPath().getString("twitterAcc"));
+        Assertions.assertEquals("biography", response.jsonPath().getString("biography"));
+    }
 
     @Test
     public void whenMakingDeleteRequestToParticipantsEndpoint_thenReturnResponse() {

@@ -77,10 +77,12 @@ public class ParticipantsController {
     @GetMapping("conferences/{conference-id}/participants")
     public ResponseEntity<List<ParticipantDTO>> getConferenceParticipantsByConferenceId(@PathVariable("conference-id") String id) {
 
-        Conference conference = conferenceService.findById(UUID.fromString(id)).get();
-        if (conference == null) {
+        //Conference conference = conferenceService.findById(UUID.fromString(id)).get();
+        Optional<Conference> optConference = conferenceService.findById(UUID.fromString(id));
+        if (!optConference.isPresent()) {
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         } else {
+            // clean repo method names
             List<ParticipantDTO> participants = participantService.findByConference_Id(UUID.fromString(id)).stream()
                     .map(participant -> mapper.toDto(participant)).collect(Collectors.toList());
 
@@ -93,8 +95,8 @@ public class ParticipantsController {
     @PostMapping(path= "conferences/{conference-id}/participants", consumes = "application/json")
     public ResponseEntity<ParticipantDTO> createParticipant(@Valid @RequestBody ParticipantCreationDTO participantCreationDTO, @PathVariable("conference-id") String conferenceId, Errors errors) {
 
-        Conference conference = conferenceService.findById(UUID.fromString(conferenceId)).get();
-        if (conference == null) {
+        Optional<Conference> optConference = conferenceService.findById(UUID.fromString(conferenceId));
+        if (!optConference.isPresent()) {
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, conferenceId.toString()));
         }
         if (errors.hasFieldErrors()) {
@@ -117,7 +119,6 @@ public class ParticipantsController {
         Participant participant = mapper.toParticipant(participantCreationDTO);
         ParticipantDTO participantDTO = mapper.toDto(mapper.toParticipant(participantCreationDTO));
         if (errors.hasFieldErrors()) {
-            //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
         }
 
@@ -130,15 +131,17 @@ public class ParticipantsController {
     // H2/postgres check
     @PatchMapping("participants/{participant-id}")
     public ResponseEntity<ParticipantDTO> patchParticipant(@PathVariable("participant-id") String id, @Valid @RequestBody ParticipantCreationDTO participantCreationDTO,Errors errors) {
-        Participant participant = participantService.findById(UUID.fromString(id)).get();
 
+        Optional<Participant> optParticipant = participantService.findById(UUID.fromString(id));
         //error checks
-        if (participant == null) {
+        if (!optParticipant.isPresent()) {
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         }
         if (errors.hasFieldErrors()) {
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
         }
+
+        Participant participant = optParticipant.get();
 
         if (participantCreationDTO.getFirstName() != null) {
             participant.setFirstName(participantCreationDTO.getFirstName());
