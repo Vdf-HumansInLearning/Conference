@@ -20,9 +20,9 @@ public class Session extends EntityWithUUID {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToMany
-    @JsonIgnore
-    private List<Speaker> speakers;
+//    @ManyToMany
+//    @JsonIgnore
+//    private List<Speaker> speakers;
 
     @Column(name = "description", nullable = false)
     private String description;
@@ -31,12 +31,16 @@ public class Session extends EntityWithUUID {
     @JsonIgnore
     private SessionType sessionType;
 
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "track_id", nullable = false)
+    private Track track;
+
     @Column(name = "topic", nullable = false)
     private String topic;
 
     @Column(name = "tech_level", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TechLevel techLevel;
+    private String techLevel;
 
     @Column(name = "keywords", nullable = false)
     private String keywords;
@@ -47,21 +51,11 @@ public class Session extends EntityWithUUID {
     @Column(name = "end_time", nullable = false)
     private LocalDate endTime;
 
-    @Column(name = "review", nullable = false)
+    @Column(name = "review")
     private int review;
 
     @OneToMany(mappedBy = "sessions")
     @JsonIgnore
     private List<Participant> participants;
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "track_id", nullable = false)
-    private Track track;
-
-    public enum TechLevel {
-        BEGINNER,
-        MID_LEVEL,
-        ADVANCED
-    }
 }

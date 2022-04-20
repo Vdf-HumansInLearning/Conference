@@ -12,7 +12,6 @@ import java.util.List;
 public class SessionCreationDTO {
 
     private String title;
-//    private List<Speaker> speakers;
     private String description;
     private SessionType sessionType;
     private Track track;
