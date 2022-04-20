@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +33,7 @@ public class Speaker {
     //private String title;
 
     @Column(name = "company", nullable = false)
+    @NotBlank(message = "Company is required")
     private String company;
 
     @Column(name = "linkedin_acc", nullable = false)
@@ -44,6 +46,7 @@ public class Speaker {
     private String githubAcc;
 
     @Column(name = "biography", nullable = false)
+    @NotBlank(message = "Biography is required")
     private String biography;
 
     // this is Spring many-to-many relationship in course

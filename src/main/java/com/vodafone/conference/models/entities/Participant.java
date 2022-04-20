@@ -44,6 +44,7 @@ public class Participant {
     private String title;
 
     @Email()
+    @NotNull
     @Pattern(regexp = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$", message = "Must conform to OWASP email standard")
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -63,6 +64,7 @@ public class Participant {
 
     @Column(name = "password", nullable = false)
     @NotBlank(message = "Password is required")
+    @Pattern(regexp = "^[A-Za-z]\\w{1,49}$", message = " Password must be between 2 and 50 characters and use upper and lowercase characters. It cannot contain any special characters.")
     /*
     * A password is considered valid if all the following constraints are satisfied:
 
@@ -72,7 +74,7 @@ public class Participant {
     It contains at least one lower case alphabet.
     It contains at least one special character which includes !@#$%&*()-+=^.
     It does not contain any white space.*/
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\\\S+$).{8,20}$")
+    //@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\\\S+$).{8,20}$")
     private String password;
 
     @OneToOne(mappedBy = "participant", cascade = CascadeType.ALL)

@@ -20,8 +20,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 
 import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -29,6 +27,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -188,7 +188,26 @@ class ConferenceControllerTest {
         //        "theme", "description", new ArrayList<>(), new ArrayList<>());
         //when(conferenceService.deleteById(id)).thenReturn(Optional.of(testConference));
 
-        Response response = given().contentType("application/json")
+        ConferenceCreationDTO conferenceCreationDTO = new ConferenceCreationDTO();
+        conferenceCreationDTO.setLocation("location replace");
+        conferenceCreationDTO.setDescription("description replace");
+        conferenceCreationDTO.setTheme("theme replace");
+        conferenceCreationDTO.setDays(new ArrayList<>());
+        conferenceCreationDTO.setParticipants(new ArrayList<>());
+        conferenceCreationDTO.setSpeakers(new ArrayList<>());
+
+        Response createResponse = given().contentType("application/json")
+                .body(conferenceCreationDTO)
+                .put(uri + "/conferences/" + id)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), createResponse.statusCode());
+
+        Response deleteResponse = given().contentType("application/json")
                 //.body(conferenceCreationDTO)
                 .delete(uri + "/conferences/" + id)
                 .then()
@@ -197,7 +216,16 @@ class ConferenceControllerTest {
                 .extract()
                 .response();
 
-        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+        //Assertions.assertEquals(null, deleteResponse.getBody());
+
+        //Response getResponse = (Response) get(uri + "/conferences/" + id).then()
+        //        .assertThat()
+        //        .statusCode(HttpStatus.OK.value())
+        //                .body("", equalTo(nullValue()));
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), deleteResponse.statusCode());
+
+
 
     }
 }

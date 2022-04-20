@@ -13,7 +13,6 @@ public class ParticipantCreationDTO {
     // NOTE: making constructor public is incorrect but necessary for testing purposes
     public ParticipantCreationDTO() {}
 
-
     private String firstName;
     private String lastName;
     private String title;

@@ -253,11 +253,31 @@ class ParticipantControllerTest {
 
         Conference testConference = new Conference(id, new ArrayList<>(), "location",
                 "theme", "description", new ArrayList<>(), new ArrayList<>());
-
         Participant testParticipant1 = new Participant(id1, "firstName1", "lastName1", "title1", "email1",
                 "phoneNumber1", "username1", "password1", null, true, true, testConference);
+        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
 
-        Response response = given().contentType("application/json")
+        ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
+        participantCreationDTO.setFirstName("firstName");
+        participantCreationDTO.setLastName("lastName");
+        participantCreationDTO.setTitle("title");
+        participantCreationDTO.setEmail("email");
+        participantCreationDTO.setPhoneNumber("phoneNumber");
+        participantCreationDTO.setUsername("username");
+        participantCreationDTO.setPassword("password");
+        participantCreationDTO.setOrganiser(true);
+        participantCreationDTO.setSpeaker(true);
+
+        Response createResponse = given().contentType("application/json")
+                .body(participantCreationDTO)
+                .put(uri + "/participants/" + id1)
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), createResponse.statusCode());
+
+        Response deleteResponse = given().contentType("application/json")
                 //.body(conferenceCreationDTO)
                 .delete(uri + "/participants/" + id1)
                 .then()
@@ -266,6 +286,8 @@ class ParticipantControllerTest {
                 .extract()
                 .response();
 
-        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+        //System.out.println("Printing response: " + deleteResponse.asString());
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), deleteResponse.statusCode());
     }
 }

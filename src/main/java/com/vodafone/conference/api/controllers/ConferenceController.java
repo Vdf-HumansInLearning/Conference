@@ -16,12 +16,14 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
 import java.util.UUID;
 
+@Validated
 @RestController
 @RequestMapping(path="/conferences", produces = "application/json")
 @CrossOrigin(origins = "*")

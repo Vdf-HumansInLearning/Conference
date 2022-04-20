@@ -298,15 +298,42 @@ class SpeakerControllerTest {
 
         Conference testConference = new Conference(id1, new ArrayList<>(), "location",
                 "theme", "description", new ArrayList<>(), new ArrayList<>());
-
-        Participant testParticipant = new Participant(id2, "firstName1", "lastName1", "title1", "email1",
+        Participant testParticipant1 = new Participant(id2, "firstName1", "lastName1", "title1", "email1",
                 "phoneNumber1", "username1", "password1", null, true, true, testConference);
+        Speaker testSpeaker1 = new Speaker(id3, testParticipant1, "company1",
+                "linkedinAcc1", "twitterAcc1", "githubAcc1",
+                "biography1", testConference);
+        when(conferenceService.findById(id1)).thenReturn(Optional.of(testConference));
 
-        Speaker testSpeaker = new Speaker(id3, testParticipant, "company",
-                "linkedinAcc", "twitterAcc", "githubAcc",
-                "biography", testConference);
+        ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
+        participantCreationDTO.setFirstName("firstName");
+        participantCreationDTO.setLastName("lastName");
+        participantCreationDTO.setTitle("title");
+        participantCreationDTO.setEmail("email");
+        participantCreationDTO.setPhoneNumber("phoneNumber");
+        participantCreationDTO.setUsername("username");
+        participantCreationDTO.setPassword("password");
+        participantCreationDTO.setOrganiser(true);
+        participantCreationDTO.setSpeaker(true);
 
-        Response response = given().contentType("application/json")
+        SpeakerCreationDTO speakerCreationDTO = new SpeakerCreationDTO();
+        speakerCreationDTO.setParticipantCreationDTO(participantCreationDTO);
+        speakerCreationDTO.setCompany("company");
+        speakerCreationDTO.setLinkedinAcc("linkedinAcc");
+        speakerCreationDTO.setGithubAcc("githubAcc");
+        speakerCreationDTO.setTwitterAcc("twitterAcc");
+        speakerCreationDTO.setBiography("biography");
+
+        Response createResponse = given().contentType("application/json")
+                .body(speakerCreationDTO)
+                .put(uri + "/speakers/" + id3)
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), createResponse.statusCode());
+
+        Response deleteResponse = given().contentType("application/json")
                 //.body(conferenceCreationDTO)
                 .delete(uri + "/speakers/" + id3)
                 .then()
@@ -315,6 +342,8 @@ class SpeakerControllerTest {
                 .extract()
                 .response();
 
-        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response.statusCode());
+        //System.out.println("Printing response: " + deleteResponse.asString());
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), deleteResponse.statusCode());
     }
 }
