@@ -36,6 +36,7 @@ public class Speaker extends EntityWithUUID {
     @Column(name = "biography", nullable = false)
     private String biography;
 
+//    @ManyToMany(mappedBy = "speakers") @JsonIgnore
     @ManyToMany @JsonIgnore
     private List<Session> sessions;
 

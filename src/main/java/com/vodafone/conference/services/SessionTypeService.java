@@ -20,6 +20,7 @@ public class SessionTypeService {
 
     public void save(SessionType sessionType) {
         Objects.requireNonNull(sessionType);
+        sessionType.setSession(null);
         sessionTypeRepository.save(sessionType);
     }
 

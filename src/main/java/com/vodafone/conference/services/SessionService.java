@@ -13,13 +13,16 @@ import java.util.UUID;
 public class SessionService {
 
     private final SessionRepository sessionRepository;
+    private final TrackService trackService;
 
-    public SessionService(SessionRepository sessionRepository) {
+    public SessionService(SessionRepository sessionRepository, TrackService trackService) {
         this.sessionRepository = sessionRepository;
+        this.trackService = trackService;
     }
 
-    public void save(Session session) {
+    public void save(Session session, UUID trackId) {
         Objects.requireNonNull(session);
+        session.setTrack(trackService.findById(trackId));
         sessionRepository.save(session);
     }
 
@@ -33,7 +36,9 @@ public class SessionService {
 
     public void update(Session session, UUID id) {
         Objects.requireNonNull(session);
-        sessionRepository.update(id);
+
+        sessionRepository.update(session.getTitle(), session.getDescription(), session.getTopic(),
+                session.getTechLevel(), session.getKeywords(), session.getDate(), session.getEndTime(), id);
     }
 
     public void deleteById(UUID id) {

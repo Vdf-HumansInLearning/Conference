@@ -3,32 +3,33 @@ package com.vodafone.conference.models.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "session")
 public class Session extends EntityWithUUID {
+
     @Column(name = "title", nullable = false)
     private String title;
 
-//    @ManyToMany
-//    @JsonIgnore
-//    private List<Speaker> speakers;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JoinTable(name = "speaker_session",
+            joinColumns = {@JoinColumn(name = "session_id")},
+            inverseJoinColumns = {@JoinColumn(name = "speaker_id")})
+    private List<Speaker> speakers;
 
     @Column(name = "description", nullable = false)
     private String description;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JoinColumn(name = "session_type_id")
     private SessionType sessionType;
 
     @ManyToOne
@@ -54,7 +55,7 @@ public class Session extends EntityWithUUID {
     @Column(name = "review")
     private int review;
 
-    @OneToMany(mappedBy = "sessions")
+    @OneToMany(mappedBy = "sessions", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Participant> participants;
 
