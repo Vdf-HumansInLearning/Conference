@@ -69,9 +69,10 @@ public class SessionTypeController {
 
     @DeleteMapping("{session-type-id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteSessionType(@PathVariable("session-type-id") String id) throws Exception {
+    public ResponseEntity deleteSessionType(@PathVariable("session-type-id") String id) throws Exception {
         try {
             sessionTypeService.deleteById(UUID.fromString(id));
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (EmptyResultDataAccessException e) {
             throw new Exception(e);
         }
