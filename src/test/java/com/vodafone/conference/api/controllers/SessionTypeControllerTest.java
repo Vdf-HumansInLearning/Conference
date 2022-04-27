@@ -33,11 +33,22 @@ class SessionTypeControllerTest {
     }
 
     @Test
+    void getSessionType() {
+        Response response = insertSessionTypeInDB();
+        Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
+
+        Response getResponse = given().contentType("application/json")
+                .get("/session_types")
+                .then().extract().response();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), getResponse.statusCode());
+    }
+
+    @Test
     void getSessionTypeById() {
         Response response = insertSessionTypeInDB();
         Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
         String id = new JsonPath(response.getBody().asString()).getString("id");
-
 
         Response getResponse = given().contentType("application/json")
                 .get("/session_types/" + id)
