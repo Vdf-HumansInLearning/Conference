@@ -6,12 +6,15 @@ import com.vodafone.conference.exceptions.ApiRequestException;
 import com.vodafone.conference.models.dto.SessionCreationDTO;
 import com.vodafone.conference.models.dto.SessionDTO;
 import com.vodafone.conference.models.dto.SessionTypeDTO;
+import com.vodafone.conference.models.entities.Participant;
 import com.vodafone.conference.models.entities.Session;
 import com.vodafone.conference.models.entities.SessionType;
 import com.vodafone.conference.models.entities.Track;
 import com.vodafone.conference.services.SessionService;
 import com.vodafone.conference.services.SessionTypeService;
 import com.vodafone.conference.services.TrackService;
+import com.vodafone.conference.services.utils.EmailSenderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +37,9 @@ public class SessionController {
     private final TrackService trackService;
     private final SessionMapper sessionMapper;
     private final SessionTypeMapper sessionTypeMapper;
+
+    @Autowired
+    private EmailSenderService senderService;
 
     public SessionController(SessionService sessionService, SessionTypeService sessionTypeService, TrackService trackService, SessionMapper sessionMapper, SessionTypeMapper sessionTypeMapper) {
         this.sessionService = sessionService;
@@ -103,6 +109,10 @@ public class SessionController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         sessionService.update(session, UUID.fromString(id));
+
+        sessionDTO.getParticipants().forEach(participant -> senderService.sendEmail(participant.getEmail(), "Test", "test"));
+//        senderService.sendEmail("ichim_sorin98@yahoo.com", "Test subject", "Test Body");
+
         return new ResponseEntity<>(sessionDTO, HttpStatus.OK);
     }
 
