@@ -1,6 +1,7 @@
 package com.vodafone.conference.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,8 +30,8 @@ public class Conference extends EntityWithUUID {
     @OneToMany(mappedBy = "id") @JsonIgnore
     private List<Participant> participants;
 
-    @OneToMany(mappedBy = "conference") @JsonIgnore
-    private List<Ticket> tickets;
+//    @OneToMany(mappedBy = "conference") @JsonIgnore
+//    private List<Ticket> tickets;
 
     //@OneToMany(mappedBy = "conference", fetch = FetchType.EAGER, cascade = CascadeType.ALL) @JsonIgnore
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.LAZY) @JsonIgnore

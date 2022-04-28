@@ -46,8 +46,8 @@ public class Participant extends EntityWithUUID {
     @JoinColumn(name = "session_id", nullable = false)
     private Session sessions;
 
-    @OneToMany(mappedBy = "participant") @JsonIgnore
-    private List<Ticket> tickets;
+//    @OneToMany(mappedBy = "participant") @JsonIgnore
+//    private List<Ticket> tickets;
 
     @Column(name = "is_organiser", columnDefinition = "boolean")
     private Boolean isOrganiser;
