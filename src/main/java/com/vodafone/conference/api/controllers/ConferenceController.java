@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,24 +60,24 @@ public class ConferenceController {
         return new ResponseEntity<>(conferenceDTO, HttpStatus.CREATED);
     }
 
-    //TODo: Use ConferenceCreatioDto for Put
     @PutMapping(value = "conferences/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Conference> updateConferenceById(@PathVariable(name = "id") UUID id, @RequestBody ConferenceDTO conferenceDTO){
-        Conference conference= conferenceService.findByID(id);
+    public ResponseEntity<ConferenceDTO> updateConferenceById(@PathVariable(name = "id") UUID id, @Valid @RequestBody ConferenceCreationDTO conferenceCreationDTO, Errors errors){
+        Conference conference = conferenceMapper.toConference(conferenceCreationDTO);
+        ConferenceDTO conferenceDTO = conferenceMapper.toDto(conference);
 
-        if (conference != null) {
-            Conference tempConference = conferenceService.updateConferenceById(conferenceDTO, id);
-
-            return  new ResponseEntity<>(tempConference, HttpStatus.OK);
+        if (errors.hasErrors()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        conferenceService.update(conference, id);
 
-        throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        return new ResponseEntity<>(conferenceDTO, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/conferences/{id}")
-    public void deleteById(@PathVariable UUID id) {
+    public ResponseEntity deleteById(@PathVariable UUID id) {
         if (conferenceService.isIdPresent(id)) {
             conferenceService.deleteById(id);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         } else {
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         }

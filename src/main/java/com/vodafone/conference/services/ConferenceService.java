@@ -60,21 +60,11 @@ public class ConferenceService {
         Objects.requireNonNull(conference);
         conferenceRepository.save(conference);
     }
-    @Transactional
-    public Conference updateConferenceById(ConferenceDTO conferenceDTO, UUID id) {
-        Conference conference;
-        Optional<Conference> conferenceOptional = conferenceRepository.findById(conferenceDTO.getId());
 
-        if (conferenceOptional.isPresent()) {
-            conference = conferenceOptional.get();
-            conference.setLocation(conferenceDTO.getLocation());
-            conference.setTheme(conferenceDTO.getTheme());
-            conference.setDescription(conferenceDTO.getDescription());
+    public void update(Conference conference, UUID id) {
+        Objects.requireNonNull(conference);
 
-            return conferenceRepository.save(conference);
-        }
-
-        throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        conferenceRepository.update(conference.getDescription(), conference.getTheme(), conference.getLocation(), id);
     }
 
     @Transactional

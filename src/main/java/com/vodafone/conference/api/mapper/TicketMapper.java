@@ -15,7 +15,7 @@ public class TicketMapper {
         return ticketMapper.map(ticket, TicketDTO.class);
     }
 
-    private Ticket toTicket(TicketCreationDTO ticketCreationDTO){
+    public Ticket toTicket(TicketCreationDTO ticketCreationDTO){
         return ticketMapper.map(ticketCreationDTO, Ticket.class);
     }
 }
