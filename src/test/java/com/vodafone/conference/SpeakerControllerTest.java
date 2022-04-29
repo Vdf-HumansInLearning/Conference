@@ -20,10 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
@@ -68,7 +65,7 @@ class SpeakerControllerTest {
 
         Speaker testSpeaker = new Speaker(id3, testParticipant, "company",
                 "linkedinAcc", "twitterAcc", "githubAcc",
-                "biography", testConference);
+                "biography", new HashSet<>(), testConference);
 
         when(speakerService.findById(id3)).thenReturn(Optional.of(testSpeaker));
 
@@ -105,11 +102,11 @@ class SpeakerControllerTest {
 
         Speaker testSpeaker1 = new Speaker(id4, testParticipant1, "company1",
                 "linkedinAcc1", "twitterAcc1", "githubAcc1",
-                "biography1", testConference);
+                "biography1", new HashSet<>(), testConference);
 
         Speaker testSpeaker2 = new Speaker(id5, testParticipant2, "company2",
                 "linkedinAcc2", "twitterAcc2", "githubAcc2",
-                "biography2", testConference);
+                "biography2", new HashSet<>(), testConference);
 
 
         List<Speaker> speakers = new ArrayList<>();
@@ -190,7 +187,7 @@ class SpeakerControllerTest {
                 "phoneNumber1", "username1", "password1", null, true, true, testConference);
         Speaker testSpeaker1 = new Speaker(id3, testParticipant1, "company1",
                 "linkedinAcc1", "twitterAcc1", "githubAcc1",
-                "biography1", testConference);
+                "biography1", new HashSet<>(), testConference);
         when(conferenceService.findById(id1)).thenReturn(Optional.of(testConference));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
@@ -249,7 +246,7 @@ class SpeakerControllerTest {
 
         Speaker testSpeaker1 = new Speaker(id3, testParticipant1, "company1",
                 "linkedinAcc1", "twitterAcc1", "githubAcc1",
-                "biography1", testConference);
+                "biography1", new HashSet<>(), testConference);
 
         when(speakerService.findById(id3)).thenReturn(Optional.of(testSpeaker1));
 
@@ -302,7 +299,7 @@ class SpeakerControllerTest {
                 "phoneNumber1", "username1", "password1", null, true, true, testConference);
         Speaker testSpeaker1 = new Speaker(id3, testParticipant1, "company1",
                 "linkedinAcc1", "twitterAcc1", "githubAcc1",
-                "biography1", testConference);
+                "biography1", new HashSet<>(), testConference);
         when(conferenceService.findById(id1)).thenReturn(Optional.of(testConference));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();

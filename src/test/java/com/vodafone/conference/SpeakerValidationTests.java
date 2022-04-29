@@ -9,6 +9,7 @@ import javax.validation.ConstraintViolation;
 import java.util.ArrayList;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class SpeakerValidationTests {
                 "0730257597", "vluta", "password", null, true, true, testConference);
         Speaker testSpeaker = new Speaker(id3, testParticipant, null,
                 "linkedinAcc", "twitterAcc", "githubAcc",
-                "biography", testConference);
+                "biography", new HashSet<>(), testConference);
 
         Set<ConstraintViolation<Participant>> violations = validator.validate(testParticipant);
         assertThat(violations.size()).isEqualTo(1);
@@ -48,7 +49,7 @@ public class SpeakerValidationTests {
                 "0730257597", "vluta", "password", null, true, true, testConference);
         Speaker testSpeaker = new Speaker(id3, testParticipant, "",
                 "linkedinAcc", "twitterAcc", "githubAcc",
-                "biography", testConference);
+                "biography", new HashSet<>(), testConference);
 
         Set<ConstraintViolation<Participant>> violations = validator.validate(testParticipant);
         assertThat(violations.size()).isEqualTo(1);
@@ -68,7 +69,7 @@ public class SpeakerValidationTests {
                 "0730257597", "vluta", "password", null, true, true, testConference);
         Speaker testSpeaker = new Speaker(id3, testParticipant, "company",
                 "linkedinAcc", "twitterAcc", "githubAcc",
-                null, testConference);
+                null, new HashSet<>(), testConference);
 
         Set<ConstraintViolation<Participant>> violations = validator.validate(testParticipant);
         assertThat(violations.size()).isEqualTo(1);
@@ -86,7 +87,7 @@ public class SpeakerValidationTests {
                 "0730257597", "vluta", "password", null, true, true, testConference);
         Speaker testSpeaker = new Speaker(id3, testParticipant, "company",
                 "linkedinAcc", "twitterAcc", "githubAcc",
-                "", testConference);
+                "", new HashSet<>(), testConference);
 
         Set<ConstraintViolation<Participant>> violations = validator.validate(testParticipant);
         assertThat(violations.size()).isEqualTo(1);
