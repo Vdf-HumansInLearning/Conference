@@ -7,7 +7,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -50,13 +52,21 @@ public class Speaker {
     private String biography;
 
     // this is Spring many-to-many relationship in course
-    /*@ManyToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(name="speaker_session", joinColumns = @JoinColumn(name="speaker_id"),
                 inverseJoinColumns = @JoinColumn(name="session_id"))
-    private List<Session> sessions;*/
+    private Set<Session> sessions = new HashSet<>();
 
+    public void addSession(Session session) {
+        this.sessions.add(session);
+    }
+
+    public void removeSession(UUID sessionId) {
+        Session session = this.sessions.stream().filter(ses -> ses.getId() == sessionId).findFirst().orElse(null);
+        if (session != null) this.sessions.remove(session);
+    }
 
     // speaker should not have session ID
     // as sessions added/created by speakers are unique to them (i.e. two speakers cannot add/create the same session)

@@ -26,11 +26,7 @@ public class Session {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                    CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(name="speaker_session", joinColumns = @JoinColumn(name="session_id"),
-            inverseJoinColumns = @JoinColumn(name="speaker_id"))
+    @ManyToMany(mappedBy = "sessions")
     private List<Speaker> speakers;
 
     @Column(name = "description", nullable = false)
@@ -75,5 +71,14 @@ public class Session {
         BEGINNER,
         MID_LEVEL,
         ADVANCED;
+    }
+
+    public void addSpeaker(Speaker speaker) {
+        this.speakers.add(speaker);
+    }
+
+    public void removeSpeaker(UUID speakerId) {
+        Speaker speaker = this.speakers.stream().filter(prod -> prod.getId() == speakerId).findFirst().orElse(null);
+        if (speaker != null) this.speakers.remove(speaker);
     }
 }
