@@ -26,9 +26,7 @@ public class Session {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                    CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(name="speaker_session", joinColumns = @JoinColumn(name="session_id"),
             inverseJoinColumns = @JoinColumn(name="speaker_id"))
     private List<Speaker> speakers;
@@ -36,7 +34,8 @@ public class Session {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToOne(mappedBy = "session")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "session_type_id")
     private SessionType sessionType;
 
     @Column(name = "topic", nullable = false)

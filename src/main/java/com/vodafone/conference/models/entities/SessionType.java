@@ -21,28 +21,9 @@ public class SessionType {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @Column(name = "type", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TypeAndDuration type;
+    private String type;
+    private int sessionLength;
 
-    @Column(name = "length", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TypeAndDuration length;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "session_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "sessionType", cascade = CascadeType.ALL)
     private Session session;
-
-    enum TypeAndDuration {
-        WORKSHOP (45),
-        DEMO (90),
-        PRESENTATION (30),
-        BREAK (15),
-        LUNCH_BREAK (90);
-
-        private int length;
-        TypeAndDuration(int length) {
-            this.length = length;
-        }
-    }
 }
