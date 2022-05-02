@@ -32,21 +32,4 @@ public class SpringFoxConfig {
                 //.pathMapping("/baeldung");
     }
 
-    /*@Bean
-    FlywayMigrationInitializer flywayInitializer(Flyway flyway) {
-        return new FlywayMigrationInitializer(flyway, (f) ->{} );
-    }
-
-    @Bean
-    @DependsOn("entityManagerFactory")
-    FlywayMigrationInitializer delayedFlywayInitializer(Flyway flyway) {
-        return new FlywayMigrationInitializer(flyway, null);
-    }*/
-
-
-    //@Override
-    //public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    //   registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-    //   registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-    //}
 }
