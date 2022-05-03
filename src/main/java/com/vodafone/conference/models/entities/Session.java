@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -19,11 +20,21 @@ public class Session extends EntityWithUUID {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    @JoinTable(name = "speaker_session",
-            joinColumns = {@JoinColumn(name = "session_id")},
-            inverseJoinColumns = {@JoinColumn(name = "speaker_id")})
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(name="speaker_session", joinColumns = @JoinColumn(name="session_id"),
+            inverseJoinColumns = @JoinColumn(name="speaker_id"))
     private List<Speaker> speakers;
+
+    public void addSpeaker(Speaker speaker) {
+        this.speakers.add(speaker);
+    }
+
+    public void removeSpeaker(UUID speakerId) {
+        Speaker speaker = this.speakers.stream().filter(sp -> sp.getId() == speakerId).findFirst().orElse(null);
+        if (speaker != null) this.speakers.remove(speaker);
+    }
 
     @Column(name = "description", nullable = false)
     private String description;

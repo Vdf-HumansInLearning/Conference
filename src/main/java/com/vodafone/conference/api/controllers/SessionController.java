@@ -6,12 +6,10 @@ import com.vodafone.conference.exceptions.ApiRequestException;
 import com.vodafone.conference.models.dto.SessionCreationDTO;
 import com.vodafone.conference.models.dto.SessionDTO;
 import com.vodafone.conference.models.dto.SessionTypeDTO;
-import com.vodafone.conference.models.entities.Participant;
-import com.vodafone.conference.models.entities.Session;
-import com.vodafone.conference.models.entities.SessionType;
-import com.vodafone.conference.models.entities.Track;
+import com.vodafone.conference.models.entities.*;
 import com.vodafone.conference.services.SessionService;
 import com.vodafone.conference.services.SessionTypeService;
+import com.vodafone.conference.services.SpeakerService;
 import com.vodafone.conference.services.TrackService;
 import com.vodafone.conference.services.utils.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,16 +35,18 @@ public class SessionController {
     private final TrackService trackService;
     private final SessionMapper sessionMapper;
     private final SessionTypeMapper sessionTypeMapper;
+    private final SpeakerService speakerService;
 
     @Autowired
     private EmailSenderService senderService;
 
-    public SessionController(SessionService sessionService, SessionTypeService sessionTypeService, TrackService trackService, SessionMapper sessionMapper, SessionTypeMapper sessionTypeMapper) {
+    public SessionController(SessionService sessionService, SessionTypeService sessionTypeService, TrackService trackService, SessionMapper sessionMapper, SessionTypeMapper sessionTypeMapper, SpeakerService speakerService) {
         this.sessionService = sessionService;
         this.sessionTypeService = sessionTypeService;
         this.trackService = trackService;
         this.sessionMapper = sessionMapper;
         this.sessionTypeMapper = sessionTypeMapper;
+        this.speakerService = speakerService;
     }
 
     @PostMapping(path = "tracks/{track-id}/sessions", consumes = "application/json")
@@ -64,10 +64,11 @@ public class SessionController {
 
             Session session = sessionMapper.toSession(sessionCreationDTO);
             session.setSessionType(sessionType);
+            session.setTrack(track);
             SessionDTO sessionDTO = sessionMapper.toDto(session);
             sessionDTO.setSessionTypeDTO(sessionTypeMapper.toDto(sessionType));
 
-            sessionService.save(session, UUID.fromString(trackId));
+            sessionService.save(session);
             return new ResponseEntity<>(sessionDTO, HttpStatus.CREATED);
         }
     }
@@ -97,7 +98,7 @@ public class SessionController {
             sessionDTO.setSessionTypeDTO(sessionTypeDTO);
             return new ResponseEntity<>(sessionDTO, HttpStatus.OK);
         } else {
-            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id));
         }
     }
 
@@ -114,6 +115,23 @@ public class SessionController {
 //        senderService.sendEmail("ichim_sorin98@yahoo.com", "Test subject", "Test Body");
 
         return new ResponseEntity<>(sessionDTO, HttpStatus.OK);
+    }
+
+    @PutMapping("speakers/{speaker-id}/sessions/{session-id}")
+    public ResponseEntity<SessionDTO> addSpeakerToSession(@PathVariable("speaker-id") String speakerId,
+                                                          @PathVariable("session-id") String sessionId) {
+
+        Optional<Speaker> speaker = speakerService.findById(UUID.fromString(speakerId));
+        Optional<Session> session = sessionService.findById(UUID.fromString(sessionId));
+
+        if (session.isPresent() && speaker.isPresent()) {
+            session.get().addSpeaker(speaker.get());
+            sessionService.save(session.get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @DeleteMapping("sessions/{session-id}")

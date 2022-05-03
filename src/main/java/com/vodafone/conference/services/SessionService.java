@@ -20,9 +20,8 @@ public class SessionService {
         this.trackService = trackService;
     }
 
-    public void save(Session session, UUID trackId) {
+    public void save(Session session) {
         Objects.requireNonNull(session);
-        session.setTrack(trackService.findById(trackId));
         sessionRepository.save(session);
     }
 

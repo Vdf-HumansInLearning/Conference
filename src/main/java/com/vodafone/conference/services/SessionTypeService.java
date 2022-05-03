@@ -18,10 +18,11 @@ public class SessionTypeService {
         this.sessionTypeRepository = sessionTypeRepository;
     }
 
-    public void save(SessionType sessionType) {
+    public SessionType save(SessionType sessionType) {
         Objects.requireNonNull(sessionType);
         sessionType.setSession(null);
         sessionTypeRepository.save(sessionType);
+        return sessionType;
     }
 
     public List<SessionType> findAll() {
