@@ -131,7 +131,21 @@ public class SessionController {
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
 
+    @DeleteMapping("speakers/{speaker-id}/sessions/{session-id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void deleteSpeakerFromSession(@PathVariable("speaker-id") String speakerId,
+                                         @PathVariable("session-id") String sessionId) throws Exception {
+        try {
+            Optional<Session> session = sessionService.findById(UUID.fromString(sessionId));
+            if (session.isPresent()) {
+                session.get().removeSpeaker(UUID.fromString(speakerId));
+                sessionService.save(session.get());
+            }
+        } catch (EmptyResultDataAccessException e) {
+            throw new Exception(e);
+        }
     }
 
     @DeleteMapping("sessions/{session-id}")

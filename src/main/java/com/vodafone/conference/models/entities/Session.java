@@ -32,8 +32,8 @@ public class Session extends EntityWithUUID {
     }
 
     public void removeSpeaker(UUID speakerId) {
-        Speaker speaker = this.speakers.stream().filter(sp -> sp.getId() == speakerId).findFirst().orElse(null);
-        if (speaker != null) this.speakers.remove(speaker);
+        Speaker speaker = this.speakers.stream().filter(sp -> sp.getId().equals(speakerId)).findFirst().get();
+        this.speakers.remove(speaker);
     }
 
     @Column(name = "description", nullable = false)
