@@ -1,6 +1,5 @@
 package com.vodafone.conference.models.dto;
 
-import com.vodafone.conference.models.entities.Conference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,10 +15,5 @@ public class ConferenceDTO {
     private String theme;
     private String description;
 
-    public ConferenceDTO(Conference conference){
-        this.id = conference.getId();
-        this.location = conference.getLocation();
-        this.theme = conference.getTheme();
-        this.description = conference.getDescription();
-    }
+    private long participantNr;
 }

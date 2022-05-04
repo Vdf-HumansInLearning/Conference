@@ -52,7 +52,7 @@ public class TicketControllerTest {
     }
 
     @Test
-    void createTikcet() {
+    void createTicket() {
         Response response = insertTicketInDB();
 
         Assertions.assertEquals(HttpStatus.CREATED.value(), response.statusCode());
