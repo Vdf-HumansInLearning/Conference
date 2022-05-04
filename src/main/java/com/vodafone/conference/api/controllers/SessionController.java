@@ -117,7 +117,7 @@ public class SessionController {
         return new ResponseEntity<>(sessionDTO, HttpStatus.OK);
     }
 
-    @PutMapping("speakers/{speaker-id}/sessions/{session-id}")
+    @PostMapping("speakers/{speaker-id}/sessions/{session-id}")
     public ResponseEntity<SessionDTO> addSpeakerToSession(@PathVariable("speaker-id") String speakerId,
                                                           @PathVariable("session-id") String sessionId) {
 
