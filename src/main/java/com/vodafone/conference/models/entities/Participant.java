@@ -1,28 +1,21 @@
 package com.vodafone.conference.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Participant {
-
-    @Id
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
-
+@Table(name = "participant")
+public class Participant extends EntityWithUUID {
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -49,23 +42,20 @@ public class Participant {
     @OneToOne(mappedBy = "participant")
     private Speaker speaker;
 
-    @ManyToOne
+    @ManyToOne @JsonIgnore
     @JoinColumn(name = "session_id", nullable = false)
     private Session sessions;
 
-    @OneToMany(mappedBy = "participant")
-    private List<Ticket> tickets;
+//    @OneToMany(mappedBy = "participant") @JsonIgnore
+//    private List<Ticket> tickets;
 
-    @Column(name = "is_organiser", columnDefinition = "tinyint(1) default 0")
+    @Column(name = "is_organiser", columnDefinition = "boolean")
     private Boolean isOrganiser;
 
-    @Column(name = "is_speaker", columnDefinition = "tinyint(1) default 0")
+    @Column(name = "is_speaker", columnDefinition = "boolean")
     private Boolean isSpeaker;
 
-    @ManyToOne
+    @ManyToOne @JsonIgnore
     @JoinColumn(name = "conference_id", nullable = false)
     private Conference conference;
-
-    @OneToMany(mappedBy = "participant")
-    private List<Track> tracks;
 }
