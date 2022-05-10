@@ -20,4 +20,8 @@ public class SessionMapper {
         return mapper.map(sessionCreationDTO, Session.class);
     }
 
+    public Session toSession(SessionDTO sessionDTO) {
+        return mapper.map(sessionDTO, Session.class);
+    }
+
 }

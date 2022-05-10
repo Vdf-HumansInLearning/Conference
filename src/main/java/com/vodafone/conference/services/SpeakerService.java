@@ -1,5 +1,6 @@
 package com.vodafone.conference.services;
 
+import com.vodafone.conference.api.repositories.ConferenceRepository;
 import com.vodafone.conference.api.repositories.ParticipantRepository;
 import com.vodafone.conference.api.repositories.SpeakerRepository;
 import com.vodafone.conference.models.entities.Speaker;
@@ -15,6 +16,7 @@ public class SpeakerService {
 
     private SpeakerRepository speakerRepository;
     private ConferenceRepository conferenceRepository;
+
     private ParticipantRepository participantRepository;
 
     public SpeakerService(SpeakerRepository speakerRepository, ConferenceRepository conferenceRepository, ParticipantRepository participantRepository) {
@@ -22,6 +24,7 @@ public class SpeakerService {
         this.speakerRepository = speakerRepository;
         this.conferenceRepository = conferenceRepository;
         this.participantRepository = participantRepository;
+
     }
 
     public List<Speaker> findAll() {
@@ -56,4 +59,5 @@ public class SpeakerService {
         speakerRepository.update(speaker.getParticipant(), speaker.getCompany(), speaker.getLinkedinAcc(),
                 speaker.getTwitterAcc(), speaker.getGithubAcc(), speaker.getBiography(), id);
     }
+
 }

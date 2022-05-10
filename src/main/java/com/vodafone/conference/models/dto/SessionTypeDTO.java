@@ -1,16 +1,18 @@
 package com.vodafone.conference.models.dto;
 
-import com.vodafone.conference.models.entities.Session;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SessionTypeDTO {
 
     private UUID id;
     private String type;
     private int sessionLength;
-    private Session session;
 
 }

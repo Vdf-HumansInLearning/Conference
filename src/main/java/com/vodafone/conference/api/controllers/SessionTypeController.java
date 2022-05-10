@@ -23,13 +23,10 @@ import java.util.stream.Collectors;
 public class SessionTypeController {
 
     @Autowired
-    private final SessionTypeService sessionTypeService;
-    private final SessionTypeMapper mapper;
+    private SessionTypeService sessionTypeService;
 
-    public SessionTypeController(SessionTypeService sessionTypeService, SessionTypeMapper mapper) {
-        this.sessionTypeService = sessionTypeService;
-        this.mapper = mapper;
-    }
+    @Autowired
+    private SessionTypeMapper mapper;
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<SessionTypeDTO> createSessionType(@Valid @RequestBody SessionTypeCreationDTO sessionTypeCreationDTO, Errors errors) {
@@ -69,9 +66,10 @@ public class SessionTypeController {
 
     @DeleteMapping("{session-type-id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteSessionType(@PathVariable("session-type-id") String id) throws Exception {
+    public ResponseEntity deleteSessionType(@PathVariable("session-type-id") String id) throws Exception {
         try {
             sessionTypeService.deleteById(UUID.fromString(id));
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (EmptyResultDataAccessException e) {
             throw new Exception(e);
         }

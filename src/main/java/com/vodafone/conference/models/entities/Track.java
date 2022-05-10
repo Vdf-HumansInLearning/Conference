@@ -26,7 +26,8 @@ public class Track extends EntityWithUUID implements Serializable {
     @JsonBackReference
     private Day day;
 
-    @OneToMany(mappedBy = "track") @JsonIgnore
+//    @OneToMany(mappedBy = "track") @JsonIgnore
+    @OneToMany @JsonIgnore
     private List<Session> sessions;
 
     //@ManyToOne

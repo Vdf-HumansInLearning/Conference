@@ -1,9 +1,7 @@
 package com.vodafone.conference.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Range;
 import java.util.List;
 import javax.validation.constraints.*;
@@ -14,7 +12,8 @@ import org.springframework.format.annotation.NumberFormat;
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

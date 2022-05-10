@@ -1,11 +1,10 @@
 package com.vodafone.conference.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +12,8 @@ import java.util.Set;
 import java.util.UUID;
 
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -22,7 +22,6 @@ import java.util.UUID;
 @Table(name = "speaker")
 public class Speaker extends EntityWithUUID {
 
- 
     //@Transient creates error
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "participant_id")
@@ -49,30 +48,8 @@ public class Speaker extends EntityWithUUID {
     @NotBlank(message = "Biography is required")
     private String biography;
 
-    // this is Spring many-to-many relationship in course
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                    CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(name="speaker_session", joinColumns = @JoinColumn(name="speaker_id"),
-                inverseJoinColumns = @JoinColumn(name="session_id"))
+    @ManyToMany(mappedBy = "speakers")
     private Set<Session> sessions = new HashSet<>();
-
-    public void addSession(Session session) {
-        this.sessions.add(session);
-    }
-
-    public void removeSession(UUID sessionId) {
-        Session session = this.sessions.stream().filter(ses -> ses.getId() == sessionId).findFirst().orElse(null);
-        if (session != null) this.sessions.remove(session);
-    }
-
-    // speaker should not have session ID
-    // as sessions added/created by speakers are unique to them (i.e. two speakers cannot add/create the same session)
-    //@ManyToOne
-    //@JoinColumn(name = "session_id", nullable = false)
-    //private Session sessions;
-    @ManyToMany @JsonIgnore
-    private List<Session> sessions;
 
     @ManyToOne
     @JoinColumn(name = "conference_id", nullable = false)

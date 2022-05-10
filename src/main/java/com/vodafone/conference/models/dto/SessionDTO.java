@@ -1,7 +1,7 @@
 package com.vodafone.conference.models.dto;
 
-import com.vodafone.conference.models.entities.SessionType;
-import com.vodafone.conference.models.entities.Track;
+import com.vodafone.conference.models.entities.Participant;
+import com.vodafone.conference.models.entities.Speaker;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -13,16 +13,15 @@ public class SessionDTO {
 
     private UUID id;
     private String title;
-//    private List<Speaker> speakers;
+    private List<Speaker> speakers;
     private String description;
-    private SessionType sessionType;
-    private Track track;
+    private SessionTypeDTO sessionTypeDTO;
     private String topic;
     private String techLevel;
     private List<String> keywords;
     private LocalDate date;
     private LocalDate endTime;
     private int review;
-//    private List<Participant> participants;
+    private List<Participant> participants;
 
 }

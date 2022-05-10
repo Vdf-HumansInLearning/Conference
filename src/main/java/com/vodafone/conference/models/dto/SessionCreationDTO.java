@@ -1,21 +1,20 @@
 package com.vodafone.conference.models.dto;
 
-import com.vodafone.conference.models.entities.Session;
-import com.vodafone.conference.models.entities.SessionType;
-import com.vodafone.conference.models.entities.Track;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SessionCreationDTO {
 
     private String title;
-//    private List<Speaker> speakers;
     private String description;
-    private SessionType sessionType;
-    private Track track;
+    private SessionTypeCreationDTO sessionTypeCreationDTO;
     private String topic;
     private String techLevel;
     private List<String> keywords;
