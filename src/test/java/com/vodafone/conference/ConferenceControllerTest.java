@@ -1,14 +1,7 @@
 package com.vodafone.conference;
 
 import com.vodafone.conference.models.entities.Conference;
-import com.vodafone.conference.models.entities.DTO.ConferenceCreationDTO;
-import com.vodafone.conference.models.entities.DTO.ConferenceDTO;
-import com.vodafone.conference.models.entities.Day;
-import com.vodafone.conference.services.ConferenceService;
-import io.restassured.RestAssured.*;
-import io.restassured.matcher.RestAssuredMatchers.*;
 import io.restassured.response.Response;
-import org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +21,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)

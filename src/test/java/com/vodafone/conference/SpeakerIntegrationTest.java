@@ -1,13 +1,11 @@
 package com.vodafone.conference;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vodafone.conference.models.entities.Conference;
 import com.vodafone.conference.models.entities.DTO.ParticipantCreationDTO;
 import com.vodafone.conference.models.entities.DTO.SpeakerCreationDTO;
 import com.vodafone.conference.models.entities.Participant;
 import com.vodafone.conference.models.entities.Speaker;
-import com.vodafone.conference.services.ConferenceService;
 import com.vodafone.conference.services.ParticipantService;
 import com.vodafone.conference.services.SpeakerService;
 import org.junit.jupiter.api.BeforeEach;

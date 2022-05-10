@@ -1,6 +1,5 @@
 package com.vodafone.conference.services;
 
-import com.vodafone.conference.api.repositories.ConferenceRepository;
 import com.vodafone.conference.api.repositories.ParticipantRepository;
 import com.vodafone.conference.models.entities.Participant;
 import org.springframework.stereotype.Service;

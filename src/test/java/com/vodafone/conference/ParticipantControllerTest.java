@@ -1,11 +1,8 @@
 package com.vodafone.conference;
 
-import com.vodafone.conference.api.mapper.ParticipantMapper;
 import com.vodafone.conference.models.entities.Conference;
 import com.vodafone.conference.models.entities.DTO.ParticipantCreationDTO;
-import com.vodafone.conference.models.entities.DTO.ParticipantDTO;
 import com.vodafone.conference.models.entities.Participant;
-import com.vodafone.conference.services.ConferenceService;
 import com.vodafone.conference.services.ParticipantService;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
