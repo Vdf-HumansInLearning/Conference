@@ -50,6 +50,11 @@ public class Session extends EntityWithUUID {
     @Column(name = "review", nullable = false)
     private int review;
 
+    // participant should not have session ID
+    // as sessions added/created by participants are unique to them (i.e. two participants cannot add/create the same session)
+    //@OneToMany(mappedBy = "sessions")
+    //private List<Participant> participants;
+
     @OneToMany(mappedBy = "sessions")
     @JsonIgnore
     private List<Participant> participants;
@@ -64,4 +69,14 @@ public class Session extends EntityWithUUID {
         MID_LEVEL,
         ADVANCED
     }
+
+    public void addSpeaker(Speaker speaker) {
+        this.speakers.add(speaker);
+    }
+
+    public void removeSpeaker(UUID speakerId) {
+        Speaker speaker = this.speakers.stream().filter(prod -> prod.getId() == speakerId).findFirst().orElse(null);
+        if (speaker != null) this.speakers.remove(speaker);
+    }
 }
+

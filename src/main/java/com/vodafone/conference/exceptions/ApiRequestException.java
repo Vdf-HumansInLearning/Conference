@@ -3,12 +3,14 @@ package com.vodafone.conference.exceptions;
 import lombok.ToString;
 
 public class ApiRequestException extends RuntimeException {
+
     @ToString
     public enum Exceptions {
         ID_NOT_FOUND(0, "Id not found! "),
         DATE_NOT_FOUND(1, "Date not found! "),
         TITLE_NOT_FOUND(2, "Title not found! "),
-        CONFERENCE_NOT_FOUND(3, "No Conference Found");
+        CONFERENCE_NOT_FOUND(3, "No Conference Found"),
+        BAD_INPUT(4, "Incorrect or incomplete input!");
 
         private final int code;
         private final String description;

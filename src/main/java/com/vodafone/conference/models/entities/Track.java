@@ -17,6 +17,7 @@ import java.util.List;
 @Table(name = "track")
 @IdClass(value = EntityWithUUID.class)
 public class Track extends EntityWithUUID implements Serializable {
+  
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -27,6 +28,10 @@ public class Track extends EntityWithUUID implements Serializable {
 
     @OneToMany(mappedBy = "track") @JsonIgnore
     private List<Session> sessions;
+
+    //@ManyToOne
+    //@JoinColumn(name = "participant_id")
+    //private Participant participant;
 
     @ManyToOne @JsonIgnore
     @JoinColumn(name = "conference_id", nullable = false)
