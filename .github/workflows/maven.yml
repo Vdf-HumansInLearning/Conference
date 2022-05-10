@@ -30,7 +30,6 @@ jobs:
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile --tag vdf/emp
-        docker run -p 8080:8080 vdf/emp"
     - name: Cache SonarCloud packages
       uses: actions/cache@v1
       with:
