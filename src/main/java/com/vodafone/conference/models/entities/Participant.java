@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Range;
 import java.util.List;
 import javax.validation.constraints.*;
@@ -14,21 +13,13 @@ import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Participant {
-
-    // columnDefinition = "uuid DEFAULT uuid_generate_v4()"
-    @Id
-    @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
-    //private String id;
+@Table(name = "participant")
+public class Participant extends EntityWithUUID {
 
     @Column(name = "first_name", nullable = false)
     @NotBlank(message = "First name is required")
@@ -80,6 +71,7 @@ public class Participant {
     @OneToOne(mappedBy = "participant", cascade = CascadeType.ALL)
     private Speaker speaker;
 
+
     public Speaker getSpeaker() {
         return speaker;
     }
@@ -97,16 +89,17 @@ public class Participant {
     //@OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
     //private List<Ticket> tickets;
 
-    @Column(name = "is_organiser", columnDefinition = "tinyint(1) default 0")
+    @Column(name = "is_organiser", columnDefinition = "boolean")
     private Boolean isOrganiser;
 
-    @Column(name = "is_speaker", columnDefinition = "tinyint(1) default 0")
+    @Column(name = "is_speaker", columnDefinition = "boolean")
     private Boolean isSpeaker;
 
-    @ManyToOne
+    @ManyToOne @JsonIgnore
     @JoinColumn(name = "conference_id", nullable = false)
     private Conference conference;
 
     //@OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
     //private List<Track> tracks;
 }
+
