@@ -71,3 +71,4 @@ public class Session extends EntityWithUUID {
     private List<Participant> participants;
 
 }
+

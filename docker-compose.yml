@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:14.1-alpine
+    container_name: postgres-1
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=db
+    ports:
+      - '5432:5432'
+    #volumes:
+    #  - db:/var/lib/postgresql/data
+  api:
+    container_name: conference-app
+    image: conference-app
+    build: ./
+    ports:
+      - '8081:8081'
+    depends_on:
+      - db
+

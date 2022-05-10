@@ -1,3 +1,4 @@
+
 -- CREATE TYPE session_tech_level AS ENUM ('BEGINNER', 'MID_LEVEL', 'ADVANCED');
 
 CREATE TABLE session

@@ -4,25 +4,35 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+
+
 @Table(name = "speaker")
 public class Speaker extends EntityWithUUID {
-    @OneToOne(cascade = CascadeType.ALL) @JsonIgnore
+
+    //@Transient creates error
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "participant_id")
     private Participant participant;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    // title also exists in participant (might want to delete this column)
+    //@Column(name = "title", nullable = false)
+    //private String title;
 
     @Column(name = "company", nullable = false)
+    @NotBlank(message = "Company is required")
     private String company;
 
     @Column(name = "linkedin_acc", nullable = false)
@@ -35,9 +45,13 @@ public class Speaker extends EntityWithUUID {
     private String githubAcc;
 
     @Column(name = "biography", nullable = false)
+    @NotBlank(message = "Biography is required")
     private String biography;
 
     @ManyToMany(mappedBy = "speakers")
     private Set<Session> sessions = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "conference_id", nullable = false)
+    private Conference conference;
 }
