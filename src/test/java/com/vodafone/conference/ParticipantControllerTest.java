@@ -3,6 +3,7 @@ package com.vodafone.conference;
 import com.vodafone.conference.models.entities.Conference;
 import com.vodafone.conference.models.entities.DTO.ParticipantCreationDTO;
 import com.vodafone.conference.models.entities.Participant;
+import com.vodafone.conference.services.ConferenceService;
 import com.vodafone.conference.services.ParticipantService;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
@@ -47,13 +48,13 @@ class ParticipantControllerTest {
     @Test
     public void givenParticipantId_whenMakingGetRequestToParticipantEndpoint_thenReturnParticipant() {
 
-        UUID id = UUID.randomUUID();
-        Participant testParticipant = new Participant(id, "firstName", "lastName", "title", "email",
-                "phoneNumber", "username", "password", null, false, false, null);
+        //UUID id = UUID.randomUUID();
+        Participant testParticipant = new Participant("firstName", "lastName", "title", "email",
+                "phoneNumber", "username", "password", null, null, false, false, null);
 
         System.out.println(testParticipant.getIsOrganiser() + " " + testParticipant.getIsSpeaker());
 
-        when(participantService.findById(id)).thenReturn(Optional.of(testParticipant));
+        when(participantService.findById(testParticipant.getId())).thenReturn(Optional.of(testParticipant));
 
         get(uri + "/participants/" + testParticipant.getId()).then()
                 .assertThat()
@@ -78,19 +79,18 @@ class ParticipantControllerTest {
     @Test
     public void givenConferenceId_whenMakingGetRequestToParticipantsEndpoint_thenReturnParticipant() {
 
-        UUID id = UUID.randomUUID();
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
+        //UUID id = UUID.randomUUID();
+        //UUID id1 = UUID.randomUUID();
+        //UUID id2 = UUID.randomUUID();
 
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
+        Participant testParticipant1 = new Participant("firstName1", "lastName1", "title1", "email1",
+                "phoneNumber1", "username1", "password1", null, null, true, true, testConference);
 
-        Participant testParticipant1 = new Participant(id1, "firstName1", "lastName1", "title1", "email1",
-                "phoneNumber1", "username1", "password1", null, true, true, testConference);
-
-        Participant testParticipant2 = new Participant(id2, "firstName2", "lastName2", "title2", "email2",
-                "phoneNumber2", "username2", "password2", null, false, false, testConference);
+        Participant testParticipant2 = new Participant("firstName2", "lastName2", "title2", "email2",
+                "phoneNumber2", "username2", "password2", null, null, false, false, testConference);
 
         List<Participant> participants = new ArrayList<>();
         participants.add(testParticipant1);
@@ -101,8 +101,8 @@ class ParticipantControllerTest {
         //participantDTOS.add(participantMapper.toDto(testParticipant1));
         //participantDTOS.add(participantMapper.toDto(testParticipant2));
 
-        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
-        when(participantService.findByConference_Id(id)).thenReturn(participants);
+        when(conferenceService.findById(testConference.getId())).thenReturn(Optional.of(testConference));
+        when(participantService.findByConference_Id(testConference.getId())).thenReturn(participants);
 
         Response response =  get(uri + "/conferences/" + testConference.getId() + "/participants").then()
                 .extract().response();
@@ -118,10 +118,10 @@ class ParticipantControllerTest {
     @Test
     public void whenMakingPostRequestToParticipantsEndpoint_thenReturnResponse() {
 
-        UUID id = UUID.randomUUID();
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        //UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        when(conferenceService.findById(testConference.getId())).thenReturn(Optional.of(testConference));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
         participantCreationDTO.setFirstName("firstName");
@@ -159,14 +159,14 @@ class ParticipantControllerTest {
     @Test
     public void whenMakingPutRequestToParticipantsEndpoint_thenReturnResponse() {
 
-        UUID id = UUID.randomUUID();
-        UUID id1 = UUID.randomUUID();
+        //UUID id = UUID.randomUUID();
+        //UUID id1 = UUID.randomUUID();
 
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        Participant testParticipant1 = new Participant(id1, "firstName1", "lastName1", "title1", "email1",
-                "phoneNumber1", "username1", "password1", null, true, true, testConference);
-        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Participant testParticipant1 = new Participant( "firstName1", "lastName1", "title1", "email1",
+                "phoneNumber1", "username1", "password1", null,null, true, true, testConference);
+        when(conferenceService.findById(testConference.getId())).thenReturn(Optional.of(testConference));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
         participantCreationDTO.setFirstName("firstName");
@@ -181,7 +181,7 @@ class ParticipantControllerTest {
 
         Response response = given().contentType("application/json")
                 .body(participantCreationDTO)
-                .put(uri + "/participants/" + id1)
+                .put(uri + "/participants/" + testParticipant1.getId())
                 .then()
                 .extract()
                 .response();
@@ -201,17 +201,16 @@ class ParticipantControllerTest {
     @Test
     public void whenMakingPatchRequestToConferenceEndpoint_thenReturnResponse() {
 
-        UUID id = UUID.randomUUID();
-        UUID id1 = UUID.randomUUID();
+        //UUID id = UUID.randomUUID();
+        //UUID id1 = UUID.randomUUID();
 
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
-        Participant testParticipant1 = new Participant(id1, "firstName1", "lastName1", "title1", "email1",
-                "phoneNumber1", "username1", "password1", null, true, true, testConference);
+        Participant testParticipant1 = new Participant( "firstName1", "lastName1", "title1", "email1",
+                "phoneNumber1", "username1", "password1", null, null, true, true, testConference);
 
-        when(participantService.findById(id1)).thenReturn(Optional.of(testParticipant1));
-
+        when(participantService.findById(testParticipant1.getId())).thenReturn(Optional.of(testParticipant1));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
         participantCreationDTO.setFirstName("firstName");
@@ -226,7 +225,7 @@ class ParticipantControllerTest {
 
         Response response = given().contentType("application/json")
                 .body(participantCreationDTO)
-                .patch(uri + "/participants/" + id1)
+                .patch(uri + "/participants/" + testParticipant1.getId())
                 .then()
                 .extract()
                 .response();
@@ -245,14 +244,15 @@ class ParticipantControllerTest {
         //TO DO: adjust test to prepopulate table entry to be deleted (mock)
         // mockito verify
 
-        UUID id = UUID.randomUUID();
-        UUID id1 = UUID.randomUUID();
+        //UUID id = UUID.randomUUID();
+        //UUID id1 = UUID.randomUUID();
 
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        Participant testParticipant1 = new Participant(id1, "firstName1", "lastName1", "title1", "email1",
-                "phoneNumber1", "username1", "password1", null, true, true, testConference);
-        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+
+        Participant testParticipant1 = new Participant( "firstName1", "lastName1", "title1", "email1",
+                "phoneNumber1", "username1", "password1", null, null, true, true, testConference);
+        when(conferenceService.findById(testParticipant1.getId())).thenReturn(Optional.of(testConference));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
         participantCreationDTO.setFirstName("firstName");
@@ -267,7 +267,7 @@ class ParticipantControllerTest {
 
         Response createResponse = given().contentType("application/json")
                 .body(participantCreationDTO)
-                .put(uri + "/participants/" + id1)
+                .put(uri + "/participants/" + testParticipant1.getId())
                 .then()
                 .extract()
                 .response();
@@ -276,7 +276,7 @@ class ParticipantControllerTest {
 
         Response deleteResponse = given().contentType("application/json")
                 //.body(conferenceCreationDTO)
-                .delete(uri + "/participants/" + id1)
+                .delete(uri + "/participants/" + testParticipant1.getId())
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.NO_CONTENT.value())

@@ -21,60 +21,54 @@ public class ConferenceValidationTests {
 
     @Test
     public void whenNullLocation_thenConstraintViolation() {
-        UUID id = UUID.randomUUID();
-        Conference testConference = new Conference(id, new ArrayList<>(), null,
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-
+        //UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         Set<ConstraintViolation<Conference>> violations = validator.validate(testConference);
         assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
     public void whenEmptyLocation_thenConstraintViolation() {
-        UUID id = UUID.randomUUID();
-        Conference testConference = new Conference(id, new ArrayList<>(), "",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-
+        //UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         Set<ConstraintViolation<Conference>> violations = validator.validate(testConference);
         assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
     public void whenNullTheme_thenConstraintViolation() {
-        UUID id = UUID.randomUUID();
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                null, "description", new ArrayList<>(), new ArrayList<>());
-
+        //UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         Set<ConstraintViolation<Conference>> violations = validator.validate(testConference);
         assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
     public void whenEmptyTheme_thenConstraintViolation() {
-        UUID id = UUID.randomUUID();
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "", "description", new ArrayList<>(), new ArrayList<>());
-
+        //UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         Set<ConstraintViolation<Conference>> violations = validator.validate(testConference);
         assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
     public void whenNullDescription_thenConstraintViolation() {
-        UUID id = UUID.randomUUID();
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", null, new ArrayList<>(), new ArrayList<>());
-
+        //UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         Set<ConstraintViolation<Conference>> violations = validator.validate(testConference);
         assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
     public void whenEmptyDescription_thenConstraintViolation() {
-        UUID id = UUID.randomUUID();
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "", new ArrayList<>(), new ArrayList<>());
-
+        //UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         Set<ConstraintViolation<Conference>> violations = validator.validate(testConference);
         assertThat(violations.size()).isEqualTo(1);
     }

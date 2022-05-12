@@ -8,6 +8,7 @@ import com.vodafone.conference.exceptions.ApiRequestException;
 import com.vodafone.conference.models.entities.Conference;
 import com.vodafone.conference.models.entities.DTO.ParticipantCreationDTO;
 import com.vodafone.conference.models.entities.DTO.ParticipantDTO;
+import com.vodafone.conference.services.ConferenceService;
 import com.vodafone.conference.services.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;

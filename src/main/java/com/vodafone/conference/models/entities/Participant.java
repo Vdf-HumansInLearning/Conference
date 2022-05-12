@@ -2,6 +2,8 @@ package com.vodafone.conference.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 import java.util.List;
 import javax.validation.constraints.*;
@@ -15,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @Entity
 @Table(name = "participant")
 public class Participant extends EntityWithUUID {
@@ -81,9 +83,9 @@ public class Participant extends EntityWithUUID {
 
     // participant should not have session ID
     // as sessions added/created by participants are unique to them (i.e. two participants cannot add/create the same session)
-    //@ManyToOne
-    //@JoinColumn(name = "session_id", nullable = false)
-    //private Session sessions;
+    @ManyToOne
+    @JoinColumn(name = "session_id", nullable = false)
+    private Session sessions;
 
     //@OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
     //private List<Ticket> tickets;
@@ -100,5 +102,21 @@ public class Participant extends EntityWithUUID {
 
     //@OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
     //private List<Track> tracks;
+
+
+    public Participant(String firstName, String lastName, String title, String email, String phoneNumber, String username, String password, Speaker speaker, Session sessions, Boolean isOrganiser, Boolean isSpeaker, Conference conference) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.title = title;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.username = username;
+        this.password = password;
+        this.speaker = speaker;
+        this.sessions = sessions;
+        this.isOrganiser = isOrganiser;
+        this.isSpeaker = isSpeaker;
+        this.conference = conference;
+    }
 }
 

@@ -1,6 +1,9 @@
 package com.vodafone.conference;
 
+import com.vodafone.conference.models.dto.ConferenceCreationDTO;
 import com.vodafone.conference.models.entities.Conference;
+import com.vodafone.conference.models.entities.Day;
+import com.vodafone.conference.services.ConferenceService;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -47,14 +50,14 @@ class ConferenceControllerTest {
     @Test
     public void givenConferenceId_whenMakingGetRequestToConferenceEndpoint_thenReturnConference() {
 
-        UUID id = UUID.randomUUID();
+        //UUID id = UUID.randomUUID();
         //List<Day> days = new ArrayList<>();
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         //mock conference service
         // check for exception with Opt.isPresent()
-        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        when(conferenceService.findById(testConference.getId())).thenReturn(Optional.of(testConference));
 
         get(uri + "/conferences/" + testConference.getId()).then()
                 .assertThat()
@@ -76,9 +79,9 @@ class ConferenceControllerTest {
         conferenceCreationDTO.setLocation("location");
         conferenceCreationDTO.setDescription("description");
         conferenceCreationDTO.setTheme("theme");
-        conferenceCreationDTO.setDays(new ArrayList<>());
-        conferenceCreationDTO.setParticipants(new ArrayList<>());
-        conferenceCreationDTO.setSpeakers(new ArrayList<>());
+        //conferenceCreationDTO.setDays(new ArrayList<>());
+        //conferenceCreationDTO.setParticipants(new ArrayList<>());
+        //conferenceCreationDTO.setSpeakers(new ArrayList<>());
 
         Response response = given().contentType("application/json")
                 .body(conferenceCreationDTO)
@@ -103,22 +106,23 @@ class ConferenceControllerTest {
 
         //TO DO: adjust test to check for table entry replacement
         // NOTE: 1) mock findById 2) check put operation
-        UUID id = UUID.randomUUID();
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        //UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        //when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        when(conferenceService.findById(testConference.getId())).thenReturn(Optional.of(testConference));
 
         ConferenceCreationDTO conferenceCreationDTO = new ConferenceCreationDTO();
         conferenceCreationDTO.setLocation("location replace");
         conferenceCreationDTO.setDescription("description replace");
         conferenceCreationDTO.setTheme("theme replace");
-        conferenceCreationDTO.setDays(new ArrayList<>());
-        conferenceCreationDTO.setParticipants(new ArrayList<>());
-        conferenceCreationDTO.setSpeakers(new ArrayList<>());
+        //conferenceCreationDTO.setDays(new ArrayList<>());
+        //conferenceCreationDTO.setParticipants(new ArrayList<>());
+        //conferenceCreationDTO.setSpeakers(new ArrayList<>());
 
         Response response = given().contentType("application/json")
                 .body(conferenceCreationDTO)
-                .put(uri + "/conferences/" + id)
+                .put(uri + "/conferences/" + testConference.getId())
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
@@ -140,22 +144,23 @@ class ConferenceControllerTest {
         //TO DO: adjust test to check for table entry field adjustment
 
         // NOTE: 1) mock findById 2) check put operation
-        UUID id = UUID.randomUUID();
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        //UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        //when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        when(conferenceService.findById(testConference.getId())).thenReturn(Optional.of(testConference));
 
         ConferenceCreationDTO conferenceCreationDTO = new ConferenceCreationDTO();
         conferenceCreationDTO.setLocation("location replace");
         conferenceCreationDTO.setDescription("description replace");
         conferenceCreationDTO.setTheme("theme replace");
-        conferenceCreationDTO.setDays(new ArrayList<>());
-        conferenceCreationDTO.setParticipants(new ArrayList<>());
-        conferenceCreationDTO.setSpeakers(new ArrayList<>());
+        //conferenceCreationDTO.setDays(new ArrayList<>());
+        //conferenceCreationDTO.setParticipants(new ArrayList<>());
+        //conferenceCreationDTO.setSpeakers(new ArrayList<>());
 
         Response response = given().contentType("application/json")
                 .body(conferenceCreationDTO)
-                .patch(uri + "/conferences/" + id)
+                .patch(uri + "/conferences/" + testConference.getId())
                 .then()
                 .extract()
                 .response();
@@ -184,9 +189,9 @@ class ConferenceControllerTest {
         conferenceCreationDTO.setLocation("location replace");
         conferenceCreationDTO.setDescription("description replace");
         conferenceCreationDTO.setTheme("theme replace");
-        conferenceCreationDTO.setDays(new ArrayList<>());
-        conferenceCreationDTO.setParticipants(new ArrayList<>());
-        conferenceCreationDTO.setSpeakers(new ArrayList<>());
+        //conferenceCreationDTO.setDays(new ArrayList<>());
+        //conferenceCreationDTO.setParticipants(new ArrayList<>());
+        //conferenceCreationDTO.setSpeakers(new ArrayList<>());
 
         Response createResponse = given().contentType("application/json")
                 .body(conferenceCreationDTO)
@@ -216,8 +221,6 @@ class ConferenceControllerTest {
         //                .body("", equalTo(nullValue()));
 
         Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), deleteResponse.statusCode());
-
-
 
     }
 }

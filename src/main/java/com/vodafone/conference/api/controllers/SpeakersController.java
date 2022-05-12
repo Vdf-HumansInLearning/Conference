@@ -12,6 +12,7 @@ import com.vodafone.conference.models.entities.DTO.ParticipantDTO;
 import com.vodafone.conference.models.entities.DTO.SpeakerCreationDTO;
 import com.vodafone.conference.models.entities.DTO.SpeakerDTO;
 import com.vodafone.conference.models.entities.Speaker;
+import com.vodafone.conference.services.ConferenceService;
 import com.vodafone.conference.services.ParticipantService;
 import com.vodafone.conference.services.SpeakerService;
 import org.springframework.beans.factory.annotation.Autowired;

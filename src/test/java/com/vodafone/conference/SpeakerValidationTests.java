@@ -21,15 +21,15 @@ public class SpeakerValidationTests {
 
     @Test
     public void whenNullCompany_thenConstraintViolation() {
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        UUID id3 = UUID.randomUUID();
+        //UUID id1 = UUID.randomUUID();
+        //UUID id2 = UUID.randomUUID();
+        //UUID id3 = UUID.randomUUID();
 
-        Conference testConference = new Conference(id1, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        Participant testParticipant = new Participant(id2, null, "Luta", "Mr", "vluta@hotmail.com",
-                "0730257597", "vluta", "password", null, true, true, testConference);
-        Speaker testSpeaker = new Speaker(id3, testParticipant, null,
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Participant testParticipant = new Participant( null, "Luta", "Mr", "vluta@hotmail.com",
+                "0730257597", "vluta", "password", null, null, true, true, testConference);
+        Speaker testSpeaker = new Speaker( testParticipant, null,
                 "linkedinAcc", "twitterAcc", "githubAcc",
                 "biography", new HashSet<>(), testConference);
 
@@ -39,15 +39,15 @@ public class SpeakerValidationTests {
 
     @Test
     public void whenEmptyCompany_thenConstraintViolation() {
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        UUID id3 = UUID.randomUUID();
+        //UUID id1 = UUID.randomUUID();
+        //UUID id2 = UUID.randomUUID();
+        //UUID id3 = UUID.randomUUID();
 
-        Conference testConference = new Conference(id1, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        Participant testParticipant = new Participant(id2, null, "Luta", "Mr", "vluta@hotmail.com",
-                "0730257597", "vluta", "password", null, true, true, testConference);
-        Speaker testSpeaker = new Speaker(id3, testParticipant, "",
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Participant testParticipant = new Participant( "Vlad", "Luta", "Mr", "vluta@hotmail.com",
+                "0730257597", "a", "password", null, null, true, true, testConference);
+        Speaker testSpeaker = new Speaker( testParticipant, "",
                 "linkedinAcc", "twitterAcc", "githubAcc",
                 "biography", new HashSet<>(), testConference);
 
@@ -59,15 +59,15 @@ public class SpeakerValidationTests {
 
     @Test
     public void whenNullBiography_thenConstraintViolation() {
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        UUID id3 = UUID.randomUUID();
+        //UUID id1 = UUID.randomUUID();
+        //UUID id2 = UUID.randomUUID();
+        //UUID id3 = UUID.randomUUID();
 
-        Conference testConference = new Conference(id1, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        Participant testParticipant = new Participant(id2, null, "Luta", "Mr", "vluta@hotmail.com",
-                "0730257597", "vluta", "password", null, true, true, testConference);
-        Speaker testSpeaker = new Speaker(id3, testParticipant, "company",
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Participant testParticipant = new Participant( "Vlad", "Luta", "Mr", "vluta@hotmail.com",
+                "0730257597", "a", "password", null, null, true, true, testConference);
+        Speaker testSpeaker = new Speaker( testParticipant, "company",
                 "linkedinAcc", "twitterAcc", "githubAcc",
                 null, new HashSet<>(), testConference);
 
@@ -77,15 +77,15 @@ public class SpeakerValidationTests {
 
     @Test
     public void whenEmptyBiography_thenConstraintViolation() {
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        UUID id3 = UUID.randomUUID();
+        //UUID id1 = UUID.randomUUID();
+        //UUID id2 = UUID.randomUUID();
+        //UUID id3 = UUID.randomUUID();
 
-        Conference testConference = new Conference(id1, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        Participant testParticipant = new Participant(id2, null, "Luta", "Mr", "vluta@hotmail.com",
-                "0730257597", "vluta", "password", null, true, true, testConference);
-        Speaker testSpeaker = new Speaker(id3, testParticipant, "company",
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Participant testParticipant = new Participant( "Vlad", "Luta", "Mr", "vluta@hotmail.com",
+                "0730257597", "a", "password", null, null, true, true, testConference);
+        Speaker testSpeaker = new Speaker( testParticipant, "company",
                 "linkedinAcc", "twitterAcc", "githubAcc",
                 "", new HashSet<>(), testConference);
 

@@ -1,7 +1,9 @@
 package com.vodafone.conference;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vodafone.conference.models.dto.ConferenceCreationDTO;
 import com.vodafone.conference.models.entities.Conference;
+import com.vodafone.conference.services.ConferenceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,16 +49,16 @@ public class ConferenceIntegrationTest {
     @Test
     public void givenConferenceId_whenMakingGetRequestToConferenceEndpoint_thenReturnConference() throws Exception {
 
-        UUID id = UUID.randomUUID();
-        //List<Day> days = new ArrayList<>();
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
+        //UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        when(conferenceService.findById(testConference.getId())).thenReturn(Optional.of(testConference));
 
         //mock conference service
         // check for exception with Opt.isPresent()
-        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        //when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
 
-        mockMvc.perform(MockMvcRequestBuilders.get(uri + "/conferences/{conferenceId}", id.toString()).accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get(uri + "/conferences/{conferenceId}", testConference.getId()).accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.days").value(testConference.getDays()))
@@ -75,9 +77,9 @@ public class ConferenceIntegrationTest {
         conferenceCreationDTO.setLocation("location");
         conferenceCreationDTO.setDescription("description");
         conferenceCreationDTO.setTheme("theme");
-        conferenceCreationDTO.setDays(new ArrayList<>());
-        conferenceCreationDTO.setParticipants(new ArrayList<>());
-        conferenceCreationDTO.setSpeakers(new ArrayList<>());
+        //conferenceCreationDTO.setDays(new ArrayList<>());
+        //conferenceCreationDTO.setParticipants(new ArrayList<>());
+        //conferenceCreationDTO.setSpeakers(new ArrayList<>());
 
         String json = new ObjectMapper().writeValueAsString(conferenceCreationDTO);
 
@@ -98,22 +100,23 @@ public class ConferenceIntegrationTest {
     @Test
     public void whenMakingPutRequestToConferenceEndpoint_thenReturnResponse() throws Exception {
 
-        UUID id = UUID.randomUUID();
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        //UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        //when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        when(conferenceService.findById(testConference.getId())).thenReturn(Optional.of(testConference));
 
         ConferenceCreationDTO conferenceCreationDTO = new ConferenceCreationDTO();
         conferenceCreationDTO.setLocation("location replace");
         conferenceCreationDTO.setDescription("description replace");
         conferenceCreationDTO.setTheme("theme replace");
-        conferenceCreationDTO.setDays(new ArrayList<>());
-        conferenceCreationDTO.setParticipants(new ArrayList<>());
-        conferenceCreationDTO.setSpeakers(new ArrayList<>());
+        //conferenceCreationDTO.setDays(new ArrayList<>());
+        //conferenceCreationDTO.setParticipants(new ArrayList<>());
+        //conferenceCreationDTO.setSpeakers(new ArrayList<>());
 
         String json = new ObjectMapper().writeValueAsString(conferenceCreationDTO);
 
-        mockMvc.perform(put(uri + "/conferences/" + id)
+        mockMvc.perform(put(uri + "/conferences/" + testConference.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON))
@@ -130,22 +133,23 @@ public class ConferenceIntegrationTest {
     @Test
     public void whenMakingPatchRequestToConferenceEndpoint_thenReturnResponse() throws Exception {
 
-        UUID id = UUID.randomUUID();
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        //UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        //when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        when(conferenceService.findById(testConference.getId())).thenReturn(Optional.of(testConference));
 
         ConferenceCreationDTO conferenceCreationDTO = new ConferenceCreationDTO();
         conferenceCreationDTO.setLocation("location replace");
         conferenceCreationDTO.setDescription("description replace");
         conferenceCreationDTO.setTheme("theme replace");
-        conferenceCreationDTO.setDays(new ArrayList<>());
-        conferenceCreationDTO.setParticipants(new ArrayList<>());
-        conferenceCreationDTO.setSpeakers(new ArrayList<>());
+        //conferenceCreationDTO.setDays(new ArrayList<>());
+        //conferenceCreationDTO.setParticipants(new ArrayList<>());
+        //conferenceCreationDTO.setSpeakers(new ArrayList<>());
 
         String json = new ObjectMapper().writeValueAsString(conferenceCreationDTO);
 
-        mockMvc.perform(patch(uri + "/conferences/" + id)
+        mockMvc.perform(patch(uri + "/conferences/" + testConference.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON))
@@ -168,9 +172,9 @@ public class ConferenceIntegrationTest {
         conferenceCreationDTO.setLocation("location replace");
         conferenceCreationDTO.setDescription("description replace");
         conferenceCreationDTO.setTheme("theme replace");
-        conferenceCreationDTO.setDays(new ArrayList<>());
-        conferenceCreationDTO.setParticipants(new ArrayList<>());
-        conferenceCreationDTO.setSpeakers(new ArrayList<>());
+        //conferenceCreationDTO.setDays(new ArrayList<>());
+        //conferenceCreationDTO.setParticipants(new ArrayList<>());
+        //conferenceCreationDTO.setSpeakers(new ArrayList<>());
 
         String json = new ObjectMapper().writeValueAsString(conferenceCreationDTO);
 

@@ -5,14 +5,15 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+//import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Entity
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "conference")
 public class Conference extends EntityWithUUID {
@@ -45,5 +46,16 @@ public class Conference extends EntityWithUUID {
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Track> tracks;
+
+    public Conference(List<Day> days, String location, String theme, String description, List<Participant> participants, List<Speaker> speakers, List<Track> tracks) {
+        super();
+        this.days = days;
+        this.location = location;
+        this.theme = theme;
+        this.description = description;
+        this.participants = participants;
+        this.speakers = speakers;
+        this.tracks = tracks;
+    }
 }
 

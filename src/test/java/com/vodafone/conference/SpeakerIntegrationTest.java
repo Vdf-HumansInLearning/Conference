@@ -6,6 +6,7 @@ import com.vodafone.conference.models.entities.DTO.ParticipantCreationDTO;
 import com.vodafone.conference.models.entities.DTO.SpeakerCreationDTO;
 import com.vodafone.conference.models.entities.Participant;
 import com.vodafone.conference.models.entities.Speaker;
+import com.vodafone.conference.services.ConferenceService;
 import com.vodafone.conference.services.ParticipantService;
 import com.vodafone.conference.services.SpeakerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,21 +58,20 @@ public class SpeakerIntegrationTest {
     @Test
     public void givenSpeakerId_whenMakingGetRequestToSpeakerEndpoint_thenReturnSpeaker() throws Exception {
 
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        UUID id3 = UUID.randomUUID();
+        //UUID id1 = UUID.randomUUID();
+        //UUID id2 = UUID.randomUUID();
+        //UUID id3 = UUID.randomUUID();
 
-        Conference testConference = new Conference(id1, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Participant testParticipant = new Participant( "firstName", "lastName", "title", "email",
+                "phoneNumber", "username", "password", null, null, false, false, null);
 
-        Participant testParticipant = new Participant(id2, "firstName", "lastName", "title", "email",
-                "phoneNumber", "username", "password", null, false, false, null);
-
-        Speaker testSpeaker = new Speaker(id3, testParticipant, "company",
+        Speaker testSpeaker = new Speaker( testParticipant, "company",
                 "linkedinAcc", "twitterAcc", "githubAcc",
                 "biography", new HashSet<>(), testConference);
 
-        when(speakerService.findById(id3)).thenReturn(Optional.of(testSpeaker));
+        when(speakerService.findById(testSpeaker.getId())).thenReturn(Optional.of(testSpeaker));
 
         mockMvc.perform(MockMvcRequestBuilders.get(uri + "/speakers/" + testSpeaker.getId()).accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -87,26 +87,25 @@ public class SpeakerIntegrationTest {
     @Test
     public void givenConferenceId_whenMakingGetRequestToSpeakersEndpoint_thenReturnSpeaker() throws Exception {
 
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        UUID id3 = UUID.randomUUID();
-        UUID id4 = UUID.randomUUID();
-        UUID id5 = UUID.randomUUID();
+        //UUID id1 = UUID.randomUUID();
+        //UUID id2 = UUID.randomUUID();
+        //UUID id3 = UUID.randomUUID();
+        //UUID id4 = UUID.randomUUID();
+        //UUID id5 = UUID.randomUUID();
 
-        Conference testConference = new Conference(id1, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Participant testParticipant1 = new Participant( "firstName", "lastName", "title", "email",
+                "phoneNumber", "username", "password", null, null, false, false, testConference);
 
-        Participant testParticipant1 = new Participant(id2, "firstName", "lastName", "title", "email",
-                "phoneNumber", "username", "password", null, false, false, testConference);
+        Participant testParticipant2 = new Participant( "firstName2", "lastName2", "title2", "email2",
+                "phoneNumber2", "username2", "password2", null, null, false, false, testConference);
 
-        Participant testParticipant2 = new Participant(id3, "firstName2", "lastName2", "title2", "email2",
-                "phoneNumber2", "username2", "password2", null, false, false, testConference);
-
-        Speaker testSpeaker1 = new Speaker(id4, testParticipant1, "company1",
+        Speaker testSpeaker1 = new Speaker( testParticipant1, "company1",
                 "linkedinAcc1", "twitterAcc1", "githubAcc1",
                 "biography1", new HashSet<>(), testConference);
 
-        Speaker testSpeaker2 = new Speaker(id5, testParticipant2, "company2",
+        Speaker testSpeaker2 = new Speaker( testParticipant2, "company2",
                 "linkedinAcc2", "twitterAcc2", "githubAcc2",
                 "biography2", new HashSet<>(), testConference);
 
@@ -115,8 +114,8 @@ public class SpeakerIntegrationTest {
         speakers.add(testSpeaker1);
         speakers.add(testSpeaker2);
 
-        when(conferenceService.findById(id1)).thenReturn(Optional.of(testConference));
-        when(speakerService.findByConference_Id(id1)).thenReturn(speakers);
+        when(conferenceService.findById(testConference.getId())).thenReturn(Optional.of(testConference));
+        when(speakerService.findByConference_Id(testConference.getId())).thenReturn(speakers);
 
         mockMvc.perform(MockMvcRequestBuilders.get(uri + "/conferences/" + testConference.getId() + "/speakers").accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -126,10 +125,10 @@ public class SpeakerIntegrationTest {
     @Test
     public void whenMakingPostRequestToSpeakersEndpoint_thenReturnResponse() throws Exception {
 
-        UUID id = UUID.randomUUID();
-        Conference testConference = new Conference(id, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        when(conferenceService.findById(id)).thenReturn(Optional.of(testConference));
+        //UUID id = UUID.randomUUID();
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        when(conferenceService.findById(testConference.getId())).thenReturn(Optional.of(testConference));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
         participantCreationDTO.setFirstName("firstName");
@@ -169,18 +168,18 @@ public class SpeakerIntegrationTest {
     @Test
     public void whenMakingPutRequestToSpeakersEndpoint_thenReturnResponse() throws Exception {
 
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        UUID id3 = UUID.randomUUID();
+        //UUID id1 = UUID.randomUUID();
+        //UUID id2 = UUID.randomUUID();
+        //UUID id3 = UUID.randomUUID();
 
-        Conference testConference = new Conference(id1, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        Participant testParticipant1 = new Participant(id2, "firstName1", "lastName1", "title1", "email1",
-                "phoneNumber1", "username1", "password1", null, true, true, testConference);
-        Speaker testSpeaker1 = new Speaker(id3, testParticipant1, "company1",
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Participant testParticipant1 = new Participant( "firstName1", "lastName1", "title1", "email1",
+                "phoneNumber1", "username1", "password1", null, null, true, true, testConference);
+        Speaker testSpeaker1 = new Speaker( testParticipant1, "company1",
                 "linkedinAcc1", "twitterAcc1", "githubAcc1",
                 "biography1", new HashSet<>(), testConference);
-        when(conferenceService.findById(id1)).thenReturn(Optional.of(testConference));
+        when(conferenceService.findById(testConference.getId())).thenReturn(Optional.of(testConference));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
         participantCreationDTO.setFirstName("firstName");
@@ -203,7 +202,7 @@ public class SpeakerIntegrationTest {
 
         String json = new ObjectMapper().writeValueAsString(speakerCreationDTO);
 
-        mockMvc.perform(MockMvcRequestBuilders.put(uri + "/speakers/" + id3)
+        mockMvc.perform(MockMvcRequestBuilders.put(uri + "/speakers/" + testSpeaker1.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -219,23 +218,22 @@ public class SpeakerIntegrationTest {
     @Test
     public void whenMakingPatchRequestToConferenceEndpoint_thenReturnResponse() throws Exception {
 
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        UUID id3 = UUID.randomUUID();
+        //UUID id1 = UUID.randomUUID();
+        //UUID id2 = UUID.randomUUID();
+        //UUID id3 = UUID.randomUUID();
 
         //when(speakerService.findById(id)).thenReturn(Optional.of(testSpeaker));
 
-        Conference testConference = new Conference(id1, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Participant testParticipant1 = new Participant( "firstName1", "lastName1", "title1", "email1",
+                "phoneNumber1", "username1", "password1", null, null, true, true, testConference);
 
-        Participant testParticipant1 = new Participant(id2, "firstName1", "lastName1", "title1", "email1",
-                "phoneNumber1", "username1", "password1", null, true, true, testConference);
-
-        Speaker testSpeaker1 = new Speaker(id3, testParticipant1, "company1",
+        Speaker testSpeaker1 = new Speaker( testParticipant1, "company1",
                 "linkedinAcc1", "twitterAcc1", "githubAcc1",
                 "biography1", new HashSet<>(), testConference);
 
-        when(speakerService.findById(id3)).thenReturn(Optional.of(testSpeaker1));
+        when(speakerService.findById(testSpeaker1.getId())).thenReturn(Optional.of(testSpeaker1));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
         participantCreationDTO.setFirstName("firstName");
@@ -258,7 +256,7 @@ public class SpeakerIntegrationTest {
 
         String json = new ObjectMapper().writeValueAsString(speakerCreationDTO);
 
-        mockMvc.perform(MockMvcRequestBuilders.put(uri + "/speakers/" + id3)
+        mockMvc.perform(MockMvcRequestBuilders.put(uri + "/speakers/" + testSpeaker1.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -274,18 +272,18 @@ public class SpeakerIntegrationTest {
     @Test
     public void whenMakingDeleteRequestToParticipantsEndpoint_thenReturnResponse() throws Exception {
 
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        UUID id3 = UUID.randomUUID();
+        //UUID id1 = UUID.randomUUID();
+        //UUID id2 = UUID.randomUUID();
+        //UUID id3 = UUID.randomUUID();
 
-        Conference testConference = new Conference(id1, new ArrayList<>(), "location",
-                "theme", "description", new ArrayList<>(), new ArrayList<>());
-        Participant testParticipant1 = new Participant(id2, "firstName1", "lastName1", "title1", "email1",
-                "phoneNumber1", "username1", "password1", null, true, true, testConference);
-        Speaker testSpeaker1 = new Speaker(id3, testParticipant1, "company1",
+        Conference testConference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Participant testParticipant1 = new Participant( "firstName1", "lastName1", "title1", "email1",
+                "phoneNumber1", "username1", "password1", null, null, true, true, testConference);
+        Speaker testSpeaker1 = new Speaker( testParticipant1, "company1",
                 "linkedinAcc1", "twitterAcc1", "githubAcc1",
                 "biography1", new HashSet<>(), testConference);
-        when(conferenceService.findById(id1)).thenReturn(Optional.of(testConference));
+        when(conferenceService.findById(testConference.getId())).thenReturn(Optional.of(testConference));
 
         ParticipantCreationDTO participantCreationDTO = new ParticipantCreationDTO();
         participantCreationDTO.setFirstName("firstName");
@@ -308,14 +306,14 @@ public class SpeakerIntegrationTest {
 
         String json = new ObjectMapper().writeValueAsString(speakerCreationDTO);
 
-        mockMvc.perform(put(uri + "/speakers/" + id3)
+        mockMvc.perform(put(uri + "/speakers/" + testSpeaker1.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        mockMvc.perform(delete(uri + "/speakers/" + id3))
+        mockMvc.perform(delete(uri + "/speakers/" + testSpeaker1.getId()))
                 .andExpect(status().isNoContent())
                 .andDo(print());
     }
