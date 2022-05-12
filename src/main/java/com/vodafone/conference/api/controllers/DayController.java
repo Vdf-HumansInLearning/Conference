@@ -1,6 +1,8 @@
 package com.vodafone.conference.api.controllers;
 
+import com.vodafone.conference.api.mapper.DayMapper;
 import com.vodafone.conference.exceptions.ApiRequestException;
+import com.vodafone.conference.models.dto.DayCreationDTO;
 import com.vodafone.conference.models.dto.DayDTO;
 import com.vodafone.conference.models.entities.Day;
 import com.vodafone.conference.services.DayService;
@@ -18,8 +20,15 @@ import java.util.UUID;
 @RestController
 public class DayController {
 
+    private final DayMapper dayMapper;
+
     @Autowired
     DayService dayService;
+
+    public DayController(DayMapper dayMapper, DayService dayService) {
+        this.dayMapper = dayMapper;
+        this.dayService = dayService;
+    }
 
     @GetMapping(value = "/days/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DayDTO> getTrackById(@PathVariable UUID id) {
@@ -48,21 +57,25 @@ public class DayController {
         }
     }
 
-    @PutMapping(value = "days/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Day> updateDayById(@PathVariable(name = "id") UUID id, @RequestBody DayDTO dayDTO) {
+    @PutMapping(value = "/days/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DayDTO> updateDayById(@PathVariable(name = "id") UUID id, @RequestBody DayCreationDTO dayCreationDTO) {
         Day dayById = dayService.findById(id);
-        if (dayById != null) {
-            Day day = dayService.updateDayById(id, dayDTO);
-            return new ResponseEntity<Day>(day, HttpStatus.OK);
+        if(dayById != null) {
+            Day day = dayMapper.toDay(dayCreationDTO);
+            DayDTO dayDTO = dayMapper.toDto(day);
+            dayService.updateDayById(id, dayDTO);
+            return new ResponseEntity<DayDTO>(dayDTO, HttpStatus.OK);
         } else {
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
         }
     }
     
-    @PostMapping(value = "days/add-day", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Day> createDay(@RequestBody DayDTO dayDTO) {
-        Day day = dayService.saveNewDay(dayDTO);
-        return new ResponseEntity<Day>(day, HttpStatus.CREATED);
+    @PostMapping(value = "/days/add-day", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DayDTO> createDay(@RequestBody DayCreationDTO dayCreationDTO) {
+        Day day = dayMapper.toDay(dayCreationDTO);
+        DayDTO dayDTO = dayMapper.toDto(day);
+        dayService.saveNewDay(dayDTO);
+        return new ResponseEntity<DayDTO>(dayDTO, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/days/{id}")

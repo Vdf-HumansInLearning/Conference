@@ -13,6 +13,6 @@ CREATE TABLE session
     date TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
     review INT NOT NULL,
-    FOREIGN KEY(session_type_id) REFERENCES session_type(id),
-    FOREIGN KEY(track_id) REFERENCES track(id)
+    FOREIGN KEY(session_type_id) REFERENCES session_type(id) ON DELETE CASCADE,
+    FOREIGN KEY(track_id) REFERENCES track(id) ON DELETE CASCADE
 );

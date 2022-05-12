@@ -41,4 +41,9 @@ public class Ticket extends EntityWithUUID {
             this.price = price;
         }
     }
+
+    public Ticket(TicketType type, TicketType price) {
+        this.type = type;
+        this.price = price;
+    }
 }

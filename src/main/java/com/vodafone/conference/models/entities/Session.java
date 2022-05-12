@@ -53,7 +53,7 @@ public class Session extends EntityWithUUID {
     @JoinColumn(name = "track_id", nullable = false)
     private Track track;
 
-    enum TechLevel {
+    public enum TechLevel {
         BEGINNER,
         MID_LEVEL,
         ADVANCED;

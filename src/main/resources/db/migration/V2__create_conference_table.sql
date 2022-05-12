@@ -5,5 +5,5 @@ CREATE TABLE conference
     theme VARCHAR(45) NOT NULL,
     description VARCHAR(45) NOT NULL,
     ticket_id UUID,
-    FOREIGN KEY(ticket_id) REFERENCES ticket(id)
+    FOREIGN KEY(ticket_id) REFERENCES ticket(id) ON DELETE CASCADE
 );

@@ -32,7 +32,13 @@ public class Conference extends EntityWithUUID {
     @OneToMany(mappedBy = "conference") @JsonIgnore
     private List<Ticket> tickets;
 
-    //@OneToMany(mappedBy = "conference", fetch = FetchType.EAGER, cascade = CascadeType.ALL) @JsonIgnore
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.LAZY) @JsonIgnore
     private List<Track> tracks;
+
+    public Conference(String location, String theme, String description, List<Ticket> tickets) {
+        this.location = location;
+        this.theme = theme;
+        this.description = description;
+        this.tickets = tickets;
+    }
 }
