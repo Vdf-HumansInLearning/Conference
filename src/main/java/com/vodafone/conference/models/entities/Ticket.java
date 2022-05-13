@@ -4,15 +4,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.UUID;
 
-@Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "ticket")
-public class Ticket extends EntityWithUUID {
+@AllArgsConstructor
+@Entity
+public class Ticket {
+
+    // columnDefinition = "uuid DEFAULT uuid_generate_v4()"
+    @Id
+    @Column(name = "id", updatable = false, nullable = false)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID id;
+
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     private TicketType type;
@@ -21,16 +30,15 @@ public class Ticket extends EntityWithUUID {
     @Enumerated(EnumType.STRING)
     private TicketType price;
 
-    @ManyToOne @JsonIgnore
+    /*@ManyToOne @JsonIgnore
     @JoinColumn(name="participant_id", nullable=false)
     private Participant participant;
 
     @ManyToOne @JsonIgnore
-    @JoinColumn(name="ticket_id", nullable=false)
-    private Conference conference;
+    @JoinColumn(name="conference_id", nullable=false)
+    private Conference conference;*/
 
-
-    public enum TicketType {
+    enum TicketType {
         COMPLETE_ONLINE_EXPERIENCE (300),
         COMPLETE_ON_SITE_EXPERIENCE (350),
         ONLINE_EXPERIENCE (200),
@@ -40,10 +48,5 @@ public class Ticket extends EntityWithUUID {
         TicketType(int price) {
             this.price = price;
         }
-    }
-
-    public Ticket(TicketType type, TicketType price) {
-        this.type = type;
-        this.price = price;
     }
 }

@@ -1,30 +1,41 @@
 package com.vodafone.conference.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "session")
-public class Session extends EntityWithUUID {
+public class Session {
+
+    // columnDefinition = "uuid DEFAULT uuid_generate_v4()"
+    @Id
+    @Column(name = "id", updatable = false, nullable = false)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID id;
+
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToMany @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JoinTable(name="speaker_session", joinColumns = @JoinColumn(name="session_id"),
+            inverseJoinColumns = @JoinColumn(name="speaker_id"))
     private List<Speaker> speakers;
 
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL) @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "session_type_id")
     private SessionType sessionType;
 
     @Column(name = "topic", nullable = false)
@@ -35,7 +46,8 @@ public class Session extends EntityWithUUID {
     private TechLevel techLevel;
 
     @Column(name = "keywords", nullable = false)
-    private String keywords;
+    @ElementCollection
+    private List<String> keywords;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
@@ -46,14 +58,19 @@ public class Session extends EntityWithUUID {
     @Column(name = "review", nullable = false)
     private int review;
 
-    @OneToMany(mappedBy = "sessions") @JsonIgnore
-    private List<Participant> participants;
+    // participant should not have session ID
+    // as sessions added/created by participants are unique to them (i.e. two participants cannot add/create the same session)
+    //@OneToMany(mappedBy = "sessions")
+    //private List<Participant> participants;
 
-    @ManyToOne @JsonIgnore
+
+    // Session may not have track id
+
+    @ManyToOne
     @JoinColumn(name = "track_id", nullable = false)
     private Track track;
 
-    public enum TechLevel {
+    enum TechLevel {
         BEGINNER,
         MID_LEVEL,
         ADVANCED;
