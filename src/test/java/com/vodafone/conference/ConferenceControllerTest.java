@@ -50,7 +50,7 @@ class ConferenceControllerTest {
     @Test
     public void givenConferenceId_whenMakingGetRequestToConferenceEndpoint_thenReturnConference() {
 
-        //UUID id = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
         //List<Day> days = new ArrayList<>();
         Conference testConference = new Conference(new ArrayList<>(), "location",
                 "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());

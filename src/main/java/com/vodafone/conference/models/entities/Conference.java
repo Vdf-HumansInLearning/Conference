@@ -15,14 +15,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Conference {
+public class Conference extends EntityWithUUID {
 
     //columnDefinition = "uuid DEFAULT uuid_generate_v4()"
-    @Id
-    @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
+    //@Id
+    //@Column(name = "id", updatable = false, nullable = false)
+    //@GeneratedValue(generator = "UUID")
+    //@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    //private UUID id;
 
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL)
     private List<Day> days;
@@ -48,8 +48,8 @@ public class Conference {
     //@OneToMany(mappedBy = "conference") @JsonIgnore
     //private List<Ticket> tickets;
 
-    //@OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.LAZY) @JsonIgnore
-    //private List<Track> tracks;
+    @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.LAZY) @JsonIgnore
+    private List<Track> tracks;
 
     @Override
     public String toString() {
