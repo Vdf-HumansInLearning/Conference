@@ -51,10 +51,13 @@ public class TrackControllerTest {
     @Test
     public void givenDaysId_whenMakingGetRequestToTracksEndpoint_thenReturnDay() throws Exception {
         UUID id = UUID.randomUUID();
-        Ticket ticket = new Ticket(Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE, Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE);
+        //Ticket ticket = new Ticket(Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE, Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE);
+        Ticket ticket = new Ticket("COMPLETE_ONLINE_EXPERIENCE", 200);
         List<Ticket> tickets = new ArrayList<>();
         tickets.add(ticket);
-        Conference conference = new Conference("Bucharest", "theme", "description", tickets);
+        //Conference conference = new Conference("Bucharest", "theme", "description", tickets);
+        Conference conference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         Day day = new Day(id, LocalDate.now(), conference);
 
         Track testTrack = new Track("Test", day, conference);
@@ -72,10 +75,13 @@ public class TrackControllerTest {
     public void whenMakingPostRequestToDayEndpoint_thenReturnResponse() throws Exception {
 
         UUID id = UUID.randomUUID();
-        Ticket ticket = new Ticket(Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE, Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE);
+        //Ticket ticket = new Ticket(Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE, Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE);
+        Ticket ticket = new Ticket("COMPLETE_ONLINE_EXPERIENCE", 200);
         List<Ticket> tickets = new ArrayList<>();
         tickets.add(ticket);
-        Conference conference = new Conference("Bucharest", "theme", "description", tickets);
+        //Conference conference = new Conference("Bucharest", "theme", "description", tickets);
+        Conference conference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         Day day = new Day(id, LocalDate.now(), conference);
 
         Track testTrack = new Track("Test", day, conference);
@@ -95,10 +101,13 @@ public class TrackControllerTest {
     public void whenMakingPutRequestToDayEndpoint_thenReturnResponse() throws Exception {
 
         UUID id = UUID.randomUUID();
-        Ticket ticket = new Ticket(Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE, Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE);
+        //Ticket ticket = new Ticket(Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE, Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE);
+        Ticket ticket = new Ticket("COMPLETE_ONLINE_EXPERIENCE", 200);
         List<Ticket> tickets = new ArrayList<>();
         tickets.add(ticket);
-        Conference conference = new Conference("Bucharest", "theme", "description", tickets);
+        //Conference conference = new Conference("Bucharest", "theme", "description", tickets);
+        Conference conference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         Day day = new Day(id, LocalDate.now(), conference);
 
         Track testTrack = new Track("Test", day, conference);
@@ -125,10 +134,13 @@ public class TrackControllerTest {
     public void whenMakingDeleteRequestToDayEndpoint_thenReturnResponse() throws Exception {
 
         UUID id = UUID.randomUUID();
-        Ticket ticket = new Ticket(Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE, Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE);
+        //Ticket ticket = new Ticket(Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE, Ticket.TicketType.COMPLETE_ON_SITE_EXPERIENCE);
+        Ticket ticket = new Ticket("COMPLETE_ONLINE_EXPERIENCE", 200);
         List<Ticket> tickets = new ArrayList<>();
         tickets.add(ticket);
-        Conference conference = new Conference("Bucharest", "theme", "description", tickets);
+        //Conference conference = new Conference("Bucharest", "theme", "description", tickets);
+        Conference conference = new Conference(new ArrayList<>(), "location",
+                "theme", "description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         Day day = new Day(id, LocalDate.now(), conference);
 
         Track testTrack = new Track("Test", day, conference);
