@@ -1,5 +1,6 @@
 package com.vodafone.conference.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vodafone.conference.models.entities.Conference;
 import com.vodafone.conference.models.entities.Day;
 import com.vodafone.conference.models.entities.Session;
@@ -17,7 +18,10 @@ import java.util.UUID;
 public class TrackDTO {
     public UUID id;
     public String title;
+
+    @JsonIgnoreProperties(value = "track")
     public Day day;
+
     public List<Session> sessions;
     public Conference conference;
 

@@ -11,6 +11,7 @@ import com.vodafone.conference.models.entities.Conference;
 import com.vodafone.conference.models.entities.DTO.ParticipantDTO;
 import com.vodafone.conference.models.entities.DTO.SpeakerCreationDTO;
 import com.vodafone.conference.models.entities.DTO.SpeakerDTO;
+import com.vodafone.conference.models.entities.Session;
 import com.vodafone.conference.models.entities.Speaker;
 import com.vodafone.conference.services.ConferenceService;
 import com.vodafone.conference.services.ParticipantService;

@@ -5,11 +5,14 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -25,11 +28,22 @@ public class Day extends EntityWithUUID implements Serializable {
     @JoinColumn(name = "conference_id", nullable = false)
     private Conference conference;
 
-    @OneToMany(mappedBy = "day", fetch = FetchType.EAGER, cascade = CascadeType.ALL) @JsonIgnore
+    @OneToMany(mappedBy = "day", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true) @JsonIgnore
     @JsonManagedReference
     private List<Track> track;
 
     public Day(LocalDate date) {
         this.date = date;
+    }
+
+    public Day(UUID id, LocalDate date, Conference conference) {
+        this.id = id;
+        this.date = date;
+        this.conference = conference;
+    }
+
+    public Day(LocalDate date, Conference conference) {
+        this.date = date;
+        this.conference = conference;
     }
 }

@@ -84,6 +84,31 @@ public class TrackService {
     }
 
     @Transactional
+    public Track saveNewTrack(TrackDTO trackDTO) {
+        Day day = null;
+        Optional<Day> dayOptional = dayRepository.findById(trackDTO.day.getId());
+
+        Conference conference = null;
+        Optional<Conference> conferenceOptional = conferenceRepository.findById(trackDTO.conference.getId());
+
+        if (!dayOptional.isPresent()) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, trackDTO.day.getId().toString()));
+        } else {
+            day = dayOptional.get();
+        }
+
+        if (!conferenceOptional.isPresent()) {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, trackDTO.conference.getId().toString()));
+        } else {
+            conference = conferenceOptional.get();
+        }
+
+        Track trackToBeSaved = new Track(trackDTO.title, day, conference);
+        Track trackSaved = trackRepository.save(trackToBeSaved);
+        return trackSaved;
+    }
+
+    @Transactional
     public void deleteById(UUID id) {
         Optional<Track> byId = trackRepository.findById(id);
         if (byId.isPresent()) {

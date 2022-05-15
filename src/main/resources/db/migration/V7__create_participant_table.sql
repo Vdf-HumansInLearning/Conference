@@ -12,6 +12,6 @@ CREATE TABLE participant
     conference_id UUID,
     is_organiser boolean,
     is_speaker boolean,
-    FOREIGN KEY(session_id) REFERENCES session(id),
-    FOREIGN KEY(conference_id) REFERENCES conference(id)
+    FOREIGN KEY(session_id) REFERENCES session(id) ON DELETE CASCADE,
+    FOREIGN KEY(conference_id) REFERENCES conference(id) ON DELETE CASCADE
 );
