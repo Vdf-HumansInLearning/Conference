@@ -66,9 +66,9 @@ public class Session extends EntityWithUUID {
     @Column(name = "review")
     private int review;
 
-    @OneToMany(mappedBy = "sessions", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Participant> participants;
+    //@OneToMany(mappedBy = "sessions", cascade = CascadeType.ALL)
+    //@JsonIgnore
+    //private List<Participant> participants;
 
 }
 
