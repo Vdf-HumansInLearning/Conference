@@ -12,10 +12,13 @@ public class ConferenceMapper {
     ModelMapper modelMapper = new ModelMapper();
 
     public ConferenceDTO toDto(Conference conference) {
-        return modelMapper.map(conference, ConferenceDTO.class);
+        ConferenceDTO conferenceDTO = modelMapper.map(conference, ConferenceDTO.class);
+
+        return conferenceDTO;
     }
 
     public Conference toConference(ConferenceCreationDTO conferenceCreationDTO) {
-        return modelMapper.map(conferenceCreationDTO, Conference.class);
+        Conference conference = modelMapper.map(conferenceCreationDTO, Conference.class);
+        return conference;
     }
 }

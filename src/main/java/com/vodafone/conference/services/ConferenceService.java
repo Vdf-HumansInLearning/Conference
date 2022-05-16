@@ -14,6 +14,11 @@ public class ConferenceService {
     @Autowired
     private ConferenceRepository conferenceRepository;
 
+    public ConferenceService(ConferenceRepository conferenceRepository) {
+        this.conferenceRepository = conferenceRepository;
+    }
+
+
     @Transactional
     public Boolean isIdPresent(UUID id) {
         return conferenceRepository.findById(id).isPresent();

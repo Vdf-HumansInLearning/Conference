@@ -44,17 +44,25 @@ public class ConferenceController {
     public ResponseEntity<ConferenceDTO> getConferenceById(@PathVariable UUID id) {
         Optional<Conference> conferenceOptional = conferenceService.findById(id);
 
-        return conferenceOptional.map(conference -> new ResponseEntity<>(conferenceMapper.toDto(conference), HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        //return conferenceOptional.map(conference -> new ResponseEntity<>(conferenceMapper.toDto(conference), HttpStatus.OK))
+                //.orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if(conferenceOptional.isPresent()) {
+            //ParticipantDTO participantDTO = mapper.toDto(optParticipant.get());
+            return new ResponseEntity<>(conferenceMapper.toDto(conferenceOptional.get()), HttpStatus.OK);
+        }
+        else {
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.ID_NOT_FOUND, id.toString()));
+        }
     }
 
     @PostMapping(value = "/conferences", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ConferenceDTO> createConference(@RequestBody ConferenceCreationDTO conferenceCreationDTO, Errors errors) {
+    public ResponseEntity<ConferenceDTO> createConference(@Valid @RequestBody ConferenceCreationDTO conferenceCreationDTO, Errors errors) {
         Conference conference = conferenceMapper.toConference(conferenceCreationDTO);
         ConferenceDTO conferenceDTO = conferenceMapper.toDto(conference);
 
         if (errors.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
         }
 
         conferenceService.save(conference);

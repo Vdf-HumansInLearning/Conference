@@ -12,7 +12,12 @@ import java.util.UUID;
 
 @Repository
 public interface ConferenceRepository extends JpaRepository<Conference, UUID> {
+
+    @Override
     Optional<Conference> findById(UUID id);
+
+    @Override
+    void deleteById(UUID uuid);
 
     @Transactional
     @Modifying

@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
-@EnableTransactionManagement
-@EnableJpaAuditing
+//@EnableTransactionManagement
+//@EnableJpaAuditing
 @EnableSwagger2
 public class ConferenceApplication {
 

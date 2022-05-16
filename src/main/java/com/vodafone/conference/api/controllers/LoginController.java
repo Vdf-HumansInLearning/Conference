@@ -1,8 +1,8 @@
 package com.vodafone.conference.api.controllers;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 import java.util.*;
 
-@RestController
+/*@RestController
 @CrossOrigin(origins = "*")
 public class LoginController {
 
@@ -30,4 +30,4 @@ public class LoginController {
     public String admin() {
         return ("<h1>Welcome admin</h1>");
     }
-}
+}*/
