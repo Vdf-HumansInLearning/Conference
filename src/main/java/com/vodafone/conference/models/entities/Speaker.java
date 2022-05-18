@@ -53,6 +53,6 @@ public class Speaker extends EntityWithUUID {
     private Set<Session> sessions = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "conference_id", nullable = false)
+    @JoinColumn(name = "conference_id", nullable = false) @JsonIgnore
     private Conference conference;
 }

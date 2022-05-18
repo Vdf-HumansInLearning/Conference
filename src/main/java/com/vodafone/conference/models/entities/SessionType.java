@@ -13,7 +13,10 @@ import javax.persistence.*;
 @Table(name = "session_type")
 public class SessionType extends EntityWithUUID {
 
+    @Column(name = "type")
     private String type;
+
+    @Column(name = "length")
     private int sessionLength;
 
     @OneToOne(mappedBy = "sessionType", cascade = CascadeType.ALL)
