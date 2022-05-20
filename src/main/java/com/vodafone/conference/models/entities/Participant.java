@@ -69,7 +69,7 @@ public class Participant extends EntityWithUUID {
     //@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\\\S+$).{8,20}$")
     private String password;
 
-    @OneToOne(mappedBy = "participant", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "participant", cascade = CascadeType.ALL) @JsonIgnore
     private Speaker speaker;
 
 

@@ -31,7 +31,7 @@ public class DayController {
     }
 
     @GetMapping(value = "/days/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DayDTO> getTrackById(@PathVariable UUID id) {
+    public ResponseEntity<DayDTO> getDayById(@PathVariable UUID id) {
         Day byId = dayService.findById(id);
         if (byId != null) {
             DayDTO dayDTO = new DayDTO(byId);

@@ -20,14 +20,11 @@ public class Session extends EntityWithUUID {
     @Column(name = "title", nullable = false)
     private String title;
 
-//    @ManyToMany(fetch = FetchType.LAZY,
-//            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-//                    CascadeType.DETACH, CascadeType.REFRESH})
-//    @JoinTable(name="speaker_session", joinColumns = @JoinColumn(name="session_id"),
-//            inverseJoinColumns = @JoinColumn(name="speaker_id"))
-//    private List<Speaker> speakers;
-
-    @ManyToMany @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(name="speaker_session", joinColumns = @JoinColumn(name="session_id"),
+            inverseJoinColumns = @JoinColumn(name="speaker_id"))
     private List<Speaker> speakers;
 
     public void addSpeaker(Speaker speaker) {
@@ -46,7 +43,8 @@ public class Session extends EntityWithUUID {
     @JoinColumn(name = "session_type_id")
     private SessionType sessionType;
 
-    @ManyToOne @JsonIgnore
+    @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "track_id", nullable = false)
     private Track track;
 
@@ -68,9 +66,7 @@ public class Session extends EntityWithUUID {
     @Column(name = "review")
     private int review;
 
-    //@OneToMany(mappedBy = "sessions", cascade = CascadeType.ALL)
-    //@JsonIgnore
-    //private List<Participant> participants;
-
+//    @OneToMany(mappedBy = "sessions", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    private List<Participant> participants;
 }
-
