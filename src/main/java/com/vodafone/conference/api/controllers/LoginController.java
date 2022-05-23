@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 import java.util.*;
 
-/*@RestController
+@RestController
 @CrossOrigin(origins = "*")
 public class LoginController {
 
     @GetMapping("/")
     public String index() {
-        //return "Home Page";
-        return ("<h1>Welcome</h1>");
+        return "Home Page";
+        //return ("<h1>Welcome</h1>");
     }
 
-    @GetMapping("/user")
+    /*@GetMapping("/user")
     public String user() {
         return ("<h1>Welcome user</h1>");
     }
@@ -29,5 +29,5 @@ public class LoginController {
     @GetMapping("/admin")
     public String admin() {
         return ("<h1>Welcome admin</h1>");
-    }
-}*/
+    }*/
+}

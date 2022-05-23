@@ -38,12 +38,12 @@ Input:
 
 JSON: 
 {
-"days": [],
-"description": "string",
-"location": "string",
-"participants": [],
-"speakers": [],
-"theme": "string"
+    "days": [],
+    "description": "string",
+    "location": "string",
+    "participants": [],
+    "speakers": [],
+    "theme": "string"
 }
 
 **GET /conferences/{id} - Get a conference by id**
@@ -60,12 +60,12 @@ conference UUID
 
 JSON:
 {
-"days": [],
-"description": "string new",
-"location": "string new",
-"participants": [],
-"speakers": [],
-"theme": "string new"
+    "days": [],
+    "description": "string new",
+    "location": "string new",
+    "participants": [],
+    "speakers": [],
+    "theme": "string new"
 }
 
 **DELETE /conferences/{id} - Delete a conference by id**
@@ -94,14 +94,24 @@ JSON: N/A
 Input: N/A
 
 JSON:
-{}
+{
+    "conference": {
+        "id": "35d3e781-6612-4521-9961-8236c5b6a1cb"
+    },
+    "date": "2022-05-22"
+}
 
 **PUT /days/{id} - Rewrite a day by id**
 
 Input: day id
 
 JSON:
-{}
+{
+    "conference": {
+        "id": "35d3e781-6612-4521-9961-8236c5b6a1cb"
+    },
+    "date": "2021-07-10"
+}
 
 **DELETE /days/{id} - Delete a day by id**
 
@@ -129,15 +139,15 @@ Input: conference id
 
 JSON:
 {
-"email": "vluta@hotmail.com",
-"firstName": "string",
-"lastName": "string",
-"organiser": true,
-"password": "string",
-"phoneNumber": "0730257597",
-"speaker": true,
-"title": "string",
-"username": "string"
+    "email": "vluta@hotmail.com",
+    "firstName": "string",
+    "lastName": "string",
+    "organiser": true,
+    "password": "string",
+    "phoneNumber": "0730257597",
+    "speaker": true,
+    "title": "string",
+    "username": "string"
 }
 
 **GET /participants/{participant-id} - Get a participant by id**
@@ -152,15 +162,15 @@ Input: participant id
 
 JSON:
 {
-"email": "vluta@hotmail.com",
-"firstName": "string",
-"lastName": "string",
-"organiser": true,
-"password": "string",
-"phoneNumber": "0730257597",
-"speaker": true,
-"title": "string",
-"username": "string"
+    "email": "vluta@hotmail.com",
+    "firstName": "string",
+    "lastName": "string",
+    "organiser": true,
+    "password": "string",
+    "phoneNumber": "0730257597",
+    "speaker": true,
+    "title": "string",
+    "username": "string"
 }
 
 **DELETE /participants/{participant-id} - Delete a participant by id**
@@ -236,7 +246,11 @@ JSON: N/A
 
 Input: N/A
 
-JSON: {}
+JSON:
+{
+    "sessionLength": 10000,
+    "type": "Test Type"
+}
 
 **GET /session_types/{session-type-id} - Get a session type by id**
 
@@ -248,7 +262,11 @@ JSON: N/A
 
 Input: session type id
 
-JSON: {}
+JSON:
+{
+    "sessionLength": 9000,
+    "type": " Second Test Type"
+}
 
 **DELETE /session_types/{session-type-id} - Delete a session type**
 
@@ -331,7 +349,11 @@ JSON: N/A
 
 Input: N/A
 
-JSON: {}
+JSON:
+{
+    "price": 10000,
+    "type": "Post Test"
+}
 
 **GET /tickets/{id} - Get a ticket by id**
 
@@ -357,7 +379,17 @@ JSON: N/A
 
 Input: track id
 
-JSON: {}
+JSON:
+{
+    "conference": {
+        "id":"35d3e781-6612-4521-9961-8236c5b6a1cb"
+    },
+    "day": {
+        "id": "80bd309c-bc40-4bc1-af88-9418d7b712f8"
+    },
+    "sessions": [ { "id": "a2e2c817-5d0f-4ad3-95e3-c6d7905c987a" } ],
+    "title": "New Title"
+}
 
 **DELETE /tracks/{id} - Delete a track by id**
 
@@ -369,4 +401,14 @@ JSON: {}
 
 Input: N/A
 
-JSON: {}
+JSON:
+{
+    "conference": {
+        "id":"35d3e781-6612-4521-9961-8236c5b6a1cb"
+    },
+    "day": {
+        "id": "80bd309c-bc40-4bc1-af88-9418d7b712f8"
+    },
+    "sessions": [ { "id": "a2e2c817-5d0f-4ad3-95e3-c6d7905c987a" } ],
+    "title": "Old Title"
+}
