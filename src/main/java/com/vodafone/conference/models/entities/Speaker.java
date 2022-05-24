@@ -1,27 +1,27 @@
 package com.vodafone.conference.models.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+
+//import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-@Data
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Speaker {
 
-    // columnDefinition = "uuid DEFAULT uuid_generate_v4()"
-    @Id
-    @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
+
+@Table(name = "speaker")
+public class Speaker extends EntityWithUUID {
 
     //@Transient creates error
     @OneToOne(cascade = CascadeType.ALL)
@@ -49,22 +49,10 @@ public class Speaker {
     @NotBlank(message = "Biography is required")
     private String biography;
 
-    // this is Spring many-to-many relationship in course
-    /*@ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                    CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(name="speaker_session", joinColumns = @JoinColumn(name="speaker_id"),
-                inverseJoinColumns = @JoinColumn(name="session_id"))
-    private List<Session> sessions;*/
-
-
-    // speaker should not have session ID
-    // as sessions added/created by speakers are unique to them (i.e. two speakers cannot add/create the same session)
-    //@ManyToOne
-    //@JoinColumn(name = "session_id", nullable = false)
-    //private Session sessions;
+    @ManyToMany(mappedBy = "speakers") @JsonIgnore
+    private Set<Session> sessions = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "conference_id", nullable = false)
+    @JoinColumn(name = "conference_id", nullable = false) @JsonIgnore
     private Conference conference;
 }

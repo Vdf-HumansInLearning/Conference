@@ -1,10 +1,12 @@
 package com.vodafone.conference.api.repositories;
 
 import com.vodafone.conference.models.entities.Participant;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.vodafone.conference.models.entities.Speaker;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -31,10 +33,7 @@ public interface SpeakerRepository extends JpaRepository<Speaker, UUID>{
             "where s.id = ?7")
     void update(Participant participant, String company, String linkedinAcc, String twitterAcc, String githubAcc, String biography, UUID id);
 
-
-
     @Override
     void deleteById(UUID uuid);
-
 
 }

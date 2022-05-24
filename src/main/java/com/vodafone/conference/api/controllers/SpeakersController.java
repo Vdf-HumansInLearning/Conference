@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import com.vodafone.conference.api.mapper.ParticipantMapper;
 import com.vodafone.conference.api.mapper.SpeakerMapper;
-import com.vodafone.conference.api.repositories.SpeakerRepository;
 import com.vodafone.conference.exceptions.ApiRequestException;
 import com.vodafone.conference.models.entities.Conference;
 import com.vodafone.conference.models.entities.DTO.ParticipantDTO;
@@ -19,8 +18,6 @@ import com.vodafone.conference.services.ParticipantService;
 import com.vodafone.conference.services.SpeakerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 
 //import org.springframework.hateoas.EntityLinks;
 import org.springframework.http.HttpStatus;

@@ -1,9 +1,9 @@
 package com.vodafone.conference.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,40 +14,48 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Session {
-
-    // columnDefinition = "uuid DEFAULT uuid_generate_v4()"
-    @Id
-    @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
+@Table(name = "session")
+public class Session extends EntityWithUUID {
 
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(name="speaker_session", joinColumns = @JoinColumn(name="session_id"),
             inverseJoinColumns = @JoinColumn(name="speaker_id"))
     private List<Speaker> speakers;
 
+    public void addSpeaker(Speaker speaker) {
+        this.speakers.add(speaker);
+    }
+
+    public void removeSpeaker(UUID speakerId) {
+        Speaker speaker = this.speakers.stream().filter(sp -> sp.getId().equals(speakerId)).findFirst().get();
+        this.speakers.remove(speaker);
+    }
+
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL) @JsonIgnore
     @JoinColumn(name = "session_type_id")
     private SessionType sessionType;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "track_id", nullable = false)
+    private Track track;
 
     @Column(name = "topic", nullable = false)
     private String topic;
 
     @Column(name = "tech_level", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TechLevel techLevel;
+    private String techLevel;
 
     @Column(name = "keywords", nullable = false)
-    @ElementCollection
-    private List<String> keywords;
+    private String keywords;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
@@ -55,24 +63,10 @@ public class Session {
     @Column(name = "end_time", nullable = false)
     private LocalDate endTime;
 
-    @Column(name = "review", nullable = false)
+    @Column(name = "review")
     private int review;
 
-    // participant should not have session ID
-    // as sessions added/created by participants are unique to them (i.e. two participants cannot add/create the same session)
-    //@OneToMany(mappedBy = "sessions")
-    //private List<Participant> participants;
-
-
-    // Session may not have track id
-
-    @ManyToOne
-    @JoinColumn(name = "track_id", nullable = false)
-    private Track track;
-
-    enum TechLevel {
-        BEGINNER,
-        MID_LEVEL,
-        ADVANCED;
-    }
+//    @OneToMany(mappedBy = "sessions", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    private List<Participant> participants;
 }

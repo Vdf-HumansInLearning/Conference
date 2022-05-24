@@ -1,5 +1,3 @@
-CREATE TYPE session_tech_level AS ENUM ('BEGINNER', 'MID_LEVEL', 'ADVANCED');
-
 CREATE TABLE session
 (
     id UUID NOT NULL PRIMARY KEY,
@@ -8,7 +6,7 @@ CREATE TABLE session
     session_type_id UUID,
     track_id UUID,
     topic VARCHAR(45) NOT NULL,
-    tech_level session_tech_level,
+    tech_level VARCHAR(45) NOT NULL,
     keywords VARCHAR(45) NOT NULL,
     date TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,

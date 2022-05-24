@@ -35,10 +35,14 @@
             <artifactId>spring-boot-starter-web-services</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>7.0.2.Final</version>
-        </dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+       </dependency>
+<!--      <dependency>-->
+<!--            <groupId>org.hibernate.validator</groupId>-->
+<!--            <artifactId>hibernate-validator</artifactId>-->
+<!--            <version>7.0.2.Final</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
@@ -131,6 +135,31 @@
             <artifactId>hibernate-validator</artifactId>
             <version>6.0.13.Final</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ldap</groupId>
+            <artifactId>spring-ldap-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-ldap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.unboundid</groupId>
+            <artifactId>unboundid-ldapsdk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.4.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -166,7 +195,7 @@
                     <schemas>
                         <schema>public</schema>
                     </schemas>
-                    <url>jdbc:postgresql://db:5432/db</url>
+                    <url>jdbc:postgresql://localhost:5433/</url>
                     <user>postgres</user>
                     <password>root</password>
                 </configuration>
@@ -176,6 +205,7 @@
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>3.4.0.905</version>
             </plugin>
+
         </plugins>
     </build>
 </project>

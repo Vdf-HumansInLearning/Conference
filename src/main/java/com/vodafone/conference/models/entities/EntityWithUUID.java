@@ -12,10 +12,9 @@ import java.util.UUID;
 @Data
 public class EntityWithUUID implements Serializable {
     @Id @Type(type = "pg-uuid")
-    private UUID id;
+    protected UUID id;
 
     public EntityWithUUID() {
         this.id = UUID.randomUUID();
     }
 }
-

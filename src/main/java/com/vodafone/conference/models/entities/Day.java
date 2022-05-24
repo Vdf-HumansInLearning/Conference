@@ -1,11 +1,13 @@
 package com.vodafone.conference.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -14,22 +16,32 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Day {
-
-    //columnDefinition = "uuid DEFAULT uuid_generate_v4()"
-    @Id
-    @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
-
-    @Column(name = "date")
+@Table(name = "day")
+@IdClass(value = EntityWithUUID.class)
+public class Day extends EntityWithUUID implements Serializable {
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @ManyToOne
+    @ManyToOne @JsonIgnore
     @JoinColumn(name = "conference_id", nullable = false)
     private Conference conference;
 
-    @OneToMany(mappedBy = "day")
+    @OneToMany(mappedBy = "day", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true) @JsonIgnore
+    @JsonManagedReference
     private List<Track> track;
+
+    public Day(LocalDate date) {
+        this.date = date;
+    }
+
+    public Day(UUID id, LocalDate date, Conference conference) {
+        this.id = id;
+        this.date = date;
+        this.conference = conference;
+    }
+
+    public Day(LocalDate date, Conference conference) {
+        this.date = date;
+        this.conference = conference;
+    }
 }

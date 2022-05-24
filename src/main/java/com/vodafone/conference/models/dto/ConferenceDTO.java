@@ -1,31 +1,39 @@
-package com.vodafone.conference.models.entities.DTO;
+package com.vodafone.conference.models.dto;
 
 import com.vodafone.conference.models.entities.Day;
 import com.vodafone.conference.models.entities.Participant;
 import com.vodafone.conference.models.entities.Speaker;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-public class ConferenceCreationDTO implements Serializable {
+@Data
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@Getter
+//@Setter
+public class ConferenceDTO implements Serializable {
 
-    // NOTE: making constructor public is incorrect but necessary for testing purposes
-    public ConferenceCreationDTO() {}
-
-
+    private List<Day> days;
     private String location;
     private String theme;
     private String description;
-
-    private List<Day> days;
     private List<Participant> participants;
     private List<Speaker> speakers;
+
+    public ConferenceDTO(List<Day> days, String location, String theme, String description, List<Participant> participants, List<Speaker> speakers) {
+        this.days = days;
+        this.location = location;
+        this.theme = theme;
+        this.description = description;
+        this.participants = participants;
+        this.speakers = speakers;
+    }
+
+    public ConferenceDTO() {
+    }
 
     public List<Day> getDays() {
         return days;
@@ -67,7 +75,11 @@ public class ConferenceCreationDTO implements Serializable {
         this.participants = participants;
     }
 
-    public List<Speaker> getSpeakers() { return speakers; }
+    public List<Speaker> getSpeakers() {
+        return speakers;
+    }
 
-    public void setSpeakers(List<Speaker> speakers) { this.speakers = speakers; }
+    public void setSpeakers(List<Speaker> speakers) {
+        this.speakers = speakers;
+    }
 }

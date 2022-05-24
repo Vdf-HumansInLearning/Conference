@@ -1,29 +1,26 @@
 package com.vodafone.conference.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class SessionType {
+@Table(name = "session_type")
+public class SessionType extends EntityWithUUID {
 
-    // columnDefinition = "uuid DEFAULT uuid_generate_v4()"
-    @Id
-    @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
-
+    @Column(name = "type")
     private String type;
+
+    @Column(name = "session_length")
     private int sessionLength;
 
-    @OneToOne(mappedBy = "sessionType", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "sessionType", cascade = CascadeType.ALL) @JsonIgnore
     private Session session;
+
 }
