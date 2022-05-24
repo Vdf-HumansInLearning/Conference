@@ -4,25 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Conference extends EntityWithUUID {
-
-    //columnDefinition = "uuid DEFAULT uuid_generate_v4()"
-    //@Id
-    //@Column(name = "id", updatable = false, nullable = false)
-    //@GeneratedValue(generator = "UUID")
-    //@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    //private UUID id;
 
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL)
     private List<Day> days;

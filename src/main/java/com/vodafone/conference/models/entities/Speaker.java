@@ -49,10 +49,10 @@ public class Speaker extends EntityWithUUID {
     @NotBlank(message = "Biography is required")
     private String biography;
 
-    @ManyToMany(mappedBy = "speakers")
+    @ManyToMany(mappedBy = "speakers") @JsonIgnore
     private Set<Session> sessions = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "conference_id", nullable = false)
+    @JoinColumn(name = "conference_id", nullable = false) @JsonIgnore
     private Conference conference;
 }

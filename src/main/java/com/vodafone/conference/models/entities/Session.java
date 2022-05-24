@@ -39,7 +39,7 @@ public class Session extends EntityWithUUID {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL) @JsonIgnore
     @JoinColumn(name = "session_type_id")
     private SessionType sessionType;
 
@@ -66,9 +66,7 @@ public class Session extends EntityWithUUID {
     @Column(name = "review")
     private int review;
 
-    //@OneToMany(mappedBy = "sessions", cascade = CascadeType.ALL)
-    //@JsonIgnore
-    //private List<Participant> participants;
-
+//    @OneToMany(mappedBy = "sessions", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    private List<Participant> participants;
 }
-

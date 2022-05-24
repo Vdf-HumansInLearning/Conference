@@ -44,10 +44,7 @@ public class ConferenceController {
     public ResponseEntity<ConferenceDTO> getConferenceById(@PathVariable UUID id) {
         Optional<Conference> conferenceOptional = conferenceService.findById(id);
 
-        //return conferenceOptional.map(conference -> new ResponseEntity<>(conferenceMapper.toDto(conference), HttpStatus.OK))
-                //.orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
         if(conferenceOptional.isPresent()) {
-            //ParticipantDTO participantDTO = mapper.toDto(optParticipant.get());
             return new ResponseEntity<>(conferenceMapper.toDto(conferenceOptional.get()), HttpStatus.OK);
         }
         else {
@@ -61,7 +58,6 @@ public class ConferenceController {
         ConferenceDTO conferenceDTO = conferenceMapper.toDto(conference);
 
         if (errors.hasErrors()) {
-            //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             throw new ApiRequestException(ApiRequestException.Exceptions.getDescription(ApiRequestException.Exceptions.BAD_INPUT));
         }
 
