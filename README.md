@@ -1,4 +1,4 @@
-# **REST API example application**
+# **Conference REST API**
 
 Our conference application REST API was designed with versatility in mind. Ideally, its flexibility should allow for usage in a variety of business contexts that require the management of events and the attendants of those events (professional conferences, concerts, etc.)
 
